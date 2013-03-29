@@ -9,8 +9,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileScanner{
     //hand banana NOOOOOOOOOOOO
@@ -41,11 +44,21 @@ public class FileScanner{
 	            		value = value + " " + splitString[j];
 	            	}
 	            }
-	            //System.out.println(splitString[0]);
-	            //System.out.println(value);
+        		value = replaceRegexInTokens(value);
 	            tempTable.put(splitString[0],value);
             }
         }
+    }
+    
+    private String replaceRegexInTokens(String tok){
+		Pattern p = Pattern.compile("[$][\\w]*");
+		List<String> list = new ArrayList<String>();
+		Matcher m = p.matcher(tok);
+		while (m.find()) {
+		    list.add(m.group());
+		    tok = tok.replace(m.group(), regexTable.get(m.group()));
+		}
+		return tok;
     }
 
     private List<String> readTextFile(String aFileName) throws IOException{
