@@ -44,6 +44,7 @@ public class FileScanner{
 	            		value = value + " " + splitString[j];
 	            	}
 	            }
+	            // I'm not actually sure we want to do this
         		value = replaceRegexInTokens(value);
 	            tempTable.put(splitString[0],value);
             }
@@ -51,15 +52,15 @@ public class FileScanner{
     }
     
     private String replaceRegexInTokens(String tok){
-		Pattern p = Pattern.compile("[$][\\w]*");
-		List<String> list = new ArrayList<String>();
-		Matcher m = p.matcher(tok);
-		while (m.find()) {
-		    list.add(m.group());
-		    tok = tok.replace(m.group(), regexTable.get(m.group()));
-		}
-		return tok;
-    }
+    	Pattern p = Pattern.compile("[$][\\w]*");
+    	List<String> list = new ArrayList<String>();
+    	Matcher m = p.matcher(tok);
+    	while (m.find()) {
+    		list.add(m.group());
+    		tok = tok.replace(m.group(), regexTable.get(m.group()));
+    		}
+    	return tok;
+    	}
 
     private List<String> readTextFile(String aFileName) throws IOException{
         Path path = Paths.get(aFileName);
