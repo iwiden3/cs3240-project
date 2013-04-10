@@ -9,8 +9,8 @@ public class State
 	
 	public State(boolean accept,HashMap<String,String> table)
 	{
-		this.accept=accept;
-		this.transitionTable=table;
+		this.accept = accept;
+		this.transitionTable = table;
 	}
 	
 	public boolean isAccept()
