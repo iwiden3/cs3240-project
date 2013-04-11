@@ -4,22 +4,33 @@ import java.util.*;
 
 public class NFAFactory
 {
-	HashMap<String, String> table;
+	HashMap<String, String> regexTable;
+	HashMap<String, String> tokenTable;
 
 	// Will take in a table
-	public NFAFactory(HashMap<String, String> table)
+	public NFAFactory(HashMap<String, String> regexTable, HashMap<String, String> tokenTable)
 	{
-		this.table = table;
+		this.regexTable = regexTable;
+		this.tokenTable = tokenTable;
 	}
 
 	public HashSet<NFA> factorize()
 	{
-		HashSet<NFA> nfaSet = new HashSet<NFA>();
-		Set<String> keys = table.keySet();
-		for(String key : keys)
+		HashSet<NFA> regexNFAs = new HashSet<NFA>();
+		Set<String> keys1 = regexTable.keySet();
+		for(String key : keys1)
 		{
-			String value = table.get(key);
-			NFACreator create = new NFACreator(key, value);
+			String value = regexTable.get(key);
+			NFACreator create = new NFACreator(key, value, null);
+			regexNFAs.add(create.getNFA());
+		}
+		
+		HashSet<NFA> nfaSet = new HashSet<NFA>();
+		Set<String> keys2 = tokenTable.keySet();
+		for(String key : keys2)
+		{
+			String value = tokenTable.get(key);
+			NFACreator create = new NFACreator(key, value, regexNFAs);
 			nfaSet.add(create.getNFA());
 		}
 		return nfaSet;

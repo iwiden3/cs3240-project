@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class NFACreator {
@@ -9,12 +10,18 @@ public class NFACreator {
 	private NFA nfa;
 	private int index;
 	private String def;
+	private ArrayList<String> splitDef;
+	private HashSet<NFA> defined_class;
 	
-	public NFACreator(String name, String def)
+	public NFACreator(String name, String def, HashSet<NFA> regexNFAs)
 	{
 		nfa = new NFA(name);
 		index = 0;
 		this.def = def;
+		this.defined_class = regexNFAs;
+		splitDef = new ArrayList<String>();
+		createSplitDef();
+		nextCurr();
 	}
 	
 	public NFA getNFA()
@@ -46,7 +53,7 @@ public class NFACreator {
 		}
 		switch(x){
 			case "|":
-				index++;
+				nextCurr();
 				return UNION(rexp1(), rexpP());
 			default:
 				return epsilon();
@@ -78,11 +85,17 @@ public class NFACreator {
 	
 	public NFA rexp2()
 	{
-		switch(x){
-			case "(": return concat(rexp(), rexp2_tail());
+		if(splitDef.get(index).equals("("))
+		{
+			return concat(rexp(), rexp2_tail());
+		}
+		
+		if(RE_CHAR().contains(splitDef.get(index)))
+		{
+			
+		}
 			case "": return epsilon();
 			default: return concat(RE_CHAR(), rexp2_tail());
-		}
 	}
 	
 	public NFA rexp2_tail()
@@ -106,8 +119,8 @@ public class NFACreator {
 	{
 		switch(x){
 			case '.': return dot();
-			case '[': return openBracket + char_class1();
-			case '$': return defined_class();
+			case '[': return "[" + char_class1();
+			case '$': return defined_class(curr);
 		}
 	}
 	
@@ -123,7 +136,7 @@ public class NFACreator {
 	{
 		switch(x){
 			case 1: return concat(char_set(), char_set_list());
-			case 2: return closeBracket;
+			case "]": return "AIGHT";
 		}
 	}
 	
@@ -131,12 +144,12 @@ public class NFACreator {
 	{
 		if(CLS_CHAR().contains(def.substring(index,index+1)))
 		{
-			index++; // Create NFA with the char
+			nextCurr() // Create NFA with the char
 			return concat(newNFA, char_set_tail());
 		}
 		else
 		{
-			index--;
+			goBack();
 			return null;
 		}
 	}
@@ -151,13 +164,18 @@ public class NFACreator {
 	
 	public NFA exclude_set()
 	{
-		return carrot + char_set() in exclude_set_tail();
+		return "^" + char_set() in exclude_set_tail();
 	}
 	
 	public NFA exclude_set_tail()
 	{
-		return openBracket + char_set() + closeBracket;
-		return defined_class();
+		return "[" + char_set() + "]";
+		return defined_class(curr);
+	}
+	
+	public NFA defined_class(String name)
+	{
+		return defined_class.get(name);
 	}
 	
 	public NFA concat(NFA n1, NFA n2)
@@ -221,10 +239,10 @@ public class NFACreator {
 		{
 			return n1;
 		}
-		State newStart = new State(false, new HashMap<String, State>());
+		State newStart = new State(false, new HashMap<String, List<State>>());
 		newStart.addTransition("", n1.getAccept());
 		newStart.addTransition("", n2.getAccept());
-		State newAccept = new State(true, new HashMap<String, State>());
+		State newAccept = new State(true, new HashMap<String, List<State>>());
 		n1.getAccept().setIsAccept(false);
 		n2.getAccept().setIsAccept(false);
 		n1.getAccept().addTransition("", newAccept);
@@ -288,5 +306,42 @@ public class NFACreator {
 		dotNFA.addTransition(startS, ".", new State(true, new HashMap<String, List<State>>()));
 		dotNFA.setStart(startS);
 		return dotNFA;
+	}
+	
+	public void createSplitDef()
+	{
+		String curr;
+		for(int i=0; i<def.length(); i++)
+		{
+			curr = def.substring(i, i+1);
+			if(curr.equals(" "))
+			{
+				continue;
+			}
+			if(curr.equals("\\"))
+			{
+				i++;
+				curr += def.substring(i, i+1);
+			}
+			else if(curr.equals("$") && def.substring(i+1, i+2).matches("[a-zA-Z]"))
+			{
+				while(def.substring(i+1, i+2).matches("[a-zA-Z]"))
+				{
+					i++;
+					curr += def.substring(i, i+1);
+				}
+			}
+			splitDef.add(curr);
+		}
+	}
+	
+	public void nextCurr()
+	{
+		index++;		
+	}
+	
+	public void goBack()
+	{
+		index--;
 	}
 }

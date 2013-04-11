@@ -20,21 +20,21 @@ public class NFAFactoryTest {
 	@Before
 	public void setUp() throws Exception {
 		fs = new FileScanner("tests/SampleSpec");
-		factory = new NFAFactory(fs.getRegexTable());
+		factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
 		nfas = factory.factorize();
 	}
 
 	@Test
 	public void testSize() {
-		assertEquals(5, nfas.size());
+		assertEquals(8, nfas.size());
 	}
 	
-	@Test
-	public void testNFAs() {
-		for(NFA n : nfas)
-		{
-			System.out.println(n.toString());
-		}
-	}
+//	@Test
+//	public void testNFAs() {
+//		for(NFA n : nfas)
+//		{
+//			System.out.println(n.toString());
+//		}
+//	}
 
 }
