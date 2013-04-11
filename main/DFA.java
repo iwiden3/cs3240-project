@@ -20,11 +20,21 @@ public class DFA
 
     }
 
-    private void constructEClosure(State s)
+    private HashSet<State> constructEClosure(State s)
     {
-        HashMap<String, State> transTable = s.getTransitionTable();
+        HashSet<State> eStates = new HashSet<State>();
+        HashMap<String, List<State>> transTable = s.getTransitionTable();
 
+        for (State s : transTable.get(""))
+        {
+            eStates.add(s);
 
+            for (State e : constructEClosure(s))
+            {
+                eStates.add(e);
+            }
+        }
+
+        return eStates;
     }
-
 }
