@@ -1,13 +1,19 @@
 package main;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class NFA
 {
 	private State start;
-    private List<State> accept;
+    private List<State> acceptStates;
 	private String name;
+	
+	public NFA(String name)
+	{
+		this.name = name;
+	}
 
 	public NFA(String name, String def)
 	{
@@ -16,6 +22,8 @@ public class NFA
         // Make accept state
         // TODO: this is for simple char classes only
         State accept = new State(true, new HashMap<String, State>());
+        
+        acceptStates.add(accept);
         
         // Create transition table
         HashMap<String, State> transition = new HashMap<String, State>();
@@ -180,7 +188,14 @@ public class NFA
 	
 	public NFA dot()
 	{
-		
+		NFA dotNFA = new NFA("dot");
+
+		dotNFA.setStart();
+		dotNFA.addState();
+
+		dotNFA.addTransition();
+
+		return dotNFA;
 	}
 
     public String getName()
@@ -191,6 +206,11 @@ public class NFA
     public State getStart()
     {
         return start;
+    }
+    
+    public void addTransition(State s1, State s2)
+    {
+    	
     }
     
     public String toString()
