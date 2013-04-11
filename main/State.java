@@ -5,9 +5,9 @@ import java.util.*;
 public class State
 {
 	private boolean accept;
-	private HashMap<String, State> transitionTable;
+	private HashMap<String, List<State>> transitionTable;
 	
-	public State(boolean accept, HashMap<String, State> table)
+	public State(boolean accept, HashMap<String, List<State>> table)
 	{
 		this.accept = accept;
 		this.transitionTable = table;
@@ -30,6 +30,6 @@ public class State
     
     public void addTransition(String trans, State toGo)
     {
-    	transitionTable.put(trans, toGo);
+    	transitionTable.put(trans, transitionTable.get(trans).add(toGo));
     }
 }

@@ -20,13 +20,14 @@ public class NFA
 
         // Make accept state
         // TODO: this is for simple char classes only
-        State accept = new State(true, new HashMap<String, State>());
+        State accept = new State(true, new HashMap<String, List<State>>());
         
         this.accept = accept;
         
         // Create transition table
-        HashMap<String, State> transition = new HashMap<String, State>();
-        transition.put(def, accept);
+        HashMap<String, State> transition = new HashMap<String, List<State>>();
+        transition.put(def, new ArrayList<State>());
+        transition.get(def).add(accept);
         
         // Create start state
         if (!def.equals(""))
@@ -73,12 +74,12 @@ public class NFA
     public String toString()
     {
     	String toReturn = name;
-    	HashMap<String, State> nextStates = start.getTransitionTable();
+    	HashMap<String, List<State>> nextStates = start.getTransitionTable();
     	Set<String> nextKeys = nextStates.keySet();
     	for(String key : nextKeys)
     	{
     		toReturn += (" -- " + key + " --> ");
-    		if(nextStates.get(key).isAccept())
+    		if(nextStates.get(key).get(0).isAccept())
     		{
     			toReturn += "ACCEPT";
     		}

@@ -11,12 +11,19 @@ public class DFA
     // This will call convertToDFA() using the passed in BigNFA
 	public DFA(BigNFA nfa)
 	{
-
+        converToDFA(nfa);
 	}
 
     // This sets the start/accept class variables
     private void convertToDFA(BigNFA nfa)
     {
+
+    }
+
+    private void constructEClosure(State s)
+    {
+        HashMap<String, State> transTable = s.getTransitionTable();
+
 
     }
 
