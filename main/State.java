@@ -18,7 +18,7 @@ public class State
 		return accept;
 	}
 	
-	public HashMap<String, State> getTransitionTable()
+	public HashMap<String, List<State>> getTransitionTable()
 	{
 		return transitionTable;
 	}
