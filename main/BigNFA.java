@@ -20,14 +20,17 @@ public class BigNFA
 	    
 	    State start=new State(false,new HashMap<String,State>());
 	    State accept=new State(true,null);
-	    
 	    for(NFA nfa : NFATable)
 	    {
-		start.addTransition("Epsilon",nfa.getStart);
-		nfa.getAccept().addTransition("Epsilon",accept);
-		nfa.getAccept().setAccept(false);
+		start.addTransition("Epsilon",nfa.getStart());
+		HashSet<State> currSet=nfa.getAccept();
+		for(State st : currSet)
+		{
+		    st.addTransition("Epsilon",accept);
+		    st.setAccept(false);
+	    	}
+		nfa.setAccept(currSet);	
 	    }
-	    
 	     fin=fin.setStart(start);
 	     fin=fin.setAccept(accept);
 
