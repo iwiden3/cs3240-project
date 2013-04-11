@@ -16,7 +16,8 @@ public class NFAFactory
 	{
 		HashSet<NFA> nfaSet = new HashSet<NFA>();
 		Set<String> keys = table.keySet();
-		for(String key : keys){
+		for(String key : keys)
+		{
 			String value = table.get(key);
 			NFA create = new NFA(key, value);
 			nfaSet.add(create);

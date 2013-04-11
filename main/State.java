@@ -7,7 +7,7 @@ public class State
 	private boolean accept;
 	private HashMap<String, State> transitionTable;
 	
-	public State(boolean accept,HashMap<String, State> table)
+	public State(boolean accept, HashMap<String, State> table)
 	{
 		this.accept = accept;
 		this.transitionTable = table;

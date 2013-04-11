@@ -17,7 +17,7 @@ public class NFA
         
         // Create transition table
         HashMap<String, State> transition = new HashMap<String, State>();
-        transition.add(regex, accept);
+        transition.put(regex, accept);
         
         // Create start state
         if (!regex.equals(""))
@@ -38,5 +38,25 @@ public class NFA
     public State getStart()
     {
         return start;
+    }
+    
+    public String toString()
+    {
+    	String toReturn = name;
+    	HashMap<String, State> nextStates = start.getTransitionTable();
+    	Set<String> nextKeys = nextStates.keySet();
+    	for(String key : nextKeys)
+    	{
+    		toReturn += (" -- " + key + " --> ");
+    		if(nextStates.get(key).isAccept())
+    		{
+    			toReturn += "ACCEPT";
+    		}
+    		else
+    		{
+    			toReturn += "NODE";
+    		}
+    	}
+    	return toReturn;
     }
 }
