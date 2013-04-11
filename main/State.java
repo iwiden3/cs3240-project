@@ -5,9 +5,9 @@ import java.util.*;
 public class State
 {
 	private boolean accept;
-	private HashMap<String,String> transitionTable;
+	private HashMap<String, State> transitionTable;
 	
-	public State(boolean accept,HashMap<String,String> table)
+	public State(boolean accept,HashMap<String, State> table)
 	{
 		this.accept = accept;
 		this.transitionTable = table;
@@ -18,7 +18,7 @@ public class State
 		return accept;
 	}
 	
-	public HashMap<String,String> getTransitionTable()
+	public HashMap<String, State> getTransitionTable()
 	{
 		return transitionTable;
 	}
