@@ -6,6 +6,7 @@ import java.util.Set;
 public class NFA
 {
 	private State start;
+    private List<State> accept;
 	private String name;
 
 	public NFA(String name, String def)
