@@ -16,7 +16,31 @@ public class BigNFA
     // Adds epsilon transitions from all accept states to one new accept state
 	private NFA conversion(HashSet<NFA> NFATAble)
 	{
+	    NFA fin=new NFA("The Big One");
+	    
+	    State start=new State(false,new HashMap<String,State>());
+	    State accept=new State(true,null);
+	    
+	    for(NFA nfa : NFATable)
+	    {
+		start.addTransition("Epsilon",nfa.getStart);
+		nfa.getAccept().addTransition("Epsilon",accept);
+		nfa.getAccept().setAccept(false);
+	    }
+	    
+	     fin=fin.setStart(start);
+	     fin=fin.setAccept(accept);
 
-		return null;
+	     return fin;
+	}
+
+	public NFA getNFA()
+	{
+	    return nfa;
+	}
+
+	public void setNFA(NFA nfa)
+	{
+	    this.nfa=nfa;
 	}
 }
