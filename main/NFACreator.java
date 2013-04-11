@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class NFACreator {
 	
@@ -33,16 +34,22 @@ public class NFACreator {
 	
 	public NFA rexpP()
 	{
-		switch(def.substring(index, index+1)){
+		String x;
+		try
+		{
+			x = def.substring(index, index+1);
+		}
+		catch(IndexOutOfBoundsException e)
+		{
+			//BLEHHHHH NOPE FIX THIS SHIT BREAK OUT OF EVERYTHING
+			return null;
+		}
+		switch(x){
 			case "|":
 				index++;
 				return UNION(rexp1(), rexpP());
-			case "":
-				index++;
-				return epsilon();
 			default:
-				index--;
-				return null;
+				return epsilon();
 		}
 	}
 	
@@ -53,6 +60,16 @@ public class NFACreator {
 	
 	public NFA rexp1P()
 	{
+		String x;
+		try
+		{
+			x = def.substring(index, index+1);
+		}
+		catch(IndexOutOfBoundsException e)
+		{
+			//BLEHHHHH NOPE FIX THIS SHIT
+			return null;
+		}
 		switch(x){
 			case "": return epsilon();
 			default: return concat(rexp2(), rexp1P());
@@ -112,7 +129,16 @@ public class NFACreator {
 	
 	public NFA char_set()
 	{
-		return concat(CLS_CHAR(), char_set_tail());
+		if(CLS_CHAR().contains(def.substring(index,index+1)))
+		{
+			index++; // Create NFA with the char
+			return concat(newNFA, char_set_tail());
+		}
+		else
+		{
+			index--;
+			return null;
+		}
 	}
 	
 	public NFA char_set_tail()
@@ -150,7 +176,7 @@ public class NFACreator {
 		return n1;
 	}
 
-	public NFA CLS_CHAR()
+	public ArrayList<String> CLS_CHAR()
 	{
 		ArrayList<String> wat = new ArrayList<String>();
 		for (char c=32; c<=126; c++) {
@@ -164,10 +190,10 @@ public class NFACreator {
 			wat.add(escapedChars[i]);
 		}
 		System.out.println(wat.toString());
-		return null;
+		return wat;
 	}
 	
-	public NFA RE_CHAR()
+	public ArrayList<String> RE_CHAR()
 	{
 		ArrayList<String> wat = new ArrayList<String>();
 		for (char c=32; c<=126; c++) {
@@ -182,7 +208,7 @@ public class NFACreator {
 			wat.add(escapedChars[i]);
 		}
 		System.out.println(wat.toString());
-		return null;
+		return wat;
 	}
 	
 	public NFA UNION(NFA n1, NFA n2)
@@ -215,19 +241,19 @@ public class NFACreator {
 	public NFA epsilon()
 	{
 		NFA epsNFA = new NFA("EPSILON");
-		State startS = new State(false, new HashMap<String, State>());
-		epsNFA.addTransition(startS, "", new State(true, new HashMap<String, State>()));
+		State startS = new State(false, new HashMap<String, List<State>>());
+		epsNFA.addTransition(startS, "", new State(true, new HashMap<String, List<State>>()));
 		epsNFA.setStart(startS);
 		return epsNFA;
 	}
 	
 	public NFA star(NFA n)
 	{
-		State newStart = new State(false, new HashMap<String, State>());
+		State newStart = new State(false, new HashMap<String, List<State>>());
 		newStart.addTransition("", n.getAccept());
 		n.getAccept().setIsAccept(false);
 		n.getAccept().addTransition("", n.getStart());
-		State newAccept = new State(true, new HashMap<String, State>());
+		State newAccept = new State(true, new HashMap<String, List<State>>());
 		n.getAccept().addTransition("", newAccept);
 		n.setAccept(newAccept);
 		n.setStart(newStart);
@@ -240,11 +266,11 @@ public class NFACreator {
 	
 	public NFA plus(NFA n)
 	{
-		State newStart = new State(false, new HashMap<String, State>());
+		State newStart = new State(false, new HashMap<String, List<State>>());
 		newStart.addTransition("", n.getStart());
 		n.getAccept().setIsAccept(false);
 		n.getAccept().addTransition("", n.getStart());
-		State newAccept = new State(true, new HashMap<String, State>());
+		State newAccept = new State(true, new HashMap<String, List<State>>());
 		n.getAccept().addTransition("", newAccept);
 		n.setAccept(newAccept);
 		n.setStart(newStart);
@@ -258,8 +284,8 @@ public class NFACreator {
 	public NFA dot()
 	{
 		NFA dotNFA = new NFA("dot");
-		State startS = new State(false, new HashMap<String, State>());
-		dotNFA.addTransition(startS, ".", new State(true, new HashMap<String, State>()));
+		State startS = new State(false, new HashMap<String, List<State>>());
+		dotNFA.addTransition(startS, ".", new State(true, new HashMap<String, List<State>>()));
 		dotNFA.setStart(startS);
 		return dotNFA;
 	}
