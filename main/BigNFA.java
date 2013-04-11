@@ -23,13 +23,11 @@ public class BigNFA
 	    for(NFA nfa : NFATable)
 	    {
 		start.addTransition("Epsilon",nfa.getStart());
-		HashSet<State> currSet=nfa.getAccept();
-		for(State st : currSet)
+		for(State st : nfa.getAccept())
 		{
 		    st.addTransition("Epsilon",accept);
 		    st.setAccept(false);
 	    	}
-		nfa.setAccept(currSet);	
 	    }
 	     fin=fin.setStart(start);
 	     fin=fin.setAccept(accept);
