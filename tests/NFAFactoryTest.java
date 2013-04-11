@@ -33,7 +33,6 @@ public class NFAFactoryTest {
 	public void testNFAs() {
 		for(NFA n : nfas)
 		{
-			n.CLS_CHAR();
 			System.out.println(n.toString());
 		}
 	}

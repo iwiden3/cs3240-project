@@ -19,8 +19,8 @@ public class NFAFactory
 		for(String key : keys)
 		{
 			String value = table.get(key);
-			NFA create = new NFA(key, value);
-			nfaSet.add(create);
+			NFACreator create = new NFACreator(key, value);
+			nfaSet.add(create.getNFA());
 		}
 		return nfaSet;
 	}
