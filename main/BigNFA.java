@@ -25,6 +25,7 @@ public class BigNFA
 	    	start.addTransition("",nfa.getStart());
 	    	nfa.getAccept().addTransition("",accept);
 	    	nfa.getAccept().setIsAccept(false);
+	    	nfa.getAccept().setName(nfa.getName());
 	    }
 	     fin.setStart(start);
 	     fin.setAccept(accept);

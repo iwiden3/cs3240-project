@@ -12,8 +12,7 @@ public class State
 	{
 		this.accept = accept;
 		this.transitionTable = table;
-		name=null;
-	
+		name="";
 	}
 	
 	public boolean isAccept()
