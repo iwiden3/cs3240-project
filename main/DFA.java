@@ -25,11 +25,17 @@ public class DFA
         HashSet<State> eStates = new HashSet<State>();
         HashMap<String, List<State>> transTable = s.getTransitionTable();
 
-        for (State s : transTable.get(""))
-        {
-            eStates.add(s);
+        // Adds the original state to the set
+        eStates.add(s);
 
-            for (State e : constructEClosure(s))
+        // Iterate over all epsilon transitions and add them to the set
+        for (State st : transTable.get(""))
+        {
+            eStates.add(st);
+
+            // Add all epsilon transitions from these episilon transitions
+            // Might have to consider endless epsilon looping
+            for (State e : constructEClosure(st))
             {
                 eStates.add(e);
             }
