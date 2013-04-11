@@ -1,5 +1,19 @@
 package main;
 
-public class NFA {
-	// WOO BLANK FILE
+import java.util.*;
+
+public class NFA 
+{
+	State start;
+	String name;
+
+	public NFA()
+	{
+		this.start=start;
+	}
+
+	
+
+
+
 }
