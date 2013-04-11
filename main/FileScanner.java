@@ -45,7 +45,7 @@ public class FileScanner{
 	            	}
 	            }
 	            // I'm not actually sure we want to do this
-        		value = replaceRegexInTokens(value);
+        		//value = replaceRegexInTokens(value);
 	            tempTable.put(splitString[0],value);
             }
         }

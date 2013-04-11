@@ -1,13 +1,14 @@
 package main;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Set;
 
-public class NFA 
+public class NFA
 {
 	private State start;
 	private String name;
 
-	public NFA(String name, String regex)
+	public NFA(String name, String def)
 	{
         this.name = name;
 
@@ -17,10 +18,10 @@ public class NFA
         
         // Create transition table
         HashMap<String, State> transition = new HashMap<String, State>();
-        transition.put(regex, accept);
+        transition.put(def, accept);
         
         // Create start state
-        if (!regex.equals(""))
+        if (!def.equals(""))
         {
             start = new State(false, transition);
         }
