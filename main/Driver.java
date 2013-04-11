@@ -12,47 +12,52 @@ public class Driver
 	
 	public String whatType(String in)
 	{
-		boolean found=false;
-		State curr=nfa.getStart();
-		while(!found)
-		{
-			HashSet<String> keys=(HashSet<String>) curr.getTransitionTable().keySet();
-			HashSet<State> states =new HashSet<State>();
-			for(String str: keys)
-			{
-				if(str.isEmpty() || in.matches(str))
-				{
-					for(State st : curr.getTransitionTable().get(str))
-					{
-						states.add(st);
-					}
-					
-				}
-			}
-			
-		}
-		return null;
+		Name name=whatType(in,nfa.getStart(),0);
+		return name.getName();
+		
 	}
 	
-	private boolean whatType(State st)
+	
+	public Name whatType(String in, State st,int num)
 	{
-		if(st.isAccept())
+		Name out=new Name(st.getName(),num);
+		
+		HashMap<String, List<State>> map=st.getTransitionTable();
+		HashSet<String> keys=(HashSet<String>) st.getTransitionTable().keySet();
+		HashSet<State> states =new HashSet<State>();
+		for(String str: keys)
 		{
-			return true;
+			if(str.isEmpty() || in.matches(str))
+			{
+				for(State st2 : st.getTransitionTable().get(str))
+				{
+					states.add(st2);
+				}
+				
+			}
+		}
+
+		if(states.isEmpty())
+		{
+			return new Name("",num);
+		}
+		else if(map.containsKey("") && states.size()==2)
+		{
+			return new Name(st.getName(),num);
 		}
 		else
 		{
-			HashSet<String> keys=(HashSet<String>) st.getTransitionTable().keySet();
-			for(String str : keys)
+			for (State st2 : states)
 			{
-				for(State crap : st.getTransitionTable().get(str))
+				Name curr=whatType(in, st2,num++);
+				if(curr.getNum()>=num && !curr.getName().isEmpty())
 				{
-					return whatType(crap)
-					
+					out.setName(curr.getName());
+					out.setNum(curr.getNum());
 				}
 			}
-		}
-		return false;
+			return out;
+		}	
 	}
 }
 	
