@@ -51,7 +51,8 @@ public class FileScanner{
         }
     }
     
-    private String replaceRegexInTokens(String tok){
+    @SuppressWarnings("unused")
+	private String replaceRegexInTokens(String tok){
     	Pattern p = Pattern.compile("[$][\\w]*");
     	List<String> list = new ArrayList<String>();
     	Matcher m = p.matcher(tok);

@@ -23,9 +23,13 @@ public class State
 		return transitionTable;
 	}
 
-    public void setAccept(boolean accept)
+    public void setIsAccept(boolean accept)
     {
         this.accept = accept;
     }
+    
+    public void addTransition(String trans, State toGo)
+    {
+    	transitionTable.put(trans, toGo);
+    }
 }
-

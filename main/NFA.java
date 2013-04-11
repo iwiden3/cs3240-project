@@ -1,13 +1,13 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 public class NFA
 {
 	private State start;
-    private List<State> acceptStates;
+    private State accept;
 	private String name;
 	
 	public NFA(String name)
@@ -23,7 +23,7 @@ public class NFA
         // TODO: this is for simple char classes only
         State accept = new State(true, new HashMap<String, State>());
         
-        acceptStates.add(accept);
+        this.accept = accept;
         
         // Create transition table
         HashMap<String, State> transition = new HashMap<String, State>();
@@ -53,7 +53,7 @@ public class NFA
 	public NFA rexpP()
 	{
 		switch(x){
-			case 1: return concat(UNION(), rexp1(), rexpP());
+			case 1: return UNION(rexp1(), rexpP());
 			case 2: return epsilon();
 		}
 	}
@@ -148,57 +148,119 @@ public class NFA
 	
 	public NFA concat(NFA n1, NFA n2)
 	{
-		return null;
+		n1.getAccept().setIsAccept(false);
+		n1.getAccept().addTransition("", n2.getStart());
+		n1.setAccept(n2.getAccept());
+		return n1;
 	}
-	
-	public NFA concat(NFA n1, NFA n2, NFA n3)
-	{
-		return null;
-	}
-	
+
 	public NFA CLS_CHAR()
 	{
-		
+		ArrayList<String> wat = new ArrayList<String>();
+		for (char c=32; c<=126; c++) {
+			if(c != '\\' && c != '^' && c != '-' && c != '[' && c != ']') {
+				wat.add(Character.toString(c));
+			}
+		}
+		String[] escapedChars = {"\\\\","\\^","\\-","\\[","\\]"};
+		for(int i=0; i<escapedChars.length; i++)
+		{
+			wat.add(escapedChars[i]);
+		}
+		System.out.println(wat.toString());
+		return null;
 	}
 	
 	public NFA RE_CHAR()
 	{
-		
+		ArrayList<String> wat = new ArrayList<String>();
+		for (char c=32; c<=126; c++) {
+			if(c != ' ' && c != '\\' && c != '*' && c != '+' && c != '?' && c != '|' && c != '[' &&
+					c != ']' && c != '(' && c != ')' && c != '.' && c != '\'' && c != '"') {
+				wat.add(Character.toString(c));
+			}
+		}
+		String[] escapedChars = {"\\ ", "\\\\","\\*","\\+","\\?","\\|","\\[","\\]","\\(","\\)","\\.","\\\'","\\\""};
+		for(int i=0; i<escapedChars.length; i++)
+		{
+			wat.add(escapedChars[i]);
+		}
+		System.out.println(wat.toString());
+		return null;
 	}
 	
-	public NFA UNION()
+	public NFA UNION(NFA n1, NFA n2)
 	{
-		
+		State newStart = new State(false, new HashMap<String, State>());
+		newStart.addTransition("", n1.getAccept());
+		newStart.addTransition("", n2.getAccept());
+		State newAccept = new State(true, new HashMap<String, State>());
+		n1.getAccept().setIsAccept(false);
+		n2.getAccept().setIsAccept(false);
+		n1.getAccept().addTransition("", newAccept);
+		n2.getAccept().addTransition("", newAccept);
+		n1.setAccept(newAccept);
+		n2.setAccept(newAccept);
+//		NFA uniNFA = new NFA("|");
+//		State startS = new State(false, new HashMap<String, State>());
+//		uniNFA.addTransition(startS, "|", new State(true, new HashMap<String, State>()));
+//		uniNFA.setStart(startS);
+		return n1;
 	}
 	
 	public NFA epsilon()
 	{
-		
+		NFA epsNFA = new NFA("EPSILON");
+		State startS = new State(false, new HashMap<String, State>());
+		epsNFA.addTransition(startS, "", new State(true, new HashMap<String, State>()));
+		epsNFA.setStart(startS);
+		return epsNFA;
 	}
 	
-	public NFA star()
+	public NFA star(NFA n)
 	{
-		
+		State newStart = new State(false, new HashMap<String, State>());
+		newStart.addTransition("", n.getAccept());
+		n.getAccept().setIsAccept(false);
+		n.getAccept().addTransition("", n.getStart());
+		State newAccept = new State(true, new HashMap<String, State>());
+		n.getAccept().addTransition("", newAccept);
+		n.setAccept(newAccept);
+		n.setStart(newStart);
+//		NFA starNFA = new NFA("star");
+//		State startS = new State(false, new HashMap<String, State>());
+//		starNFA.addTransition(startS, "*", new State(true, new HashMap<String, State>()));
+//		starNFA.setStart(startS);
+		return n;
 	}
 	
-	public NFA plus()
+	public NFA plus(NFA n)
 	{
-		
+		State newStart = new State(false, new HashMap<String, State>());
+		newStart.addTransition("", n.getStart());
+		n.getAccept().setIsAccept(false);
+		n.getAccept().addTransition("", n.getStart());
+		State newAccept = new State(true, new HashMap<String, State>());
+		n.getAccept().addTransition("", newAccept);
+		n.setAccept(newAccept);
+		n.setStart(newStart);
+//		NFA plusNFA = new NFA("plus");
+//		State startS = new State(false, new HashMap<String, State>());
+//		plusNFA.addTransition(startS, "+", new State(true, new HashMap<String, State>()));
+//		plusNFA.setStart(startS);
+		return n;
 	}
 	
 	public NFA dot()
 	{
 		NFA dotNFA = new NFA("dot");
-
-		dotNFA.setStart();
-		dotNFA.addState();
-
-		dotNFA.addTransition();
-
+		State startS = new State(false, new HashMap<String, State>());
+		dotNFA.addTransition(startS, ".", new State(true, new HashMap<String, State>()));
+		dotNFA.setStart(startS);
 		return dotNFA;
 	}
 
-    public String getName()
+	public String getName()
     {
         return name;
     }
@@ -206,11 +268,26 @@ public class NFA
     public State getStart()
     {
         return start;
+    }	
+
+	public void setStart(State state)
+	{
+		this.start = state;	
+	}
+    
+    public State getAccept()
+    {
+        return accept;
     }
     
-    public void addTransition(State s1, State s2)
+    public void setAccept(State state)
     {
-    	
+    	this.accept = state;
+    }
+    
+    public void addTransition(State s1, String trans, State s2)
+    {
+    	s1.addTransition(trans, s2);
     }
     
     public String toString()
