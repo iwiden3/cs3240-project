@@ -6,16 +6,29 @@ public class State
 {
 	private boolean accept;
 	private HashMap<String, List<State>> transitionTable;
+	private String name;
 	
 	public State(boolean accept, HashMap<String, List<State>> table)
 	{
 		this.accept = accept;
 		this.transitionTable = table;
+		name=null;
+	
 	}
 	
 	public boolean isAccept()
 	{
 		return accept;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name=name;
 	}
 	
 	public HashMap<String, List<State>> getTransitionTable()
