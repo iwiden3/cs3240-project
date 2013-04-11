@@ -22,8 +22,8 @@ public class BigNFA
 	    State accept=new State(true,null);
 	    for(NFA nfa : NFATable)
 	    {
-	    	start.addTransition("Epsilon",nfa.getStart());
-	    	nfa.getAccept().addTransition("Epsilon",accept);
+	    	start.addTransition("",nfa.getStart());
+	    	nfa.getAccept().addTransition("",accept);
 	    	nfa.getAccept().setIsAccept(false);
 	    }
 	     fin.setStart(start);
