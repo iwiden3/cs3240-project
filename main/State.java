@@ -22,5 +22,10 @@ public class State
 	{
 		return transitionTable;
 	}
+
+    public void setAccept(boolean accept)
+    {
+        this.accept = accept;
+    }
 }
 
