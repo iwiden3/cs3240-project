@@ -1,6 +1,8 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class NFA
@@ -25,7 +27,7 @@ public class NFA
         this.accept = accept;
         
         // Create transition table
-        HashMap<String, State> transition = new HashMap<String, List<State>>();
+        HashMap<String, List<State>> transition = new HashMap<String, List<State>>();
         transition.put(def, new ArrayList<State>());
         transition.get(def).add(accept);
         

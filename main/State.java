@@ -30,6 +30,15 @@ public class State
     
     public void addTransition(String trans, State toGo)
     {
-    	transitionTable.put(trans, transitionTable.get(trans).add(toGo));
+    	if(transitionTable.containsKey(trans))
+    	{
+    		transitionTable.get(trans).add(toGo);
+    	}
+    	else
+    	{
+    		ArrayList<State> n = new ArrayList<State>();
+    		n.add(toGo);
+        	transitionTable.put(trans, n);
+    	}
     }
 }

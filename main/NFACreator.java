@@ -33,9 +33,16 @@ public class NFACreator {
 	
 	public NFA rexpP()
 	{
-		switch(x){
-			case "": return epsilon();
-			default: return UNION(rexp1(), rexpP());
+		switch(def.substring(index, index+1)){
+			case "|":
+				index++;
+				return UNION(rexp1(), rexpP());
+			case "":
+				index++;
+				return epsilon();
+			default:
+				index--;
+				return null;
 		}
 	}
 	
@@ -207,11 +214,11 @@ public class NFACreator {
 	
 	public NFA epsilon()
 	{
-//		NFA epsNFA = new NFA("EPSILON");
-//		State startS = new State(false, new HashMap<String, State>());
-//		epsNFA.addTransition(startS, "", new State(true, new HashMap<String, State>()));
-//		epsNFA.setStart(startS);
-		return null;
+		NFA epsNFA = new NFA("EPSILON");
+		State startS = new State(false, new HashMap<String, State>());
+		epsNFA.addTransition(startS, "", new State(true, new HashMap<String, State>()));
+		epsNFA.setStart(startS);
+		return epsNFA;
 	}
 	
 	public NFA star(NFA n)
