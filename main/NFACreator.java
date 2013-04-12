@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class NFACreator {
 	
@@ -11,14 +12,16 @@ public class NFACreator {
 	private int index;
 	private String def;
 	private ArrayList<String> splitDef;
-	private HashSet<NFA> defined_class;
+	private HashSet<NFA> defined_classes;
+	private HashMap<String, String> regexTable;
 	
-	public NFACreator(String name, String def, HashSet<NFA> regexNFAs)
+	public NFACreator(String name, String def, HashMap<String, String> regexTable, HashSet<NFA> regexNFAs)
 	{
 		nfa = new NFA(name);
 		index = 0;
 		this.def = def;
-		this.defined_class = regexNFAs;
+		this.defined_classes = regexNFAs;
+		this.regexTable = regexTable;
 		splitDef = new ArrayList<String>();
 		createSplitDef();
 		nextCurr();
@@ -115,7 +118,7 @@ public class NFACreator {
 		}
 	}
 	
-	public NFA char_class()
+	public String char_class()
 	{
 		switch(x){
 			case '.': return dot();
@@ -124,7 +127,7 @@ public class NFACreator {
 		}
 	}
 	
-	public NFA char_class1()
+	public String char_class1()
 	{
 		switch(x){
 			case 1: return char_set_list();
@@ -132,50 +135,115 @@ public class NFACreator {
 		}
 	}
 	
-	public NFA char_set_list()
+	public String char_set_list()
 	{
+		String char_set = char_set();
+		String char_set_list = char_set_list();
 		switch(x){
 			case 1: return concat(char_set(), char_set_list());
 			case "]": return "AIGHT";
 		}
 	}
 	
-	public NFA char_set()
+	public String char_set()
 	{
-		if(CLS_CHAR().contains(def.substring(index,index+1)))
+		String ret = "";
+		if(CLS_CHAR().contains(splitDef.get(index)))
 		{
-			nextCurr() // Create NFA with the char
-			return concat(newNFA, char_set_tail());
+			ret += splitDef.get(index);
+			nextCurr();
+			String char_set_tail = char_set_tail();
+			return ret + char_set_tail;
 		}
 		else
 		{
-			goBack();
 			return null;
 		}
 	}
 	
-	public NFA char_set_tail()
+	public String char_set_tail()
 	{
-		switch(x){
-			case 1: return CLS_CHAR();
-			case 2: return epsilon();
+		String ret = "";
+		if(splitDef.get(index).equals("-") && CLS_CHAR().contains(splitDef.get(index+1)))
+		{
+			ret += splitDef.get(index);
+			nextCurr();
+			ret += splitDef.get(index);
+			nextCurr();
+			return ret;
+		}	
+		else
+		{
+			return epsilon();
 		}
 	}
 	
-	public NFA exclude_set()
+	public String exclude_set()
 	{
-		return "^" + char_set() in exclude_set_tail();
+		String ret = "";
+		if(splitDef.get(index).equals("^"))
+		{
+			ret += splitDef.get(index);
+			nextCurr();
+			String char_set = char_set();
+			if(char_set != null)
+			{
+				ret += char_set;
+				if(splitDef.get(index).equals("]"))
+				{
+					ret += splitDef.get(index);
+					nextCurr();
+					if(splitDef.get(index).equals("I") && splitDef.get(index+1).equals("N"))
+					{
+						nextCurr();
+						nextCurr();
+						String exclude_set_tail = exclude_set_tail();
+						if(exclude_set_tail != null)
+						{
+							ret += exclude_set_tail;
+							return ret;
+						}
+					}
+				}
+			}
+		}	
+		return null;
 	}
 	
-	public NFA exclude_set_tail()
+	public String exclude_set_tail()
 	{
-		return "[" + char_set() + "]";
-		return defined_class(curr);
+		if(splitDef.get(index).equals("["))
+		{
+			nextCurr();
+			String char_set = char_set();
+			if(char_set != null && splitDef.get(index).equals("]"))
+			{
+				nextCurr();
+				return "[" + char_set + "]";
+			}
+			return null;
+		}
+		
+		String defined_class = defined_class(splitDef.get(index));
+		return defined_class; // null if nonexistent
 	}
 	
-	public NFA defined_class(String name)
+	public String defined_class(String name)
 	{
-		return defined_class.get(name);
+		String s = regexTable.get(name);
+		return s;
+	}
+	
+	public NFA defined_classNFA(String name)
+	{
+		for (NFA n : defined_classes)
+		{
+			if (n.getName().equals(name))
+			{
+				return n;
+			}
+		}
+		return null;
 	}
 	
 	public NFA concat(NFA n1, NFA n2)
@@ -256,13 +324,18 @@ public class NFACreator {
 		return n1;
 	}
 	
-	public NFA epsilon()
+	public NFA epsilonNFA()
 	{
 		NFA epsNFA = new NFA("EPSILON");
 		State startS = new State(false, new HashMap<String, List<State>>());
 		epsNFA.addTransition(startS, "", new State(true, new HashMap<String, List<State>>()));
 		epsNFA.setStart(startS);
 		return epsNFA;
+	}
+	
+	public String epsilon()
+	{
+		return "";
 	}
 	
 	public NFA star(NFA n)
@@ -329,10 +402,15 @@ public class NFACreator {
 				{
 					i++;
 					curr += def.substring(i, i+1);
+					if(i >= def.length()-1)
+					{
+						break;
+					}
 				}
 			}
 			splitDef.add(curr);
 		}
+		//System.out.println(splitDef.toString());
 	}
 	
 	public void nextCurr()

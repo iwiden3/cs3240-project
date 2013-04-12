@@ -21,7 +21,7 @@ public class NFAFactory
 		for(String key : keys1)
 		{
 			String value = regexTable.get(key);
-			NFACreator create = new NFACreator(key, value, null);
+			NFACreator create = new NFACreator(key, value, regexTable, null);
 			regexNFAs.add(create.getNFA());
 		}
 		
@@ -30,7 +30,7 @@ public class NFAFactory
 		for(String key : keys2)
 		{
 			String value = tokenTable.get(key);
-			NFACreator create = new NFACreator(key, value, regexNFAs);
+			NFACreator create = new NFACreator(key, value, regexTable, regexNFAs);
 			nfaSet.add(create.getNFA());
 		}
 		return nfaSet;
