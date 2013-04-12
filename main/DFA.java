@@ -5,9 +5,9 @@ import java.util.*;
 
 public class DFA
 {
-	public DFAState start;
-	public List<DFAState> accept;
-    public HashSet<DFAState> states;
+	private DFAState start;
+	private List<DFAState> accept;
+    private HashSet<DFAState> states;
 
     // This will call convertToDFA() using the passed in BigNFA
 	public DFA(BigNFA bnfa)
@@ -138,5 +138,20 @@ public class DFA
         s.getTransitions().put(token, output);
 
         return output;
+    }
+
+    public DFAState getStart()
+    {
+        return start;
+    }
+
+    public List<DFAState> getAccepts()
+    {
+        return accept;
+    }
+
+    public HashSet<DFAState> getStates()
+    {
+        return states;
     }
 }
