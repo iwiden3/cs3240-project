@@ -12,6 +12,7 @@ public class NFACreator {
 	private NFA nfa;
 	private int index;
 	private String def;
+	private String name;
 	private ArrayList<String> splitDef;
 	private HashSet<NFA> defined_classes;
 	private HashMap<String, String> regexTable;
@@ -29,6 +30,7 @@ public class NFACreator {
 		splitDef = new ArrayList<String>();
 		createSplitDef();
 		initializeFirsts();
+		this.name = name;
         
 		nfa = reg_ex();
 		nfa.setName(name);
@@ -191,7 +193,7 @@ public class NFACreator {
 		
 		if(RE_CHAR().contains(splitDef.get(index)))
 		{
-			NFA n = new NFA("YO", splitDef.get(index));
+			NFA n = new NFA(name, splitDef.get(index));
 			nextCurr();
 			NFA rexp2_tail = rexp2_tail(n);
 			myStack.pop();
@@ -253,7 +255,7 @@ public class NFACreator {
 		if(char_class != null)
 		{
 			myStack.pop();
-			return new NFA("SUP", char_class);
+			return new NFA(name, char_class);
 		}
 		else
 		{
@@ -518,11 +520,15 @@ public class NFACreator {
 		{
 			return null;
 		}
-		else if(n1 == null)
+		else if(n1.getName().equals("EPSILON") && n2.getName().equals("EPSILON"))
+		{
+			return n1;
+		}
+		else if(n1 == null || n1.getName().equals("EPSILON"))
 		{
 			return n2;
 		}
-		else if(n2 == null)
+		else if(n2 == null || n2.getName().equals("EPSILON"))
 		{
 			return n1;
 		}
@@ -569,15 +575,15 @@ public class NFACreator {
 	
 	public NFA UNION(NFA n1, NFA n2)
 	{
-		if(n1 == null && n2 == null)
+		if((n1 == null && n2 == null) || (n1.getName().equals("EPSILON") && n2.getName().equals("EPSILON")))
 		{
 			return null;
 		}
-		else if(n1 == null)
+		else if(n1 == null || n1.getName().equals("EPSILON"))
 		{
 			return n2;
 		}
-		else if(n2 == null)
+		else if(n2 == null || n2.getName().equals("EPSILON"))
 		{
 			return n1;
 		}
@@ -585,6 +591,7 @@ public class NFACreator {
 		newStart.addTransition("", n1.getAccept());
 		newStart.addTransition("", n2.getAccept());
 		State newAccept = new State(true, new HashMap<String, List<State>>());
+		newAccept.setName(name);
 		n1.getAccept().setIsAccept(false);
 		n2.getAccept().setIsAccept(false);
 		n1.getAccept().addTransition("", newAccept);
@@ -604,6 +611,7 @@ public class NFACreator {
 		NFA epsNFA = new NFA("EPSILON");
 		State startS = new State(false, new HashMap<String, List<State>>());
 		State acceptS = new State(true, new HashMap<String, List<State>>());
+		acceptS.setName("EPSILON");
 		epsNFA.addTransition(startS, "", acceptS);
 		epsNFA.setStart(startS);
 		epsNFA.setAccept(acceptS);

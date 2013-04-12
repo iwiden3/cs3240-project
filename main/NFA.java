@@ -21,6 +21,7 @@ public class NFA
         // Make accept state
         // TODO: this is for simple char classes only
         State accept = new State(true, new HashMap<String, List<State>>());
+        accept.setName(name);
         
         this.accept = accept;
         
