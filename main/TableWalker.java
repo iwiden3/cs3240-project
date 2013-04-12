@@ -37,5 +37,9 @@ public class TableWalker
             endPos = 0;
 
         }
+        
+        return output;
     }
+    
+    private Token tokChar()
 }

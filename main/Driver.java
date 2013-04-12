@@ -53,11 +53,11 @@ public class Driver
 	}
 	
 	
-	public String whatType(String in)
+	/*public String whatType(String in)
 	{
 		Name name=whatType(in,nfa.getStart(),0);
 		return name.getName();
-	}
+	}*/
 	
 	private void readInput() throws IOException
 	{
@@ -96,7 +96,7 @@ public class Driver
 			for(int i=0;i<splitString.length;i++)
 			{
 				String type = whatType(splitString[i]);
-				String fin = type + " "+ splitString[i];
+				String fin = type + " "+ splitString[i] + "\n";
 				out.add(fin);
 			}
 		}
@@ -108,6 +108,36 @@ public class Driver
 		}
 		writer.close();
 	}
+	
+	//NEW ONE
+	/*
+	public String whatType(String in, DFAState st)
+	{
+		HashMap<String, List<State>> map = st.getTransitionTable();
+		Set<String> keys = st.getTransitionTable().keySet();
+		ArrayList<DFAState> states=new ArrayList<DFAState>();
+		
+		for(String k : keys)
+		{
+			if(in.isEmpty())
+			{
+				return st.getName();
+			}
+			else if(in.substring(0,1).matches(k))
+			{
+				states.add(k);
+			}
+			
+		}
+		
+		
+		
+		
+		
+	}
+	
+	
+	
 		
 	public Name whatType(String in, State st, int num)
 	{
@@ -180,4 +210,6 @@ public class Driver
 			return out;
 		}	
 	}
+	
+	*/
 }
