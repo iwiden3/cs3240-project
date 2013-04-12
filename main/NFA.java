@@ -1,9 +1,7 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 
 public class NFA
 {
@@ -78,23 +76,27 @@ public class NFA
     }
     
     // Meh I think this broke but whatever
-    public String toString()
+    public List<String> toListStrings()
     {
-    	String toReturn = name;
-    	HashMap<String, List<State>> nextStates = start.getTransitionTable();
-    	Set<String> nextKeys = nextStates.keySet();
-    	for(String key : nextKeys)
+    	ArrayList<String> fin=new ArrayList<String>();
+    	HashMap<String,List<State>> map=start.getTransitionTable();
+    	Set<String> s=map.keySet();
+    	
+    	HashMap<String,List<State>> map2=accept.getTransitionTable();
+    	Set<String> s2=map.keySet();
+    	fin.add("Start");
+    	for(String k : s)
     	{
-    		toReturn += (" -- " + key + " --> ");
-    		if(nextStates.get(key).get(0).isAccept())
-    		{
-    			toReturn += "ACCEPT";
-    		}
-    		else
-    		{
-    			toReturn += "NODE";
-    		}
+    		fin.add(k);
     	}
-    	return toReturn;
+    	
+    	fin.add("Accept");
+    	
+    	for(String k : s2)
+    	{
+    		fin.add(k);
+    	}
+    	
+    	return fin;
     }
 }

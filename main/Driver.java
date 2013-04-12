@@ -17,6 +17,7 @@ public class Driver
 		HashSet<NFA>nfas = factory.factorize();
 		BigNFA theNFA=new BigNFA(nfas);
 		nfa=theNFA.getNFA();
+		readInput();
 	}
 	
 	public String whatType(String in)
@@ -25,7 +26,7 @@ public class Driver
 		return name.getName();
 	}
 	
-	public void readInput() throws IOException
+	private void readInput() throws IOException
 	{
 		List<String> text = readTextFile(input);
 		ArrayList<String> out=new ArrayList<String>();
