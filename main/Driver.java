@@ -1,21 +1,58 @@
 package main;
+
 import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Driver
 {
 	NFA nfa;
-	public Driver()
+	public Driver( NFA nfa)
 	{
-		
-	
+		this.nfa=nfa;
 	}
 	
 	public String whatType(String in)
 	{
 		Name name=whatType(in,nfa.getStart(),0);
 		return name.getName();
-		
 	}
+	
+	public void readInput(String file) throws IOException
+	{
+		List<String> text = readTextFile(file);
+		ArrayList<String> out=new ArrayList<String>();
+		for(String s: text)
+		{
+			String[] splitString = (s.split(" "));
+			for(int i=0;i<splitString.length;i++)
+			{
+				String type=whatType(splitString[i]);
+				String fin=type + " "+ splitString[i];
+				out.add(fin);
+			}
+		}
+	
+		FileWriter writer = new FileWriter("output.txt"); 
+		for(String str: out) 
+		{
+		  writer.write(str);
+		}
+		writer.close();
+	}
+	
+	
+	
+	 private List<String> readTextFile(String aFileName) throws IOException{
+	        Path path = Paths.get(aFileName);
+	        return Files.readAllLines(path, ENCODING);
+	    }
+	
+	
+	
+	
+	
+	
 	
 	
 	public Name whatType(String in, State st,int num)
