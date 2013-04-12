@@ -38,31 +38,12 @@ public class HomeStarRunner {
 		test.add(str.compareTo("$MULTIPLY"));
 		str=dr2.whatType("PRINT");
 		
-		
-
-		
-		
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		//ArrayList<String> list=new ArrayList<String>();
 		//list.add("a = 5");
 		//list.add("PRINT a");
 		//list.add("b = a * 10 + 20");
 		//list.add("PRINT b");
 		
-		//Driver dr=new Driver(list,"tests/SampleSpec");
-		
-		
-		
+		//Driver dr=new Driver(list,"tests/SampleSpec");	
 	}
 }
