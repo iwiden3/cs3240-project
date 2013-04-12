@@ -10,6 +10,6 @@
 <char-class1> = {CLS_CHAR, ]}
 <char-set-list> = {CLS_CHAR, ]}
 <char-set> = {CLS_CHAR}
-<char-set-tail> = {CLS_CHAR, ""}
-<exclude-set>
+<char-set-tail> = {"-", ""}
+<exclude-set> = {^}
 <exclude-set-tail> = {[, defined_class}

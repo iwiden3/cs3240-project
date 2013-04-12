@@ -15,9 +15,13 @@ public class NFACreator {
 	private HashSet<NFA> defined_classes;
 	private HashMap<String, String> regexTable;
 	private Stack<Integer> myStack = new Stack<Integer>();
+    private HashSet<String> reg_exFirst, rexpFirst, rexpPFirst, rexp1First, rexp1PFirst,
+            rexp2First, rexp2_tailFirst, rexp3First, char_classFirst, char_class1First, 
+            char_set_listFirst, char_setFirst, char_set_tailFirst, exclude_setFirst, exclude_set_tailFirst;
 	
 	public NFACreator(String name, String def, HashMap<String, String> regexTable, HashSet<NFA> regexNFAs)
 	{
+        String[] firstSet;
 		index = 0;
 		this.def = def;
 		this.defined_classes = regexNFAs;
@@ -26,6 +30,38 @@ public class NFACreator {
 		createSplitDef();
 		nfa = reg_ex();
 		nfa.setName(name);
+
+        // Sets up first sets
+        firstSet = {"(", "RE_CHAR", ".", "[", "$"};
+        reg_exFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"(", "RE_CHAR", ".", "[", "$"};
+        rexpFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"UNION", ""}
+        rexpPFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"(", "RE_CHAR", ".", "[", "$"};
+        rexp1First = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"(", "RE_CHAR", ".", "[", "$", ""};
+        rexp1PFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"(", "RE_CHAR", ".", "[", "$"};
+        rexp2First = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"*", "+", ""};
+        rexp2_tailFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {".", "[", "$", ""};
+        rexp3First = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {".", "[", "$"};
+        char_classFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"CLS_CHAR", "]"};
+        char_class1First = new HashSet<String>(Arrays.asList(firstSet));
+        char_set_listFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"CLS_CHAR"};
+        char_setFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"-", ""};
+        char_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"^"};
+        exclude_setFirst = new HashSet<String>(Arrays.asList(firstSet));
+        firstSet = {"[", "$"};
+        exclude_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet));
+        
 	}
 	
 	public NFA getNFA()
