@@ -2,7 +2,7 @@ package main;
 
 import java.util.*;
 
-public class DFAState implements Comparable<DFAState>
+public class DFAState
 {
     private String name;
     private String id;
@@ -36,10 +36,5 @@ public class DFAState implements Comparable<DFAState>
     public HashMap<String, State> getTransitions()
     {
         return transitionTable;
-    }
-
-    public int compareTo(DFAState that)
-    {
-        return 0;
     }
 }

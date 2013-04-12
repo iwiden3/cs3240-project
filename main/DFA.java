@@ -31,7 +31,16 @@ public class DFA
 
     private DFAState constructEClosure(State s)
     {
+        SortedSet<State> eStates = new TreeSet<State>();
+        SortedSet<State> finalStates = constructEClosure(eStates);
+
         return null;
+    }
+
+    private SortedSet<State> constructEClosure(SortedSet<State> eStates)
+    {
+
+        return eStates;
     }
 
 }

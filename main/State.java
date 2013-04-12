@@ -2,7 +2,7 @@ package main;
 
 import java.util.*;
 
-public class State
+public class State implements Comparable<State>
 {
 	private boolean accept;
 	private HashMap<String, List<State>> transitionTable;
@@ -62,5 +62,13 @@ public class State
     		n.add(toGo);
         	transitionTable.put(trans, n);
     	}
+    }
+
+    public int compareTo(State that)
+    {
+        int thisId = Integer.parseInt(this.id);
+        int thatId = Integer.parseInt(that.id);
+
+        return thisId - thatId;
     }
 }
