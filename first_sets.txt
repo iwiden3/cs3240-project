@@ -1,0 +1,15 @@
+<reg-ex> = {(, RE_CHAR, ., [, defined_class}
+<rexp> = {(, RE_CHAR, ., [, defined_class}
+<rexp’> = {UNION, epsilon} 
+<rexp1> = {(, RE_CHAR, ., [, defined_class}
+<rexp1’> = {(, RE_CHAR, ., [, defined_class, epsilon}
+<rexp2> = {(, RE_CHAR, ., [, defined_class}
+<rexp2-tail> = {*, +, epsilon}
+<rexp3> = {., [, defined_class, epsilon}
+<char-class> = {., [, defined_class
+<char-class1> = {CLS_CHAR, ]}
+<char-set-list> = {CLS_CHAR, ]}
+<char-set> = {CLS_CHAR}
+<char-set-tail> = {CLS_CHAR, ""}
+<exclude-set>
+<exclude-set-tail> = {[, defined_class}
