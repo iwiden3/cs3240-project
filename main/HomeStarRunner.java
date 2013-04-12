@@ -21,7 +21,6 @@ public class HomeStarRunner {
 			System.out.println(out);
 			System.out.println(n.toListStrings());
 			out++;
-			
 		}
 	}
 }
