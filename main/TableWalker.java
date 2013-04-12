@@ -12,35 +12,10 @@ import java.nio.file.Paths;
 
 public class TableWalker
 {
-	private NFA nfa;
-		
-	public TableWalker(BigNFA nfa)
-	{
-		this.nfa = nfa.getNFA();
-	}
+    private DFA dfa;
 
-    // Takes in a string and validates it against the NFA
-    // Returns a character or token class if valid
-    // Returns null if invalid
-    public String validate(String token)
+    public TableWalker(DFA dfa)
     {
-        // Set up lists for tracking current valid states
-        // and current acceptStates
-        List<WalkerPair> currStates = new ArrayList<WalkerPair>();
-        List<String> acceptStates = new LinkedList<String>();
-        WalkerPair currPair;
-
-        State start = nfa.getStart();
-        HashTable<String, List<State>> startTable = start.getTransitionTable();
-
-        // Add all epsilon transitions coming out of start
-        for (State s : startTable.get(""))
-        {
-            currPair = new WalkerPair(s.getName(), s);
-            currStates.add(currPair);
-        }
-        
-
-        return "";
+        this.dfa = dfa; 
     }
 }
