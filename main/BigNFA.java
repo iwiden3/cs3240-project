@@ -19,7 +19,7 @@ public class BigNFA
 	    NFA fin=new NFA("The Big One");
 	    
 	    State start=new State(false,new HashMap<String,List<State>>());
-	    State accept=new State(true,null);
+	    State accept=new State(true,new HashMap<String,List<State>>());
 	    for(NFA nfa : NFATable)
 	    {
 	    	start.addTransition("",nfa.getStart());

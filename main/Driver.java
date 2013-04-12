@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Driver
 {
@@ -41,7 +42,7 @@ public class Driver
 		testReadInput();
 	}
 	
-	public Driver(String rules)
+	public Driver(String rules) throws IOException
 	{
 		FileScanner fs=new FileScanner(rules);
 		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
@@ -81,7 +82,12 @@ public class Driver
 		writer.close();
 	}
 	
-	private void testReadInput()
+    private List<String> readTextFile(String aFileName) throws IOException{
+        Path path = Paths.get(aFileName);
+        return Files.readAllLines(path, ENCODING);
+    }
+	
+	private void testReadInput() throws IOException
 	{
 		ArrayList<String> out=new ArrayList<String>();
 		for(String s: text)
@@ -89,8 +95,8 @@ public class Driver
 			String[] splitString = (s.split(" "));
 			for(int i=0;i<splitString.length;i++)
 			{
-				String type=whatType(splitString[i]);
-				String fin=type + " "+ splitString[i];
+				String type = whatType(splitString[i]);
+				String fin = type + " "+ splitString[i];
 				out.add(fin);
 			}
 		}
@@ -102,29 +108,15 @@ public class Driver
 		}
 		writer.close();
 	}
-	
-	
-	
-	
-	/* private List<String> readTextFile(String aFileName) throws IOException{
-	        Path path = Paths.get(aFileName);
-	        return Files.readAllLines(path, ENCODING);
-	    }*/
-	
-	
-	
-	
-	
-	
-	
-	
-	public Name whatType(String in, State st,int num)
-	{
-		Name out=new Name(st.getName(),num);
 		
-		HashMap<String, List<State>> map=st.getTransitionTable();
-		HashSet<String> keys=(HashSet<String>) st.getTransitionTable().keySet();
-		HashSet<State> states =new HashSet<State>();
+	public Name whatType(String in, State st, int num)
+	{
+		num++;
+		Name out = new Name(st.getName(), num);
+		//System.out.println(st.getName());
+		HashMap<String, List<State>> map = st.getTransitionTable();
+		Set<String> keys = st.getTransitionTable().keySet();
+		HashSet<State> states = new HashSet<State>();
 		for(String str: keys)
 		{
 			if(str.isEmpty() || in.matches(str))
@@ -149,7 +141,7 @@ public class Driver
 		{
 			for (State st2 : states)
 			{
-				Name curr=whatType(in, st2,num++);
+				Name curr=whatType(in, st2,num);
 				if(curr.getNum()>=num && !curr.getName().isEmpty())
 				{
 					out.setName(curr.getName());

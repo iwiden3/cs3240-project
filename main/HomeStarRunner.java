@@ -7,23 +7,23 @@ public class HomeStarRunner {
 
 	public static void main(String[]args) throws IOException
 	{
-		FileScanner fs;
-		NFAFactory factory;
-		HashSet<NFA> nfas;
-		
-		fs = new FileScanner("tests/SampleSpec");
-		factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
-		nfas = factory.factorize();
-		
-		for(NFA n: nfas)
-		{
-			System.out.println(n.getName());
-			System.out.println(n.toListStrings());
-		}
+//		FileScanner fs;
+//		NFAFactory factory;
+//		HashSet<NFA> nfas;
+//		
+//		fs = new FileScanner("tests/SampleSpec");
+//		factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
+//		nfas = factory.factorize();
+//		
+//		for(NFA n: nfas)
+//		{
+//			System.out.println(n.getName());
+//			System.out.println(n.toListStrings());
+//		}
 		
 		Driver dr2=new Driver("tests/SampleSpec");
-		
-		System.out.println(dr2.whatType("a"));
+		String str=dr2.whatType("a");
+		System.out.println(str);
 		
 		
 		
