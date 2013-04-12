@@ -32,13 +32,26 @@ public class DFA
     private DFAState constructEClosure(State s)
     {
         SortedSet<State> eStates = new TreeSet<State>();
-        SortedSet<State> finalStates = constructEClosure(eStates);
+        SortedSet<State> finalStates; 
+
+        finalStates = constructEClosure(s, eStates);
 
         return null;
     }
 
-    private SortedSet<State> constructEClosure(SortedSet<State> eStates)
+    private SortedSet<State> constructEClosure(State curr, SortedSet<State> eStates)
     {
+        if (!eStates.contains(curr))
+        {
+            eStates.add(curr);
+            if (curr.getTransitionTable().containsKey(""))
+            {
+                for (State s : curr.getTransitionTable().get(""))
+                {
+                    constructEClosure(s, eStates);
+                }
+            }
+        }
 
         return eStates;
     }

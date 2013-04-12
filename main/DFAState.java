@@ -37,4 +37,9 @@ public class DFAState
     {
         return transitionTable;
     }
+
+    public boolean equals(Object obj)
+    {
+        return (this.id.equals(((DFAState)obj).id) ? true : false);
+    }
 }
