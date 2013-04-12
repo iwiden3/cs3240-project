@@ -18,25 +18,43 @@ public class DFA
 
     private void convertToDFA(NFA nfa)
     {
-        start = findStart(nfa);
+        findStart(nfa);
     }
 
     // Calculates the start state of the DFA
-    private DFAState findStart(NFA nfa)
+    private void findStart(NFA nfa)
     {
         start = constructEClosure(nfa.getStart());
-
-        return null;
     }
 
     private DFAState constructEClosure(State s)
     {
         SortedSet<State> eStates = new TreeSet<State>();
         SortedSet<State> finalStates; 
+        DFAState ret;
+        String retId = ""; // inefficient, so sue me
+        boolean isAccept = false;
+        String name = "";
 
         finalStates = constructEClosure(s, eStates);
+        
+        for (State t : finalStates)
+        {
+            if (t.isAccept())
+            {
+                isAccept = true;
+                name = t.getName();
+            }
 
-        return null;
+            retId += t.getId();
+        }
+        ret = new DFAState(name, retId, isAccept, new HashMap<String, State>());
+        states.add(ret);
+
+        if (ret.isAccept())
+            accept.add(ret);
+
+        return ret;
     }
 
     private SortedSet<State> constructEClosure(State curr, SortedSet<State> eStates)

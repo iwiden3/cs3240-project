@@ -49,6 +49,11 @@ public class State implements Comparable<State>
     {
         this.accept = accept;
     }
+
+    public String getId()
+    {
+        return id;
+    }
     
     public void addTransition(String trans, State toGo)
     {
