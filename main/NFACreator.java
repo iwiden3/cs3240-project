@@ -28,40 +28,49 @@ public class NFACreator {
 		this.regexTable = regexTable;
 		splitDef = new ArrayList<String>();
 		createSplitDef();
-		nfa = reg_ex();
-		nfa.setName(name);
 
         // Sets up first sets
-        String[] firstSet1 = {"(", "RE_CHAR", ".", "[", "$"};
+        String[] firstSet1 = {"(", ".", "[", "$"};
         reg_exFirst = new HashSet<String>(Arrays.asList(firstSet1));
-        String[] firstSet2 = {"(", "RE_CHAR", ".", "[", "$"};
+        reg_exFirst.addAll(RE_CHAR());
+        String[] firstSet2 = {"(", ".", "[", "$"};
         rexpFirst = new HashSet<String>(Arrays.asList(firstSet2));
-        String[] firstSet3 = {"UNION", ""};
+        rexpFirst.addAll(RE_CHAR());
+        String[] firstSet3 = {"|", ""};
         rexpPFirst = new HashSet<String>(Arrays.asList(firstSet3));
-        String[] firstSet4 = {"(", "RE_CHAR", ".", "[", "$"};
+        String[] firstSet4 = {"(", ".", "[", "$"};
         rexp1First = new HashSet<String>(Arrays.asList(firstSet4));
-        String[] firstSet5 = {"(", "RE_CHAR", ".", "[", "$", ""};
+        rexp1First.addAll(RE_CHAR());
+        String[] firstSet5 = {"(", ".", "[", "$", ""};
         rexp1PFirst = new HashSet<String>(Arrays.asList(firstSet5));
-        String[] firstSet6 = {"(", "RE_CHAR", ".", "[", "$"};
+        rexp1PFirst.addAll(RE_CHAR());
+        String[] firstSet6 = {"(", ".", "[", "$"};
         rexp2First = new HashSet<String>(Arrays.asList(firstSet6));
+        rexp2First.addAll(RE_CHAR());
         String[] firstSet7 = {"*", "+", ""};
         rexp2_tailFirst = new HashSet<String>(Arrays.asList(firstSet7));
         String[] firstSet8 = {".", "[", "$", ""};
         rexp3First = new HashSet<String>(Arrays.asList(firstSet8));
         String[] firstSet9 = {".", "[", "$"};
         char_classFirst = new HashSet<String>(Arrays.asList(firstSet9));
-        String[] firstSet10 = {"CLS_CHAR", "]"};
+        String[] firstSet10 = {"]", "^"};
         char_class1First = new HashSet<String>(Arrays.asList(firstSet10));
-        char_set_listFirst = new HashSet<String>(Arrays.asList(firstSet10));
-        String[] firstSet11 = {"CLS_CHAR"};
-        char_setFirst = new HashSet<String>(Arrays.asList(firstSet11));
-        String[] firstSet12 = {"-", ""};
-        char_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet12));
-        String[] firstSet13 = {"^"};
-        exclude_setFirst = new HashSet<String>(Arrays.asList(firstSet13));
-        String[] firstSet14 = {"[", "$"};
-        exclude_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet14));
+        char_class1First.addAll(CLS_CHAR());
+        String[] firstSet11 = {"]"};
+        char_set_listFirst = new HashSet<String>(Arrays.asList(firstSet11));
+        char_set_listFirst.addAll(CLS_CHAR());
+        String[] firstSet12 = {};
+        char_setFirst = new HashSet<String>(Arrays.asList(firstSet12));
+        char_setFirst.addAll(CLS_CHAR());
+        String[] firstSet13 = {"-", ""};
+        char_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet13));
+        String[] firstSet14 = {"^"};
+        exclude_setFirst = new HashSet<String>(Arrays.asList(firstSet14));
+        String[] firstSet15 = {"[", "$"};
+        exclude_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet15));
         
+		nfa = reg_ex();
+		nfa.setName(name);
 	}
 	
 	public NFA getNFA()
@@ -71,11 +80,19 @@ public class NFACreator {
 
 	public NFA reg_ex()
 	{
+		if(!reg_exFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return epsilonNFA();
+		}
 		return rexp();
 	}
 	
 	public NFA rexp()
 	{
+		if(!rexpFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		NFA rexp1 = rexp1();
 		if(rexp1 != null)
@@ -101,6 +118,10 @@ public class NFACreator {
 		if(index >= splitDef.size())
 		{
 			return epsilonNFA();
+		}
+		if(!rexpPFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return in;
 		}
 		myStack.push(index);
 		if(splitDef.get(index).equals("|"))
@@ -129,6 +150,10 @@ public class NFACreator {
 	
 	public NFA rexp1()
 	{
+		if(!rexp1First.contains(splitDef.get(index).substring(0,1)))
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		NFA rexp2 = rexp2();
 		NFA rexp1P = rexp1P();
@@ -150,6 +175,10 @@ public class NFACreator {
 		{
 			return epsilonNFA();
 		}
+		if(!rexp1PFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		NFA rexp2 = rexp2();
 		NFA rexp1P = rexp1P();
@@ -167,6 +196,10 @@ public class NFACreator {
 	
 	public NFA rexp2()
 	{
+		if(!rexp2First.contains(splitDef.get(index).substring(0,1)))
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		if(splitDef.get(index).equals("("))
 		{
@@ -224,6 +257,10 @@ public class NFACreator {
 		{
 			return epsilonNFA();
 		}
+		if(!rexp2_tailFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return in;
+		}
 		myStack.push(index);
 		switch(splitDef.get(index)){
 			case "*": 
@@ -246,6 +283,10 @@ public class NFACreator {
 		{
 			return epsilonNFA();
 		}
+		if(!rexp3First.contains(splitDef.get(index).substring(0,1)))
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		String char_class = char_class();
 		if(char_class != null)
@@ -261,6 +302,10 @@ public class NFACreator {
 	
 	public String char_class()
 	{
+		if(!char_classFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return null;
+		}
 		myStack.push(index);
 		if(splitDef.get(index).matches("[.]"))
 		{
@@ -296,6 +341,10 @@ public class NFACreator {
 	
 	public String char_class1()
 	{
+		if(!char_class1First.contains(splitDef.get(index).substring(0,1)))
+		{
+			return null;
+		}
 		myStack.push(index);
 		String char_set_list = char_set_list();
 		if(char_set_list != null)
@@ -317,6 +366,11 @@ public class NFACreator {
 	
 	public String char_set_list()
 	{
+		if(!char_set_listFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			System.out.println("BITCHES");
+			return null;
+		}
 		myStack.push(index);
 		String char_set = char_set();
 		if(char_set != null)
@@ -342,6 +396,10 @@ public class NFACreator {
 	
 	public String char_set()
 	{
+		if(!char_setFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return null;
+		}
 		myStack.push(index);
 		String ret = "";
 		if(CLS_CHAR().contains(splitDef.get(index)))
@@ -365,6 +423,10 @@ public class NFACreator {
 		{
 			return epsilon();
 		}
+		if(!char_set_tailFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return null;
+		}
 		myStack.push(index);
 		String ret = "";
 		if(splitDef.get(index).equals("-") && CLS_CHAR().contains(splitDef.get(index+1)))
@@ -385,9 +447,12 @@ public class NFACreator {
 	
 	public String exclude_set()
 	{
+		if(!exclude_setFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return null;
+		}
 		myStack.push(index);
 		String ret = "";
-		System.out.println(index);
 		if(splitDef.get(index).equals("^"))
 		{
 			ret += splitDef.get(index);
@@ -421,6 +486,10 @@ public class NFACreator {
 	
 	public String exclude_set_tail()
 	{
+		if(!exclude_set_tailFirst.contains(splitDef.get(index).substring(0,1)))
+		{
+			return null;
+		}
 		myStack.push(index);
 		if(splitDef.get(index).equals("["))
 		{
