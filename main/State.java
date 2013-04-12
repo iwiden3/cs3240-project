@@ -2,26 +2,17 @@ package main;
 
 import java.util.*;
 
-public class State implements Comparable<State>
+public class State
 {
 	private boolean accept;
 	private HashMap<String, List<State>> transitionTable;
 	private String name;
-    private String id;
-    // Needed for the creation of combo-states in the DFA
-    private static int currId;
 
-    static
-    {
-        currId = 1;
-    }
 	
 	public State(boolean accept, HashMap<String, List<State>> table)
 	{
 		this.accept = accept;
 		this.transitionTable = table;
-        id = currId + "";
-        currId++;
 		name="";
 	}
 	
@@ -49,11 +40,6 @@ public class State implements Comparable<State>
     {
         this.accept = accept;
     }
-
-    public String getId()
-    {
-        return id;
-    }
     
     public void addTransition(String trans, State toGo)
     {
@@ -67,13 +53,5 @@ public class State implements Comparable<State>
     		n.add(toGo);
         	transitionTable.put(trans, n);
     	}
-    }
-
-    public int compareTo(State that)
-    {
-        int thisId = Integer.parseInt(this.id);
-        int thatId = Integer.parseInt(that.id);
-
-        return thisId - thatId;
     }
 }

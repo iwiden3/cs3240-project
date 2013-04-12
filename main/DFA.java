@@ -24,54 +24,76 @@ public class DFA
     // Calculates the start state of the DFA
     private void findStart(NFA nfa)
     {
-        start = constructEClosure(nfa.getStart());
+        DFAState dummy = new DFAState("", false, null, new HashMap<String, State>());
+        dummy.addState(nfa.getStart());
+        start = closure(dummy);
     }
 
-    private DFAState constructEClosure(State s)
+    // Calculates epsilon transition states
+    private DFAState closure(DFAState s)
     {
-        SortedSet<State> eStates = new TreeSet<State>();
-        SortedSet<State> finalStates; 
-        DFAState ret;
-        String retId = ""; // inefficient, so sue me
+        HashSet<State> ret = new HashSet<State>();
+        HashSet<State> toAdd;
         boolean isAccept = false;
         String name = "";
+        DFAState output;
 
-        finalStates = constructEClosure(s, eStates);
-        
-        for (State t : finalStates)
+        // Add all input states to output
+        for (State i : s.getStates())
+        {
+            ret.add(i);
+        }
+
+        while (true)
+        {
+            toAdd = new HashSet<State>();
+
+            // Iterate over all states currently in ret
+            for (State r : ret)
+            {
+                if (r.getTransitionTable().containsKey(""))
+                {
+                    for (State t : r.getTransitionTable().get(""))
+                    {
+                        if (!ret.contains(t))
+                        {
+                            toAdd.add(t);
+                        }
+                    }
+                }
+            }
+            if (toAdd.isEmpty())
+            {
+                break;
+            }
+            for (State a : toAdd)
+            {
+                ret.add(a);
+            }
+        }
+        // Determine if new state is accept
+        for (State t : ret)
         {
             if (t.isAccept())
             {
                 isAccept = true;
                 name = t.getName();
+                break;
             }
-
-            retId += t.getId();
         }
-        ret = new DFAState(name, retId, isAccept, new HashMap<String, State>());
-        states.add(ret);
-
-        if (ret.isAccept())
-            accept.add(ret);
-
-        return ret;
-    }
-
-    private SortedSet<State> constructEClosure(State curr, SortedSet<State> eStates)
-    {
-        if (!eStates.contains(curr))
+        // Create new DFAState
+        output = new DFAState(name, isAccept, ret, new HashMap<String, State>());
+        states.add(output);
+        if (output.isAccept())
         {
-            eStates.add(curr);
-            if (curr.getTransitionTable().containsKey(""))
-            {
-                for (State s : curr.getTransitionTable().get(""))
-                {
-                    constructEClosure(s, eStates);
-                }
-            }
+            accept.add(output);
         }
 
-        return eStates;
+        return output;
     }
 
+    private DFAState goTo(DFAState s)
+    {
+        return null;
+    }
 }
