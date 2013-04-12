@@ -5,14 +5,24 @@ import java.util.*;
 
 public class DFA
 {
-	public State start;
-	public List<State> accept;
+	public DFAState start;
+	public List<DFAState> accept;
+    public HashSet<DFAState> states;
 
     // This will call convertToDFA() using the passed in BigNFA
-	public DFA(BigNFA nfa)
+	public DFA(BigNFA bnfa)
 	{
+        // Extract the underlying NFA
+        NFA nfa = bnfa.getNFA();
+        // Set the DFA's start equal to an equivalent 
         convertToDFA(nfa);
 	}
+
+    // Calculates the start state of the DFA
+    private void findStart(NFA nfa)
+    {
+
+    }
 
     // This sets the start/accept class variables
     private void convertToDFA(BigNFA nfa)
@@ -22,30 +32,6 @@ public class DFA
 
     private HashSet<State> constructEClosure(State s)
     {
-        HashSet<State> eStates = new HashSet<State>();
-        HashSet<State> visited = new HashSet<State>();
-        HashMap<String, List<State>> transTable = s.getTransitionTable();
-
-        // Adds the original state to the set
-        eStates.add(s);
-        visited.add(s);
-
-        // Iterate over all epsilon transitions and add them to the set
-        for (State st : transTable.get(""))
-        {
-            eStates.add(st);
-
-            // Add all epsilon transitions from the new states
-            if (!visited.contains(st))
-            {
-                for (State e : constructEClosure(st))
-                {
-                    eStates.add(e);
-                }
-            }
-            visited.add(st);
-        }
-
-        return eStates;
+        return null;
     }
 }
