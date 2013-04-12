@@ -22,19 +22,19 @@ public class HomeStarRunner {
 //		}
 		
 		Driver dr2=new Driver("tests/SampleSpec");
-		String str=dr2.whatType("a");
+		String str=dr2.whatType("");
 		System.out.println(str);
 		
 		
 		
-		/*
-		ArrayList<String> list=new ArrayList<String>();
-		list.add("a = 5");
-		list.add("PRINT a");
-		list.add("b = a * 10 + 20");
-		list.add("PRINT b");
 		
-		Driver dr=new Driver(list,"tests/SampleSpec");*/
+		//ArrayList<String> list=new ArrayList<String>();
+		//list.add("a = 5");
+		//list.add("PRINT a");
+		//list.add("b = a * 10 + 20");
+		//list.add("PRINT b");
+		
+		//Driver dr=new Driver(list,"tests/SampleSpec");
 		
 		
 		
