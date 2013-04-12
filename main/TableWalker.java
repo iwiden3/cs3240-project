@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 
 public class TableWalker
@@ -24,22 +25,38 @@ public class TableWalker
     public List<Token> parse()
     {
         char curr;
-        boolean hasAccept;
+        DFAState currState;
+        boolean hasAccept = false, failure = false;
         String lastKnown;
-        int startPos = 0, endPos = 0;
+        int startPos = 0, endPos = 0, index = 0;
         List<Token> output = new LinkedList<Token>();
 
         for (String s : input)
         {
+            currState = dfa.getStart();
             lastKnown = "";
             hasAccept = false;
             startPos= 0;
             endPos = 0;
+            index = 0;
 
+            if (currState
+
+            while (index < s.length() && !failure)
+            {
+                curr = s.charAt(i);
+
+                for (String reg : currState.getTransitions().keySet())
+                {
+                   if (Pattern.matches(reg, Character.toString(curr)))
+                   {
+                       currState = currState.getTransitions().get(reg);
+                       break;
+                   }
+                }
+            }
         }
         
         return output;
     }
-    
-    private Token tokChar()
 }
