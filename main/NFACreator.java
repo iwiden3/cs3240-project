@@ -17,14 +17,14 @@ public class NFACreator {
 	
 	public NFACreator(String name, String def, HashMap<String, String> regexTable, HashSet<NFA> regexNFAs)
 	{
-		nfa = new NFA(name);
 		index = 0;
 		this.def = def;
 		this.defined_classes = regexNFAs;
 		this.regexTable = regexTable;
 		splitDef = new ArrayList<String>();
 		createSplitDef();
-		nextCurr();
+		nfa = reg_ex();
+		nfa.setName(name);
 	}
 	
 	public NFA getNFA()
@@ -44,45 +44,42 @@ public class NFACreator {
 	
 	public NFA rexpP()
 	{
-		String x;
-		try
+		if(splitDef.get(index).equals("|"))
 		{
-			x = def.substring(index, index+1);
+			nextCurr();
+			return UNION(rexp1(), rexpP());
 		}
-		catch(IndexOutOfBoundsException e)
+		else
 		{
-			//BLEHHHHH NOPE FIX THIS SHIT BREAK OUT OF EVERYTHING
-			return null;
-		}
-		switch(x){
-			case "|":
-				nextCurr();
-				return UNION(rexp1(), rexpP());
-			default:
-				return epsilon();
+			return epsilonNFA();
 		}
 	}
 	
 	public NFA rexp1()
 	{
-		return concat(rexp2(), rexp1P());
+		NFA rexp2 = rexp2();
+		NFA rexp1P = rexp1P();
+		if(rexp2 != null && rexp1P != null)
+		{
+			return concat(rexp2(), rexp1P());
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public NFA rexp1P()
 	{
-		String x;
-		try
+		NFA rexp2 = rexp2();
+		NFA rexp1P = rexp1P();
+		if(rexp2 != null && rexp1P != null)
 		{
-			x = def.substring(index, index+1);
+			return concat(rexp2(), rexp1P());
 		}
-		catch(IndexOutOfBoundsException e)
+		else
 		{
-			//BLEHHHHH NOPE FIX THIS SHIT
-			return null;
-		}
-		switch(x){
-			case "": return epsilon();
-			default: return concat(rexp2(), rexp1P());
+			return epsilonNFA();
 		}
 	}
 	
@@ -90,31 +87,60 @@ public class NFACreator {
 	{
 		if(splitDef.get(index).equals("("))
 		{
-			return concat(rexp(), rexp2_tail());
+			nextCurr();
+			NFA rexp = rexp();
+			if(rexp() != null)
+			{
+				NFA rexp2_tail = rexp2_tail(rexp);
+				if(!rexp2_tail.getName().equals("EPSILON"))
+				{
+					return rexp2_tail;
+				}
+				else
+				{
+					return rexp;
+				}
+			}
 		}
 		
 		if(RE_CHAR().contains(splitDef.get(index)))
 		{
+			NFA n = new NFA("YO", splitDef.get(index));
+			nextCurr();
+			NFA rexp2_tail = rexp2_tail(n);
+			if(!rexp2_tail.getName().equals("EPSILON"))
+			{
+				return rexp2_tail;
+			}
+			else
+			{
+				return n;
+			}
 			
 		}
-			case "": return epsilon();
-			default: return concat(RE_CHAR(), rexp2_tail());
+		
+		return rexp3();
 	}
 	
-	public NFA rexp2_tail()
+	public NFA rexp2_tail(NFA in)
 	{
-		switch(x){
-			case "*": return star();
-			case "+": return plus();
-			case "": return epsilon();
+		switch(splitDef.get(index)){
+			case "*": return star(in);
+			case "+": return plus(in);
 		}
+		return epsilonNFA();
 	}
 	
 	public NFA rexp3()
 	{
-		switch(x){
-			case "": return epsilon();
-			default: return char_class();
+		String char_class = char_class();
+		if(char_class != null)
+		{
+			return new NFA("SUP", char_class);
+		}
+		else
+		{
+			return epsilonNFA();
 		}
 	}
 	
@@ -136,7 +162,6 @@ public class NFACreator {
 		}
 		String defined_class = defined_class(splitDef.get(index));
 		return defined_class; // null if nonexistent
-		}
 	}
 	
 	public String char_class1()
@@ -280,7 +305,11 @@ public class NFACreator {
 	
 	public NFA concat(NFA n1, NFA n2)
 	{
-		if(n1 == null)
+		if(n1 == null && n2 == null)
+		{
+			return null;
+		}
+		else if(n1 == null)
 		{
 			return n2;
 		}
