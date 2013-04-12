@@ -480,6 +480,19 @@ public class NFACreator {
 	public String defined_class(String name)
 	{
 		String s = regexTable.get(name);
+        String[] splitString = (s.split(" "));
+        String value = splitString[0];
+        for(int j=1; j<splitString.length; j++){
+        	if(splitString[j].equalsIgnoreCase("in")){
+        		String tempVal = regexTable.get(splitString[j+1]); //Retrieves the regex for "in $DIGIT/$CHAR"
+            	value = tempVal.substring(0,tempVal.length()-1) + value.substring(1); //Appends the previous regex with the new one
+            	break;
+            }
+            else{
+            	value = value + " " + splitString[j];
+            }
+        }
+        s = value;
 		if(s != null)
 		{
 			nextCurr();

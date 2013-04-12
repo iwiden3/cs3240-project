@@ -35,15 +35,15 @@ public class FileScanner{
             else{
 	            String value = splitString[1];
 	            for(int j=2; j<splitString.length; j++){
-	            	//if(splitString[j].equalsIgnoreCase("in")){
-	            	//	String tempVal = tempTable.get(splitString[j+1]); //Retrieves the regex for "in $DIGIT/$CHAR"
-	            	//	value = tempVal.substring(0,tempVal.length()-1) + value.substring(1); //Appends the previous regex with the new one
-	            	//	break;
-	            //	}
-	            //	else{
+//	            	if(splitString[j].equalsIgnoreCase("in")){
+//	            		String tempVal = tempTable.get(splitString[j+1]); //Retrieves the regex for "in $DIGIT/$CHAR"
+//	            		value = tempVal.substring(0,tempVal.length()-1) + value.substring(1); //Appends the previous regex with the new one
+//	            		break;
+//	            	}
+//	            	else{
 	            		value = value + " " + splitString[j];
-	            	}
-	            //}
+//	            	}
+	            }
 	            // I'm not actually sure we want to do this
         		//value = replaceRegexInTokens(value);
 	            tempTable.put(splitString[0],value);

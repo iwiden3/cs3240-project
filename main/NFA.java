@@ -87,6 +87,7 @@ public class NFA
     	fin.add("Start");
     	for(String k : s)
     	{
+    		fin.add(k);
     		List<State> states= map.get(k);
     		if(states!=null)
     		{	
@@ -105,6 +106,7 @@ public class NFA
     	
     	for(String k : s2)
     	{
+    		fin.add(k);
     		List<State> states= map2.get(k);
     		if(states!=null)
     		{	

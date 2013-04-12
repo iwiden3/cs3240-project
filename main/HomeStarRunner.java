@@ -15,12 +15,10 @@ public class HomeStarRunner {
 		factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
 		nfas = factory.factorize();
 		
-		int out=1;
 		for(NFA n: nfas)
 		{
-			System.out.println(out);
+			System.out.println(n.getName());
 			System.out.println(n.toListStrings());
-			out++;
 		}
 	}
 }

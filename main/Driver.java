@@ -1,13 +1,22 @@
 package main;
 
-import java.util.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class Driver
 {
 	NFA nfa;
 	String input;
+    private final static Charset ENCODING = StandardCharsets.US_ASCII;
 	
 	public Driver(String input, String rules) throws IOException
 	{
