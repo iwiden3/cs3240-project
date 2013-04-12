@@ -139,7 +139,7 @@ public class Driver
 			}
 		}
 		
-		if( states1.size()==1)
+		if( states1.size()==1 && states2.isEmpty())
 		{
 			for(State state: states1)
 			{
@@ -168,7 +168,7 @@ public class Driver
 				}
 			}
 			
-			for (State st3 : states1)
+			for (State st3 : states2)
 			{
 				Name curr=whatType(in.substring(1,in.length()-1), st3,num);
 				if(curr.getNum()>=num && !curr.getName().isEmpty())
