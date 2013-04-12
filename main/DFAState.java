@@ -2,14 +2,14 @@ package main;
 
 import java.util.*;
 
-public class DFAState
+public class DFAState implements Comparable<DFAState>
 {
     private String name;
     private String id;
     private boolean accept;
     private HashMap<String, State> transitionTable;
 
-    public DFAState(String name, String id, boolean id,
+    public DFAState(String name, String id, boolean accept,
             HashMap<String, State> transitionTable)
     {
         this.name = name;
@@ -36,5 +36,10 @@ public class DFAState
     public HashMap<String, State> getTransitions()
     {
         return transitionTable;
+    }
+
+    public int compareTo(DFAState that)
+    {
+        return 0;
     }
 }

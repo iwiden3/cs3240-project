@@ -7,7 +7,7 @@ public class State
 	private boolean accept;
 	private HashMap<String, List<State>> transitionTable;
 	private String name;
-    private int id;
+    private String id;
     // Needed for the creation of combo-states in the DFA
     private static int currId;
 
@@ -20,7 +20,8 @@ public class State
 	{
 		this.accept = accept;
 		this.transitionTable = table;
-        id = currId++;
+        id = currId + "";
+        currId++;
 		name="";
 	}
 	

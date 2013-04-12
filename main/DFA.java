@@ -12,26 +12,26 @@ public class DFA
     // This will call convertToDFA() using the passed in BigNFA
 	public DFA(BigNFA bnfa)
 	{
-        // Extract the underlying NFA
         NFA nfa = bnfa.getNFA();
-        // Set the DFA's start equal to an equivalent 
         convertToDFA(nfa);
 	}
 
+    private void convertToDFA(NFA nfa)
+    {
+        start = findStart(nfa);
+    }
+
     // Calculates the start state of the DFA
-    private void findStart(NFA nfa)
+    private DFAState findStart(NFA nfa)
     {
+        start = constructEClosure(nfa.getStart());
 
+        return null;
     }
 
-    // This sets the start/accept class variables
-    private void convertToDFA(BigNFA nfa)
-    {
-
-    }
-
-    private HashSet<State> constructEClosure(State s)
+    private DFAState constructEClosure(State s)
     {
         return null;
     }
+
 }
