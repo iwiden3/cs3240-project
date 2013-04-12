@@ -62,6 +62,10 @@ public class NFACreator {
 	
 	public NFA rexpP(NFA in)
 	{
+		if(index >= splitDef.size())
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		if(splitDef.get(index).equals("|"))
 		{
@@ -95,7 +99,7 @@ public class NFACreator {
 		if(rexp2 != null && rexp1P != null)
 		{
 			myStack.pop();
-			return concat(rexp2(), rexp1P());
+			return concat(rexp2, rexp1P);
 		}
 		else
 		{
@@ -106,13 +110,17 @@ public class NFACreator {
 	
 	public NFA rexp1P()
 	{
+		if(index >= splitDef.size())
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		NFA rexp2 = rexp2();
 		NFA rexp1P = rexp1P();
 		if(rexp2 != null && rexp1P != null)
 		{
 			myStack.pop();
-			return concat(rexp2(), rexp1P());
+			return concat(rexp2, rexp1P);
 		}
 		else
 		{
@@ -158,7 +166,6 @@ public class NFACreator {
 			NFA rexp2_tail = rexp2_tail(n);
 			myStack.pop();
 			return rexp2_tail;
-			
 		}
 		
 		index = myStack.pop();
@@ -177,6 +184,10 @@ public class NFACreator {
 	
 	public NFA rexp2_tail(NFA in)
 	{
+		if(index >= splitDef.size())
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		switch(splitDef.get(index)){
 			case "*": 
@@ -195,6 +206,10 @@ public class NFACreator {
 	
 	public NFA rexp3()
 	{
+		if(index >= splitDef.size())
+		{
+			return epsilonNFA();
+		}
 		myStack.push(index);
 		String char_class = char_class();
 		if(char_class != null)
@@ -226,7 +241,7 @@ public class NFACreator {
 			if(char_class1 != null)
 			{
 				myStack.pop();
-				return "[" + char_class1();
+				return "[" + char_class1;
 			}
 		}
 		index = myStack.pop();
@@ -250,7 +265,7 @@ public class NFACreator {
 		if(char_set_list != null)
 		{
 			myStack.pop();
-			return char_set_list();
+			return char_set_list;
 		}
 		index = myStack.pop();
 		myStack.push(index);
@@ -258,7 +273,7 @@ public class NFACreator {
 		if(exclude_set != null)
 		{
 			myStack.pop();
-			return exclude_set();
+			return exclude_set;
 		}
 		index = myStack.pop();
 		return null;
@@ -310,6 +325,10 @@ public class NFACreator {
 	
 	public String char_set_tail()
 	{
+		if(index >= splitDef.size())
+		{
+			return epsilon();
+		}
 		myStack.push(index);
 		String ret = "";
 		if(splitDef.get(index).equals("-") && CLS_CHAR().contains(splitDef.get(index+1)))
@@ -505,8 +524,10 @@ public class NFACreator {
 	{
 		NFA epsNFA = new NFA("EPSILON");
 		State startS = new State(false, new HashMap<String, List<State>>());
-		epsNFA.addTransition(startS, "", new State(true, new HashMap<String, List<State>>()));
+		State acceptS = new State(true, new HashMap<String, List<State>>());
+		epsNFA.addTransition(startS, "", acceptS);
 		epsNFA.setStart(startS);
+		epsNFA.setAccept(acceptS);
 		return epsNFA;
 	}
 	
@@ -597,10 +618,5 @@ public class NFACreator {
 		{
 			
 		}
-	}
-	
-	public void goBack()
-	{
-		index--;
 	}
 }
