@@ -218,7 +218,7 @@ public class NFACreator {
 	{
 		if(index >= splitDef.size())
 		{
-			return epsilonNFA();
+			return in;
 		}
 		if(!rexp2_tailFirst.contains(splitDef.get(index).substring(0,1)))
 		{
