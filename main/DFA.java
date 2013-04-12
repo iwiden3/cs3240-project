@@ -18,13 +18,36 @@ public class DFA
 
     private void convertToDFA(NFA nfa)
     {
+        DFAState curr, temp;
+        List<String> tokens = new ArrayList<String>();
+        LinkedList<DFAState> queue = new LinkedList<DFAState>();
         findStart(nfa);
+        queue.add(start);
+
+        while (!queue.isEmpty())
+        {
+            curr = queue.removeFirst();
+            // Pull out all keys
+            for (State s : curr.getStates())
+            {
+                for (String k : curr.getTransitions().keySet())
+                {
+                    tokens.add(k);
+                }
+            }
+            // Iterate over all possible iterations and link states together
+            for (String j : tokens)
+            {
+                temp = goTo(curr, j);
+                queue.add(temp);
+            }
+        }
     }
 
     // Calculates the start state of the DFA
     private void findStart(NFA nfa)
     {
-        DFAState dummy = new DFAState("", false, null, new HashMap<String, State>());
+        DFAState dummy = new DFAState("", false, null, new HashMap<String, DFAState>());
         dummy.addState(nfa.getStart());
         start = closure(dummy);
     }
@@ -82,7 +105,7 @@ public class DFA
             }
         }
         // Create new DFAState
-        output = new DFAState(name, isAccept, ret, new HashMap<String, State>());
+        output = new DFAState(name, isAccept, ret, new HashMap<String, DFAState>());
         states.add(output);
         if (output.isAccept())
         {
@@ -92,8 +115,28 @@ public class DFA
         return output;
     }
 
-    private DFAState goTo(DFAState s)
+    // This calculates all of the transitions out of a state
+    // for a given transition string
+    private DFAState goTo(DFAState s, String token)
     {
-        return null;
+        HashSet<State> ret = new HashSet<State>();
+        DFAState dummy, output;
+
+        for (State i : s.getStates())
+        {
+            if (i.getTransitionTable().containsKey(token))
+            {
+                for (State t : i.getTransitionTable().get(token))
+                {
+                    ret.add(t);
+                }
+            }
+        }
+        // Create dummy DFAState to pass to closure()
+        dummy = new DFAState("", false, ret, new HashMap<String, DFAState>());
+        output = closure(dummy);
+        s.getTransitions().put(token, output);
+
+        return output;
     }
 }

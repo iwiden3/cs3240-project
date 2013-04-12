@@ -7,10 +7,10 @@ public class DFAState
     private String name;
     private boolean accept;
     private HashSet<State> states;
-    private HashMap<String, State> transitionTable;
+    private HashMap<String, DFAState> transitionTable;
 
     public DFAState(String name, boolean accept, HashSet<State> states,
-            HashMap<String, State> transitionTable)
+            HashMap<String, DFAState> transitionTable)
     {
         this.name = name;
         this.accept = accept;
@@ -33,7 +33,7 @@ public class DFAState
         return name;
     }
 
-    public HashMap<String, State> getTransitions()
+    public HashMap<String, DFAState> getTransitions()
     {
         return transitionTable;
     }
