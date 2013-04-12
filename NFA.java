@@ -1,16 +1,15 @@
-import java.util.*;
+import main.State;
 
 public class NFA{
-	private state start;
+	private State start;
 	
-	public NFA(state start)
+	public NFA(State start)
 	{
-		this.start=start;
+		this.start = start;
 	}
 	
-	public void addState
-
-
-
-
+	public void addState()
+	{
+		
+	}
 }

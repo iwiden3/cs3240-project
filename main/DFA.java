@@ -1,6 +1,6 @@
 package main;
 
-import java.util.*
+import java.util.*;
 
 
 public class DFA
@@ -11,7 +11,7 @@ public class DFA
     // This will call convertToDFA() using the passed in BigNFA
 	public DFA(BigNFA nfa)
 	{
-        converToDFA(nfa);
+        convertToDFA(nfa);
 	}
 
     // This sets the start/accept class variables
