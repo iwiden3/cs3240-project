@@ -588,8 +588,8 @@ public class NFACreator {
 			return n1;
 		}
 		State newStart = new State(false, new HashMap<String, List<State>>());
-		newStart.addTransition("", n1.getAccept());
-		newStart.addTransition("", n2.getAccept());
+		newStart.addTransition("", n1.getStart());
+		newStart.addTransition("", n2.getStart());
 		State newAccept = new State(true, new HashMap<String, List<State>>());
 		newAccept.setName(name);
 		n1.getAccept().setIsAccept(false);
