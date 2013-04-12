@@ -7,9 +7,16 @@ import java.io.IOException;
 public class Driver
 {
 	NFA nfa;
-	public Driver( NFA nfa)
+	String input;
+	
+	public Driver(String input, String rules) throws IOException
 	{
-		this.nfa=nfa;
+		this.input=input;
+		FileScanner fs=new FileScanner(rules);
+		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
+		HashSet<NFA>nfas = factory.factorize();
+		BigNFA theNFA=new BigNFA(nfas);
+		nfa=theNFA.getNFA();
 	}
 	
 	public String whatType(String in)
@@ -18,9 +25,9 @@ public class Driver
 		return name.getName();
 	}
 	
-	public void readInput(String file) throws IOException
+	public void readInput() throws IOException
 	{
-		List<String> text = readTextFile(file);
+		List<String> text = readTextFile(input);
 		ArrayList<String> out=new ArrayList<String>();
 		for(String s: text)
 		{
