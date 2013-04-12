@@ -116,32 +116,61 @@ public class Driver
 		//System.out.println(st.getName());
 		HashMap<String, List<State>> map = st.getTransitionTable();
 		Set<String> keys = st.getTransitionTable().keySet();
-		HashSet<State> states = new HashSet<State>();
+		HashSet<State> states1 = new HashSet<State>();
+		HashSet<State> states2 = new HashSet<State>();
+
+	
 		for(String str: keys)
 		{
-			if(str.isEmpty() || in.matches(str))
+			if(str.isEmpty())
 			{
 				for(State st2 : st.getTransitionTable().get(str))
 				{
-					states.add(st2);
+					states1.add(st2);
+				}
+			}
+			else if(in.matches(str))
+			{
+				for(State st2 : st.getTransitionTable().get(str))
+				{
+					states2.add(st2);
 				}
 				
 			}
 		}
-
-		if(states.isEmpty())
+		
+		if( states1.size()==1)
+		{
+			for(State state: states1)
+			{
+				if(state.isAccept())
+				{
+					return out;
+				}
+			}
+			
+			//return out
+		}
+	    
+		if(states1.isEmpty() && states2.isEmpty())
 		{
 			return new Name("",num);
 		}
-		else if(map.containsKey("") && states.size()==2)
-		{
-			return new Name(st.getName(),num);
-		}
 		else
 		{
-			for (State st2 : states)
+			for (State st2 : states1)
 			{
 				Name curr=whatType(in, st2,num);
+				if(curr.getNum()>=num && !curr.getName().isEmpty())
+				{
+					out.setName(curr.getName());
+					out.setNum(curr.getNum());
+				}
+			}
+			
+			for (State st3 : states1)
+			{
+				Name curr=whatType(in.substring(1,in.length()-1), st3,num);
 				if(curr.getNum()>=num && !curr.getName().isEmpty())
 				{
 					out.setName(curr.getName());
