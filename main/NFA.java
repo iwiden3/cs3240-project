@@ -88,14 +88,17 @@ public class NFA
     	for(String k : s)
     	{
     		List<State> states= map.get(k);
-    		for(State paul: states)
-    		{
-    			Set<String> stuff=paul.getTransitionTable().keySet();
-    			for(String l : stuff)
+    		if(states!=null)
+    		{	
+    			for(State paul: states)
     			{
-    				fin.add(l);
+    				Set<String> stuff=paul.getTransitionTable().keySet();
+    				for(String l : stuff)
+    				{
+    					fin.add(l);
+    				}
     			}
-    	    }
+    		}
     	}
     	
     	fin.add("Accept");
@@ -103,13 +106,16 @@ public class NFA
     	for(String k : s2)
     	{
     		List<State> states= map2.get(k);
-    		for(State kurt: states)
-    		{
-    			Set<String> stuff=kurt.getTransitionTable().keySet();
-    			for(String l : stuff)
+    		if(states!=null)
+    		{	
+    			for(State kurt: states)
     			{
-    				fin.add(l);
-    			}
+    				Set<String> stuff=kurt.getTransitionTable().keySet();
+    				for(String l : stuff)
+    				{
+    					fin.add(l);
+    				}
+    			}	
     	    }
     	}
     	
