@@ -33,34 +33,34 @@ public class NFACreator {
 
         // Sets up first sets
         String[] firstSet1 = {"(", "RE_CHAR", ".", "[", "$"};
-        reg_exFirst = new HashSet<String>(Arrays.asList(firstSet));
+        reg_exFirst = new HashSet<String>(Arrays.asList(firstSet1));
         String[] firstSet2 = {"(", "RE_CHAR", ".", "[", "$"};
-        rexpFirst = new HashSet<String>(Arrays.asList(firstSet));
+        rexpFirst = new HashSet<String>(Arrays.asList(firstSet2));
         String[] firstSet3 = {"UNION", ""};
-        rexpPFirst = new HashSet<String>(Arrays.asList(firstSet));
+        rexpPFirst = new HashSet<String>(Arrays.asList(firstSet3));
         String[] firstSet4 = {"(", "RE_CHAR", ".", "[", "$"};
-        rexp1First = new HashSet<String>(Arrays.asList(firstSet));
+        rexp1First = new HashSet<String>(Arrays.asList(firstSet4));
         String[] firstSet5 = {"(", "RE_CHAR", ".", "[", "$", ""};
-        rexp1PFirst = new HashSet<String>(Arrays.asList(firstSet));
+        rexp1PFirst = new HashSet<String>(Arrays.asList(firstSet5));
         String[] firstSet6 = {"(", "RE_CHAR", ".", "[", "$"};
-        rexp2First = new HashSet<String>(Arrays.asList(firstSet));
+        rexp2First = new HashSet<String>(Arrays.asList(firstSet6));
         String[] firstSet7 = {"*", "+", ""};
-        rexp2_tailFirst = new HashSet<String>(Arrays.asList(firstSet));
+        rexp2_tailFirst = new HashSet<String>(Arrays.asList(firstSet7));
         String[] firstSet8 = {".", "[", "$", ""};
-        rexp3First = new HashSet<String>(Arrays.asList(firstSet));
+        rexp3First = new HashSet<String>(Arrays.asList(firstSet8));
         String[] firstSet9 = {".", "[", "$"};
-        char_classFirst = new HashSet<String>(Arrays.asList(firstSet));
+        char_classFirst = new HashSet<String>(Arrays.asList(firstSet9));
         String[] firstSet10 = {"CLS_CHAR", "]"};
-        char_class1First = new HashSet<String>(Arrays.asList(firstSet));
-        char_set_listFirst = new HashSet<String>(Arrays.asList(firstSet));
+        char_class1First = new HashSet<String>(Arrays.asList(firstSet10));
+        char_set_listFirst = new HashSet<String>(Arrays.asList(firstSet10));
         String[] firstSet11 = {"CLS_CHAR"};
-        char_setFirst = new HashSet<String>(Arrays.asList(firstSet));
+        char_setFirst = new HashSet<String>(Arrays.asList(firstSet11));
         String[] firstSet12 = {"-", ""};
-        char_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet));
+        char_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet12));
         String[] firstSet13 = {"^"};
-        exclude_setFirst = new HashSet<String>(Arrays.asList(firstSet));
+        exclude_setFirst = new HashSet<String>(Arrays.asList(firstSet13));
         String[] firstSet14 = {"[", "$"};
-        exclude_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet));
+        exclude_set_tailFirst = new HashSet<String>(Arrays.asList(firstSet14));
         
 	}
 	
