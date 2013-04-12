@@ -15,10 +15,11 @@ import java.util.Set;
 
 public class Driver
 {
-	NFA nfa;
+	DFA dfa;
 	String input;
 	List<String> text;
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
+    TableWalker tw;
 	
 	public Driver(String input, String rules) throws IOException
 	{
@@ -27,11 +28,13 @@ public class Driver
 		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
 		HashSet<NFA>nfas = factory.factorize();
 		BigNFA theNFA=new BigNFA(nfas);
-		nfa=theNFA.getNFA();
+		DFA dfa=new DFA(theNFA);
+	    tw=new TableWalker(dfa,text);
+		
 		readInput();
 	}
 	
-	public Driver(List<String> text, String rules) throws IOException
+	/*public Driver(List<String> text, String rules) throws IOException
 	{
 		this.text=text;
 		FileScanner fs=new FileScanner(rules);
@@ -40,17 +43,9 @@ public class Driver
 		BigNFA theNFA=new BigNFA(nfas);
 		nfa=theNFA.getNFA();
 		testReadInput();
-	}
+	}*/
 	
-	public Driver(String rules) throws IOException
-	{
-		FileScanner fs=new FileScanner(rules);
-		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
-		HashSet<NFA>nfas = factory.factorize();
-		BigNFA theNFA=new BigNFA(nfas);
-		nfa=theNFA.getNFA();
-		
-	}
+	
 	
 	
 	/*public String whatType(String in)
