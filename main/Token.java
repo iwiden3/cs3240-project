@@ -8,7 +8,7 @@ public class Token
     public Token(String id, String value)
     {
         this.id = id;
-        this.value = value
+        this.value = value;
     }
 
     public String getId()

@@ -30,9 +30,26 @@ public class Driver
 		BigNFA theNFA=new BigNFA(nfas);
 		DFA dfa=new DFA(theNFA);
 	    tw=new TableWalker(dfa,text);
+	    ArrayList<String> out = new ArrayList<String>();
 		
-		readInput();
-	}
+	    List<Token> list=tw.parse();
+	    
+	    for(Token t : list)
+	    {
+	    	String str=t.getId();
+	    	str=str.substring(1);
+	    	str+=" ";
+	    	str+=t.getValue();
+	    	out.add(str);
+	    }
+	    
+		FileWriter writer = new FileWriter("output.txt"); 
+		for(String str: out) 
+		{
+		  writer.write(str);
+		}
+		writer.close();
+	 }
 	
 	/*public Driver(List<String> text, String rules) throws IOException
 	{
@@ -63,9 +80,9 @@ public class Driver
 			String[] splitString = (s.split(" "));
 			for(int i=0;i<splitString.length;i++)
 			{
-				String type=whatType(splitString[i]);
-				String fin=type + " "+ splitString[i];
-				out.add(fin);
+				//String type=whatType(splitString[i]);
+			//	String fin=type + " "+ splitString[i];
+		//		out.add(fin);
 			}
 		}
 	
@@ -90,9 +107,9 @@ public class Driver
 			String[] splitString = (s.split(" "));
 			for(int i=0;i<splitString.length;i++)
 			{
-				String type = whatType(splitString[i]);
-				String fin = type + " "+ splitString[i] + "\n";
-				out.add(fin);
+				//String type = whatType(splitString[i]);
+				//String fin = type + " "+ splitString[i] + "\n";
+				//out.add(fin);
 			}
 		}
 	
