@@ -87,14 +87,30 @@ public class NFA
     	fin.add("Start");
     	for(String k : s)
     	{
-    		fin.add(k);
+    		List<State> states= map.get(k);
+    		for(State paul: states)
+    		{
+    			Set<String> stuff=paul.getTransitionTable().keySet();
+    			for(String l : stuff)
+    			{
+    				fin.add(l);
+    			}
+    	    }
     	}
     	
     	fin.add("Accept");
     	
     	for(String k : s2)
     	{
-    		fin.add(k);
+    		List<State> states= map2.get(k);
+    		for(State kurt: states)
+    		{
+    			Set<String> stuff=kurt.getTransitionTable().keySet();
+    			for(String l : stuff)
+    			{
+    				fin.add(l);
+    			}
+    	    }
     	}
     	
     	return fin;
