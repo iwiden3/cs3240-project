@@ -5,11 +5,11 @@ import java.util.*;
 
 public class TableWalker
 {
-	private DFA dfa;
+	private BigNFA nfa;
 		
-	public TableWalker(DFA dfa)
+	public TableWalker(BigNFA nfa)
 	{
-		this.dfa = dfa;
+		this.nfa = nfa;
 	}
 
     // Takes in a string and validates it against the DFA

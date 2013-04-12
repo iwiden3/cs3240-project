@@ -120,29 +120,57 @@ public class NFACreator {
 	
 	public String char_class()
 	{
-		switch(x){
-			case '.': return dot();
-			case '[': return "[" + char_class1();
-			case '$': return defined_class(curr);
+		if(splitDef.get(index).matches("[.]"))
+		{
+			nextCurr();
+			return "[.]";
+		}
+		if(splitDef.get(index).equals("["))
+		{
+			nextCurr();
+			String char_class1 = char_class1();
+			if(char_class1 != null)
+			{
+				return "[" + char_class1();
+			}
+		}
+		String defined_class = defined_class(splitDef.get(index));
+		return defined_class; // null if nonexistent
 		}
 	}
 	
 	public String char_class1()
 	{
-		switch(x){
-			case 1: return char_set_list();
-			case 2: return exclude_set();
+		String char_set_list = char_set_list();
+		if(char_set_list != null)
+		{
+			return char_set_list();
 		}
+		String exclude_set = exclude_set();
+		if(exclude_set != null)
+		{
+			return exclude_set();
+		}
+		return null;
 	}
 	
 	public String char_set_list()
 	{
 		String char_set = char_set();
-		String char_set_list = char_set_list();
-		switch(x){
-			case 1: return concat(char_set(), char_set_list());
-			case "]": return "AIGHT";
+		if(char_set != null)
+		{
+			String char_set_list = char_set_list();
+			if(char_set_list != null)
+			{
+				return char_set + char_set_list;
+			}
 		}
+		else if(splitDef.get(index).equals("]"))
+		{
+			nextCurr();
+			return "]";
+		}
+		return null;
 	}
 	
 	public String char_set()
@@ -186,7 +214,7 @@ public class NFACreator {
 			ret += splitDef.get(index);
 			nextCurr();
 			String char_set = char_set();
-			if(char_set != "")
+			if(char_set != null)
 			{
 				ret += char_set;
 				if(splitDef.get(index).equals("]"))
@@ -200,21 +228,13 @@ public class NFACreator {
 						String exclude_set_tail = exclude_set_tail();
 						if(exclude_set_tail != null)
 						{
-							ret += exclude_set_tail;
+							ret = exclude_set_tail.substring(1,exclude_set_tail.length()-1) + ret;
 							return ret;
 						}
-						goBack();
-						goBack();
 					}
-					goBack();
 				}
-				goBack();
 			}
-			goBack();
-			goBack();
-			goBack();
-		}
-		
+		}	
 		return null;
 	}
 	
@@ -224,29 +244,25 @@ public class NFACreator {
 		{
 			nextCurr();
 			String char_set = char_set();
-			if(splitDef.get(index).equals("]"))
+			if(char_set != null && splitDef.get(index).equals("]"))
 			{
+				nextCurr();
 				return "[" + char_set + "]";
 			}
-			if(char_set != "")
-			{
-				goBack();
-			}
-			goBack();
+			return null;
 		}
 		
 		String defined_class = defined_class(splitDef.get(index));
-		if(defined_class != null)
-		{
-			return defined_class;
-		}
-		
-		return null;
+		return defined_class; // null if nonexistent
 	}
 	
 	public String defined_class(String name)
 	{
 		String s = regexTable.get(name);
+		if(s != null)
+		{
+			nextCurr();
+		}
 		return s;
 	}
 	
@@ -418,10 +434,15 @@ public class NFACreator {
 				{
 					i++;
 					curr += def.substring(i, i+1);
+					if(i >= def.length()-1)
+					{
+						break;
+					}
 				}
 			}
 			splitDef.add(curr);
 		}
+		//System.out.println(splitDef.toString());
 	}
 	
 	public void nextCurr()
