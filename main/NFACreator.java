@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Stack;
 
 public class NFACreator {
 	
@@ -14,6 +14,7 @@ public class NFACreator {
 	private ArrayList<String> splitDef;
 	private HashSet<NFA> defined_classes;
 	private HashMap<String, String> regexTable;
+	private Stack<Integer> myStack = new Stack<Integer>();
 	
 	public NFACreator(String name, String def, HashMap<String, String> regexTable, HashSet<NFA> regexNFAs)
 	{
@@ -39,103 +40,166 @@ public class NFACreator {
 	
 	public NFA rexp()
 	{
-		return UNION(rexp1(), rexpP());
+		myStack.push(index);
+		NFA rexp1 = rexp1();
+		if(rexp1 != null)
+		{
+			NFA rexpP = rexpP(rexp1);
+			if(!rexpP.getName().equals("EPSILON"))
+			{
+				myStack.pop();
+				return rexpP;
+			}
+			else
+			{
+				myStack.pop();
+				return rexp1;
+			}
+		}
+		index = myStack.pop();
+		return null;
 	}
 	
-	public NFA rexpP()
+	public NFA rexpP(NFA in)
 	{
+		myStack.push(index);
 		if(splitDef.get(index).equals("|"))
 		{
 			nextCurr();
-			return UNION(rexp1(), rexpP());
+			NFA rexp1 = rexp1();
+			if(rexp1 != null)
+			{
+				NFA temp = UNION(in, rexp1);
+				NFA toRet = rexpP(temp);
+				myStack.pop();
+				return toRet;
+			}
+			else
+			{
+				index = myStack.pop();
+				return epsilonNFA();
+			}
 		}
 		else
 		{
-			return epsilonNFA();
+			index = myStack.pop();
+			return in;
 		}
 	}
 	
 	public NFA rexp1()
 	{
+		myStack.push(index);
 		NFA rexp2 = rexp2();
 		NFA rexp1P = rexp1P();
 		if(rexp2 != null && rexp1P != null)
 		{
+			myStack.pop();
 			return concat(rexp2(), rexp1P());
 		}
 		else
 		{
+			index = myStack.pop();
 			return null;
 		}
 	}
 	
 	public NFA rexp1P()
 	{
+		myStack.push(index);
 		NFA rexp2 = rexp2();
 		NFA rexp1P = rexp1P();
 		if(rexp2 != null && rexp1P != null)
 		{
+			myStack.pop();
 			return concat(rexp2(), rexp1P());
 		}
 		else
 		{
+			index = myStack.pop();
 			return epsilonNFA();
 		}
 	}
 	
 	public NFA rexp2()
 	{
+		myStack.push(index);
 		if(splitDef.get(index).equals("("))
 		{
 			nextCurr();
 			NFA rexp = rexp();
 			if(rexp() != null)
 			{
-				NFA rexp2_tail = rexp2_tail(rexp);
-				if(!rexp2_tail.getName().equals("EPSILON"))
+				if(splitDef.get(index).equals(")"))
 				{
-					return rexp2_tail;
-				}
-				else
-				{
-					return rexp;
+					nextCurr();
+					NFA rexp2_tail = rexp2_tail(rexp);
+					if(!rexp2_tail.getName().equals("EPSILON"))
+					{
+						myStack.pop();
+						return rexp2_tail;
+					}
+					else
+					{
+						myStack.pop();
+						return rexp;
+					}
 				}
 			}
 		}
+		
+		index = myStack.pop();
+		myStack.push(index);
 		
 		if(RE_CHAR().contains(splitDef.get(index)))
 		{
 			NFA n = new NFA("YO", splitDef.get(index));
 			nextCurr();
 			NFA rexp2_tail = rexp2_tail(n);
-			if(!rexp2_tail.getName().equals("EPSILON"))
-			{
-				return rexp2_tail;
-			}
-			else
-			{
-				return n;
-			}
+			myStack.pop();
+			return rexp2_tail;
 			
 		}
 		
-		return rexp3();
+		index = myStack.pop();
+		myStack.push(index);
+		
+		NFA rexp3 = rexp3();
+		if(rexp3 != null)
+		{
+			myStack.pop();
+			return rexp3;
+		}
+		
+		index = myStack.pop();
+		return null;
 	}
 	
 	public NFA rexp2_tail(NFA in)
 	{
+		myStack.push(index);
 		switch(splitDef.get(index)){
-			case "*": return star(in);
-			case "+": return plus(in);
+			case "*": 
+				nextCurr();
+				myStack.pop();
+				return star(in);
+			case "+": 
+				nextCurr();
+				myStack.pop();
+				return plus(in);
 		}
-		return epsilonNFA();
+		
+		index = myStack.pop();
+		return in;
 	}
 	
 	public NFA rexp3()
 	{
+		myStack.push(index);
 		String char_class = char_class();
 		if(char_class != null)
 		{
+			myStack.pop();
 			return new NFA("SUP", char_class);
 		}
 		else
@@ -146,76 +210,107 @@ public class NFACreator {
 	
 	public String char_class()
 	{
+		myStack.push(index);
 		if(splitDef.get(index).matches("[.]"))
 		{
 			nextCurr();
+			myStack.pop();
 			return "[.]";
 		}
+		index = myStack.pop();
+		myStack.push(index);
 		if(splitDef.get(index).equals("["))
 		{
 			nextCurr();
 			String char_class1 = char_class1();
 			if(char_class1 != null)
 			{
+				myStack.pop();
 				return "[" + char_class1();
 			}
 		}
+		index = myStack.pop();
+		myStack.push(index);
 		String defined_class = defined_class(splitDef.get(index));
+		if(defined_class == null)
+		{
+			index = myStack.pop();
+		}
+		else
+		{
+			myStack.pop();
+		}
 		return defined_class; // null if nonexistent
 	}
 	
 	public String char_class1()
 	{
+		myStack.push(index);
 		String char_set_list = char_set_list();
 		if(char_set_list != null)
 		{
+			myStack.pop();
 			return char_set_list();
 		}
+		index = myStack.pop();
+		myStack.push(index);
 		String exclude_set = exclude_set();
 		if(exclude_set != null)
 		{
+			myStack.pop();
 			return exclude_set();
 		}
+		index = myStack.pop();
 		return null;
 	}
 	
 	public String char_set_list()
 	{
+		myStack.push(index);
 		String char_set = char_set();
 		if(char_set != null)
 		{
 			String char_set_list = char_set_list();
 			if(char_set_list != null)
 			{
+				myStack.pop();
 				return char_set + char_set_list;
 			}
 		}
-		else if(splitDef.get(index).equals("]"))
+		index = myStack.pop();
+		myStack.push(index);
+		if(splitDef.get(index).equals("]"))
 		{
 			nextCurr();
+			myStack.pop();
 			return "]";
 		}
+		index = myStack.pop();
 		return null;
 	}
 	
 	public String char_set()
 	{
+		myStack.push(index);
 		String ret = "";
 		if(CLS_CHAR().contains(splitDef.get(index)))
 		{
 			ret += splitDef.get(index);
 			nextCurr();
 			String char_set_tail = char_set_tail();
+			myStack.pop();
 			return ret + char_set_tail;
 		}
 		else
 		{
+			index = myStack.pop();
 			return null;
 		}
 	}
 	
 	public String char_set_tail()
 	{
+		myStack.push(index);
 		String ret = "";
 		if(splitDef.get(index).equals("-") && CLS_CHAR().contains(splitDef.get(index+1)))
 		{
@@ -223,17 +318,21 @@ public class NFACreator {
 			nextCurr();
 			ret += splitDef.get(index);
 			nextCurr();
+			myStack.pop();
 			return ret;
 		}	
 		else
 		{
+			myStack.pop();
 			return epsilon();
 		}
 	}
 	
 	public String exclude_set()
 	{
+		myStack.push(index);
 		String ret = "";
+		System.out.println(index);
 		if(splitDef.get(index).equals("^"))
 		{
 			ret += splitDef.get(index);
@@ -254,17 +353,20 @@ public class NFACreator {
 						if(exclude_set_tail != null)
 						{
 							ret = exclude_set_tail.substring(1,exclude_set_tail.length()-1) + ret;
+							myStack.pop();
 							return ret;
 						}
 					}
 				}
 			}
-		}	
+		}
+		index = myStack.pop();
 		return null;
 	}
 	
 	public String exclude_set_tail()
 	{
+		myStack.push(index);
 		if(splitDef.get(index).equals("["))
 		{
 			nextCurr();
@@ -272,12 +374,21 @@ public class NFACreator {
 			if(char_set != null && splitDef.get(index).equals("]"))
 			{
 				nextCurr();
+				myStack.pop();
 				return "[" + char_set + "]";
 			}
-			return null;
 		}
-		
+		index = myStack.pop();
+		myStack.push(index);
 		String defined_class = defined_class(splitDef.get(index));
+		if(defined_class == null)
+		{
+			index = myStack.pop();
+		}
+		else
+		{
+			myStack.pop();
+		}
 		return defined_class; // null if nonexistent
 	}
 	
@@ -336,7 +447,7 @@ public class NFACreator {
 		{
 			wat.add(escapedChars[i]);
 		}
-		System.out.println(wat.toString());
+		//System.out.println(wat.toString());
 		return wat;
 	}
 	
@@ -354,13 +465,17 @@ public class NFACreator {
 		{
 			wat.add(escapedChars[i]);
 		}
-		System.out.println(wat.toString());
+		//System.out.println(wat.toString());
 		return wat;
 	}
 	
 	public NFA UNION(NFA n1, NFA n2)
 	{
-		if(n1 == null)
+		if(n1 == null && n2 == null)
+		{
+			return null;
+		}
+		else if(n1 == null)
 		{
 			return n2;
 		}
@@ -378,6 +493,7 @@ public class NFACreator {
 		n2.getAccept().addTransition("", newAccept);
 		n1.setAccept(newAccept);
 		n2.setAccept(newAccept);
+		n1.setStart(newStart);
 //		NFA uniNFA = new NFA("|");
 //		State startS = new State(false, new HashMap<String, State>());
 //		uniNFA.addTransition(startS, "|", new State(true, new HashMap<String, State>()));
@@ -433,15 +549,15 @@ public class NFACreator {
 		return n;
 	}
 	
-	public NFA dot()
-	{
-		NFA dotNFA = new NFA("dot");
-		State startS = new State(false, new HashMap<String, List<State>>());
-		dotNFA.addTransition(startS, ".", new State(true, new HashMap<String, List<State>>()));
-		dotNFA.setStart(startS);
-		return dotNFA;
-	}
-	
+//	public NFA dot()
+//	{
+//		NFA dotNFA = new NFA("dot");
+//		State startS = new State(false, new HashMap<String, List<State>>());
+//		dotNFA.addTransition(startS, ".", new State(true, new HashMap<String, List<State>>()));
+//		dotNFA.setStart(startS);
+//		return dotNFA;
+//	}
+//	
 	public void createSplitDef()
 	{
 		String curr;
@@ -476,7 +592,11 @@ public class NFACreator {
 	
 	public void nextCurr()
 	{
-		index++;		
+		index++;
+		if(index >= splitDef.size())
+		{
+			
+		}
 	}
 	
 	public void goBack()
