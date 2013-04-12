@@ -16,6 +16,7 @@ public class Driver
 {
 	NFA nfa;
 	String input;
+	List<String> text;
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 	
 	public Driver(String input, String rules) throws IOException
@@ -28,6 +29,28 @@ public class Driver
 		nfa=theNFA.getNFA();
 		readInput();
 	}
+	
+	public Driver(List<String> text, String rules) throws IOException
+	{
+		this.text=text;
+		FileScanner fs=new FileScanner(rules);
+		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
+		HashSet<NFA>nfas = factory.factorize();
+		BigNFA theNFA=new BigNFA(nfas);
+		nfa=theNFA.getNFA();
+		testReadInput();
+	}
+	
+	public Driver(String rules)
+	{
+		FileScanner fs=new FileScanner(rules);
+		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
+		HashSet<NFA>nfas = factory.factorize();
+		BigNFA theNFA=new BigNFA(nfas);
+		nfa=theNFA.getNFA();
+		
+	}
+	
 	
 	public String whatType(String in)
 	{
@@ -58,12 +81,35 @@ public class Driver
 		writer.close();
 	}
 	
+	private void testReadInput()
+	{
+		ArrayList<String> out=new ArrayList<String>();
+		for(String s: text)
+		{
+			String[] splitString = (s.split(" "));
+			for(int i=0;i<splitString.length;i++)
+			{
+				String type=whatType(splitString[i]);
+				String fin=type + " "+ splitString[i];
+				out.add(fin);
+			}
+		}
+	
+		FileWriter writer = new FileWriter("output.txt"); 
+		for(String str: out) 
+		{
+		  writer.write(str);
+		}
+		writer.close();
+	}
 	
 	
-	 private List<String> readTextFile(String aFileName) throws IOException{
+	
+	
+	/* private List<String> readTextFile(String aFileName) throws IOException{
 	        Path path = Paths.get(aFileName);
 	        return Files.readAllLines(path, ENCODING);
-	    }
+	    }*/
 	
 	
 	
