@@ -47,7 +47,8 @@ public class DFA
     // Calculates the start state of the DFA
     private void findStart(NFA nfa)
     {
-        DFAState dummy = new DFAState("", false, null, new HashMap<String, DFAState>());
+        DFAState dummy = new DFAState("", false, 
+                new HashSet<State>(), new HashMap<String, DFAState>());
         dummy.addState(nfa.getStart());
         start = closure(dummy);
     }
