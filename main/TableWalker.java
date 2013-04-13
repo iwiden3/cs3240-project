@@ -24,6 +24,7 @@ public class TableWalker
 
     public List<Token> parse()
     {
+    	System.out.println("Entered Parse");
         char curr;
         DFAState currState;
         boolean hasAccept = false, failure = false;
@@ -34,6 +35,7 @@ public class TableWalker
         for (String s : input)
         {
             currState = dfa.getStart();
+            System.out.println(currState.getTransitions());
             identifier = "";
             lastKnown = "";
             hasAccept = false;
@@ -52,6 +54,7 @@ public class TableWalker
                        currState = currState.getTransitions().get(reg);
                        if (currState.isAccept())
                        {
+                    	   System.out.println("Accepts: " + currState.getName());
                            hasAccept = true;
                            endPos = index;
                            identifier = currState.getName();

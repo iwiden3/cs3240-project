@@ -5,6 +5,7 @@ import java.util.*;
 
 public class HomeStarRunner {
 
+	@SuppressWarnings("unused")
 	public static void main(String[]args) throws IOException
 	{
 //		FileScanner fs;
@@ -21,7 +22,7 @@ public class HomeStarRunner {
 //			System.out.println(n.toListStrings());
 //		}
 		
-		HashSet<Integer> test=new HashSet<Integer>();
+		//HashSet<Integer> test=new HashSet<Integer>();
 		Driver dr2=new Driver("tests/testInput", "tests/SampleSpec");
 		
 		//ArrayList<String> list=new ArrayList<String>();

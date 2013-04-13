@@ -29,6 +29,7 @@ public class Driver
 		HashSet<NFA>nfas = factory.factorize();
 		BigNFA theNFA=new BigNFA(nfas);
 		DFA dfa=new DFA(theNFA);
+		text=readTextFile(input);
 	    tw=new TableWalker(dfa,text);
 	    ArrayList<String> out = new ArrayList<String>();
 		
@@ -43,7 +44,7 @@ public class Driver
 	    	out.add(str);
 	    }
 	    
-		FileWriter writer = new FileWriter("output.txt"); 
+		FileWriter writer = new FileWriter("tests/output"); 
 		for(String str: out) 
 		{
 		  writer.write(str);

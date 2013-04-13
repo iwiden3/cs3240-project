@@ -15,6 +15,7 @@ public class DFA
 		accept = new LinkedList<DFAState>();
 		states = new HashSet<DFAState>();
         NFA nfa = bnfa.getNFA();
+        //System.out.println(nfa.getStart().getTransitionTable().get("").get(2).getTransitionTable());
         convertToDFA(nfa);
 	}
 
@@ -35,6 +36,7 @@ public class DFA
                 for (String k : curr.getTransitions().keySet())
                 {
                     tokens.add(k);
+                    System.out.println(tokens);
                 }
             }
             // Iterate over all possible iterations and link states together
@@ -139,6 +141,7 @@ public class DFA
         dummy = new DFAState("", false, ret, new HashMap<String, DFAState>());
         output = closure(dummy);
         s.getTransitions().put(token, output);
+        System.out.println(s.getTransitions());
 
         return output;
     }
