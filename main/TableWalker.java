@@ -27,13 +27,14 @@ public class TableWalker
         char curr;
         DFAState currState;
         boolean hasAccept = false, failure = false;
-        String lastKnown;
+        String lastKnown, identifier;
         int startPos = 0, endPos = 0, index = 0;
         List<Token> output = new LinkedList<Token>();
 
         for (String s : input)
         {
             currState = dfa.getStart();
+            identifier = "";
             lastKnown = "";
             hasAccept = false;
             startPos= 0;
@@ -49,9 +50,22 @@ public class TableWalker
                    if (Pattern.matches(reg, Character.toString(curr)))
                    {
                        currState = currState.getTransitions().get(reg);
+                       if (currState.isAccept())
+                       {
+                           hasAccept = true;
+                           endPos = index;
+                           identifier = currState.getName();
+                           Token acc = new Token(identifier, s.substring(startPos, endPos));
+                           output.add(acc);
+                       }
                        break;
                    }
+                   else
+                   {
+                       failure = true;
+                   }
                 }
+                index++;
             }
         }
         
