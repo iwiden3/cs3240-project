@@ -22,7 +22,7 @@ public class HomeStarRunner {
 //		}
 		
 		HashSet<Integer> test=new HashSet<Integer>();
-		Driver dr2=new Driver("tests/SampleSpec");
+		Driver dr2=new Driver("tests/testInput", "tests/SampleSpec");
 		String str=dr2.whatType("a");
 		test.add(str.compareTo("$IDENTIFIER"));
 		System.out.println(str);

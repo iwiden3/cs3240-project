@@ -40,11 +40,9 @@ public class TableWalker
             endPos = 0;
             index = 0;
 
-            if (currState
-
             while (index < s.length() && !failure)
             {
-                curr = s.charAt(i);
+                curr = s.charAt(index);
 
                 for (String reg : currState.getTransitions().keySet())
                 {
