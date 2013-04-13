@@ -23,20 +23,6 @@ public class HomeStarRunner {
 		
 		HashSet<Integer> test=new HashSet<Integer>();
 		Driver dr2=new Driver("tests/testInput", "tests/SampleSpec");
-		String str=dr2.whatType("a");
-		test.add(str.compareTo("$IDENTIFIER"));
-		System.out.println(str);
-
-		str=dr2.whatType("=");
-		System.out.println(str);
-
-		str=dr2.whatType("+");
-		test.add(str.compareTo("$PLUS"));
-		str=dr2.whatType("-");
-		test.add(str.compareTo("$MINUS"));
-		str=dr2.whatType("*");
-		test.add(str.compareTo("$MULTIPLY"));
-		str=dr2.whatType("PRINT");
 		
 		//ArrayList<String> list=new ArrayList<String>();
 		//list.add("a = 5");

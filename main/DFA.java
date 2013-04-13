@@ -12,6 +12,8 @@ public class DFA
     // This will call convertToDFA() using the passed in BigNFA
 	public DFA(BigNFA bnfa)
 	{
+		accept = new LinkedList<DFAState>();
+		states = new HashSet<DFAState>();
         NFA nfa = bnfa.getNFA();
         convertToDFA(nfa);
 	}
