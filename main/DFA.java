@@ -8,12 +8,14 @@ public class DFA
 	private DFAState start;
 	private List<DFAState> accept;
     private HashSet<DFAState> states;
+    private HashSet<DFAState> checked;
 
     // This will call convertToDFA() using the passed in BigNFA
 	public DFA(BigNFA bnfa)
 	{
 		accept = new LinkedList<DFAState>();
 		states = new HashSet<DFAState>();
+		checked = new HashSet<DFAState>();
         NFA nfa = bnfa.getNFA();
         //System.out.println(nfa.getStart().getTransitionTable().get("").get(2).getTransitionTable());
         convertToDFA(nfa);
@@ -27,9 +29,17 @@ public class DFA
         findStart(nfa);
         queue.add(start);
 
+        MAINWHILE:
         while (!queue.isEmpty())
         {
             curr = queue.removeFirst();
+            for(DFAState sta : checked){
+            	if(curr.equals(sta)){
+//            		System.out.println("NOPE");
+            		continue MAINWHILE;
+            	}
+            }
+            checked.add(curr);
             // Pull out all keys
             for (State s : curr.getStates())
             {
@@ -111,6 +121,15 @@ public class DFA
         }
         // Create new DFAState
         output = new DFAState(name, isAccept, ret, new HashMap<String, DFAState>());
+        for(DFAState sta : states){
+        	if(output.equals(sta)){
+        		output = sta;
+        		break;
+        	}
+        }
+//        if(states.contains(output)){
+//        	System.out.println("NOOO");
+//        }
         states.add(output);
         if (output.isAccept())
         {

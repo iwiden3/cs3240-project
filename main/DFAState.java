@@ -42,7 +42,8 @@ public class DFAState
     {
         return states;
     }
-
+    
+    @Override
     public boolean equals(Object obj)
     {
         return this.states.equals(((DFAState)obj).states);
