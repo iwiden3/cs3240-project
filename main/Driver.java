@@ -37,10 +37,11 @@ public class Driver
 	    
 	    for(Token t : list)
 	    {
-	    	String str=t.getId();
-	    	str=str.substring(1);
-	    	str+=" ";
-	    	str+=t.getValue();
+	    	String str = t.getId();
+	    	str = str.substring(1);
+	    	str += " ";
+	    	str += t.getValue();
+	    	str += "\r\n";
 	    	out.add(str);
 	    }
 	    

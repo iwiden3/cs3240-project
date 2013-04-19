@@ -52,8 +52,10 @@ public class DFA
             // Iterate over all possible iterations and link states together
             for (String j : tokens)
             {
-                temp = goTo(curr, j);
-                queue.add(temp);
+            	if(!j.equals("")){
+	                temp = goTo(curr, j);
+	                queue.add(temp);
+            	}
             }
         }
     }

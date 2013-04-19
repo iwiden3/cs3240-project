@@ -42,10 +42,16 @@ public class TableWalker
             startPos= 0;
             endPos = 0;
             index = 0;
+            String currToken = "";
 
             while (index < s.length() && !failure)
             {
                 curr = s.charAt(index);
+                if(curr == ' '){
+                	index++;
+                	continue;
+                }
+                currToken += Character.toString(curr);
 
                 for (String reg : currState.getTransitions().keySet())
                 {
@@ -58,14 +64,15 @@ public class TableWalker
                            hasAccept = true;
                            endPos = index;
                            identifier = currState.getName();
-                           Token acc = new Token(identifier, s.substring(startPos, endPos));
+                           Token acc = new Token(identifier, currToken);
                            output.add(acc);
+                           currToken = "";
                        }
                        break;
                    }
                    else
                    {
-                       failure = true;
+                       //failure = true;
                    }
                 }
                 index++;
