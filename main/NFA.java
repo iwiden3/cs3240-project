@@ -84,11 +84,16 @@ public class NFA
     	Set<String> s=map.keySet();
     	
     	HashMap<String,List<State>> map2=accept.getTransitionTable();
-    	Set<String> s2=map.keySet();
+    	Set<String> s2=map2.keySet();
     	fin.add("Start");
     	for(String k : s)
     	{
-    		fin.add(k);
+			if(!k.equals("")){
+				fin.add(k);
+			}
+			else{
+				fin.add("EPSILON");
+			}
     		List<State> states= map.get(k);
     		if(states!=null)
     		{	
@@ -97,7 +102,12 @@ public class NFA
     				Set<String> stuff=paul.getTransitionTable().keySet();
     				for(String l : stuff)
     				{
-    					fin.add(l);
+    					if(!l.equals("")){
+    						fin.add(l);
+    					}
+    					else{
+    						fin.add("EPSILON");
+    					}
     				}
     			}
     		}
@@ -107,16 +117,26 @@ public class NFA
     	
     	for(String k : s2)
     	{
-    		fin.add(k);
+			if(!k.equals("")){
+				fin.add(k);
+			}
+			else{
+				fin.add("EPSILON");
+			}
     		List<State> states= map2.get(k);
     		if(states!=null)
-    		{	
+    		{
     			for(State kurt: states)
     			{
     				Set<String> stuff=kurt.getTransitionTable().keySet();
     				for(String l : stuff)
     				{
-    					fin.add(l);
+    					if(!l.equals("")){
+    						fin.add(l);
+    					}
+    					else{
+    						fin.add("EPSILON");
+    					}
     				}
     			}	
     	    }

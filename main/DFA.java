@@ -33,10 +33,10 @@ public class DFA
             // Pull out all keys
             for (State s : curr.getStates())
             {
-                for (String k : curr.getTransitions().keySet())
+                for (String k : s.getTransitionTable().keySet())
                 {
                     tokens.add(k);
-                    System.out.println(tokens);
+                    //System.out.println(tokens);
                 }
             }
             // Iterate over all possible iterations and link states together
@@ -116,7 +116,6 @@ public class DFA
         {
             accept.add(output);
         }
-
         return output;
     }
 
