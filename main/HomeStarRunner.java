@@ -23,7 +23,8 @@ public class HomeStarRunner {
 //		}
 		
 		//HashSet<Integer> test=new HashSet<Integer>();
-		Driver dr2=new Driver("tests/testInput2", "tests/SampleSpec");
+		//Driver dr2 = new Driver("tests/testInput2", "tests/SampleSpec");
+		DriverNFA dr2 = new DriverNFA("tests/testInput2", "tests/SampleSpec");
 		
 		//ArrayList<String> list=new ArrayList<String>();
 		//list.add("a = 5");
