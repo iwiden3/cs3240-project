@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -34,7 +35,9 @@ public class DriverNFA {
 	    for(Token t : list)
 	    {
 	    	String str = t.getId();
-	    	str = str.substring(1);
+	    	if(str.length() > 0){
+	    		str = str.substring(1);
+	    	}
 	    	str += " ";
 	    	str += t.getValue();
 	    	str += "\r\n";
@@ -51,6 +54,16 @@ public class DriverNFA {
 	
     private List<String> readTextFile(String aFileName) throws IOException{
         Path path = Paths.get(aFileName);
-        return Files.readAllLines(path, ENCODING);
+        List<String> temp = Files.readAllLines(path, ENCODING);
+        List<String> toRet = new ArrayList<String>();
+        for(String str : temp){
+        	toRet.addAll(new ArrayList(Arrays.asList(str.split(""))));
+        }
+        List<String> temp2 = new ArrayList<String>();
+        temp2.add(" ");
+//        temp2.add("");
+        toRet.removeAll(temp2);
+        System.out.println(toRet.toString());
+        return toRet;
     }
 }

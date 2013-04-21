@@ -11,9 +11,13 @@ public class State
 	
 	public State(boolean accept, HashMap<String, List<State>> table)
 	{
+		this(accept, table, "");
+	}
+	
+	public State(boolean accept, HashMap<String, List<State>> table, String name){
 		this.accept = accept;
 		this.transitionTable = table;
-		name="";
+		this.name = name;
 	}
 	
 	public boolean isAccept()

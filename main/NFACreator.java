@@ -586,11 +586,10 @@ public class NFACreator {
 		{
 			return n1;
 		}
-		State newStart = new State(false, new HashMap<String, List<State>>());
+		State newStart = new State(false, new HashMap<String, List<State>>(), name);
 		newStart.addTransition("", n1.getStart());
 		newStart.addTransition("", n2.getStart());
-		State newAccept = new State(true, new HashMap<String, List<State>>());
-		newAccept.setName(name);
+		State newAccept = new State(true, new HashMap<String, List<State>>(), name);
 		n1.getAccept().setIsAccept(false);
 		n2.getAccept().setIsAccept(false);
 		n1.getAccept().addTransition("", newAccept);
@@ -604,9 +603,8 @@ public class NFACreator {
 	public NFA epsilonNFA()
 	{
 		NFA epsNFA = new NFA("EPSILON");
-		State startS = new State(false, new HashMap<String, List<State>>());
-		State acceptS = new State(true, new HashMap<String, List<State>>());
-		acceptS.setName("EPSILON");
+		State startS = new State(false, new HashMap<String, List<State>>(), "EPSILON");
+		State acceptS = new State(true, new HashMap<String, List<State>>(), "EPSILON");
 		epsNFA.addTransition(startS, "", acceptS);
 		epsNFA.setStart(startS);
 		epsNFA.setAccept(acceptS);
@@ -620,11 +618,11 @@ public class NFACreator {
 	
 	public NFA star(NFA n)
 	{
-		State newStart = new State(false, new HashMap<String, List<State>>());
+		State newStart = new State(false, new HashMap<String, List<State>>(), name);
 		newStart.addTransition("", n.getAccept());
 		n.getAccept().setIsAccept(false);
 		n.getAccept().addTransition("", n.getStart());
-		State newAccept = new State(true, new HashMap<String, List<State>>());
+		State newAccept = new State(true, new HashMap<String, List<State>>(), name);
 		n.getAccept().addTransition("", newAccept);
 		n.setAccept(newAccept);
 		n.setStart(newStart);
@@ -633,11 +631,11 @@ public class NFACreator {
 	
 	public NFA plus(NFA n)
 	{
-		State newStart = new State(false, new HashMap<String, List<State>>());
+		State newStart = new State(false, new HashMap<String, List<State>>(), name);
 		newStart.addTransition("", n.getStart());
 		n.getAccept().setIsAccept(false);
 		n.getAccept().addTransition("", n.getStart());
-		State newAccept = new State(true, new HashMap<String, List<State>>());
+		State newAccept = new State(true, new HashMap<String, List<State>>(), name);
 		n.getAccept().addTransition("", newAccept);
 		n.setAccept(newAccept);
 		n.setStart(newStart);
