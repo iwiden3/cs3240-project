@@ -1,11 +1,11 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
-import java.util.Arrays;
 
 public class NFACreator {
 	
@@ -387,7 +387,7 @@ public class NFACreator {
 		}
 		if(!char_set_tailFirst.contains((String) (splitDef.get(index).charAt(0) == '$' ? splitDef.get(index).substring(0,1) : splitDef.get(index))))
 		{
-			return null;
+			return epsilon();
 		}
 		myStack.push(index);
 		String ret = "";
@@ -486,7 +486,22 @@ public class NFACreator {
         for(int j=1; j<splitString.length; j++){
         	if(splitString[j].equalsIgnoreCase("in")){
         		String tempVal = regexTable.get(splitString[j+1]); //Retrieves the regex for "in $DIGIT/$CHAR"
-            	value = tempVal.substring(0,tempVal.length()-1) + value.substring(1); //Appends the previous regex with the new one
+        		System.out.println(tempVal);
+        		String[] otherVal;
+        		if(value.length() >= 5){
+        			otherVal = tempVal.split(value.substring(2,5));
+        		}
+        		else{
+        			otherVal = tempVal.split(value.substring(2,3));
+        			if(otherVal[1].startsWith("-")){
+        				otherVal[0] += String.valueOf(Character.toChars(value.charAt(2)+1));
+        			}
+        			else if(otherVal[0].endsWith("-")){
+        				otherVal[0] += String.valueOf(Character.toChars(value.charAt(2)-1));
+        			}
+        		}
+//            	value = value.substring(0,1) + "(" + value.substring(1,value.length()-1) + ")" + tempVal.substring(1); //Appends the previous regex with the new one
+        		value = otherVal[0] + otherVal[1];
             	break;
             }
             else{
@@ -659,7 +674,7 @@ public class NFACreator {
 			}
 			else if(curr.equals("$") && def.substring(i+1, i+2).matches("[a-zA-Z]"))
 			{
-				while(def.substring(i+1, i+2).matches("[a-zA-Z]"))
+				while(def.substring(i+1, i+2).matches("[a-zA-Z\\-]"))
 				{
 					i++;
 					curr += def.substring(i, i+1);

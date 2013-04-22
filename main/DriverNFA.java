@@ -57,12 +57,8 @@ public class DriverNFA {
         List<String> temp = Files.readAllLines(path, ENCODING);
         List<String> toRet = new ArrayList<String>();
         for(String str : temp){
-        	toRet.addAll(new ArrayList(Arrays.asList(str.split(""))));
+        	toRet.addAll(new ArrayList<String>(Arrays.asList(str.split(""))));
         }
-        List<String> temp2 = new ArrayList<String>();
-        temp2.add(" ");
-//        temp2.add("");
-        toRet.removeAll(temp2);
         System.out.println(toRet.toString());
         return toRet;
     }

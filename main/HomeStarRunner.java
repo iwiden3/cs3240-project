@@ -1,7 +1,6 @@
 package main;
 
 import java.io.IOException;
-import java.util.*;
 
 public class HomeStarRunner {
 
@@ -21,17 +20,18 @@ public class HomeStarRunner {
 //			System.out.println(n.getName());
 //			System.out.println(n.toListStrings());
 //		}
+//		
+//		HashSet<Integer> test=new HashSet<Integer>();
+//		Driver dr2 = new Driver("tests/testInput2", "tests/SampleSpec");
 		
-		//HashSet<Integer> test=new HashSet<Integer>();
-		//Driver dr2 = new Driver("tests/testInput2", "tests/SampleSpec");
-		DriverNFA dr2 = new DriverNFA("tests/testInput2", "tests/SampleSpec");
+		DriverNFA dr2 = new DriverNFA("tests/input1", "tests/spec1");
 		
-		//ArrayList<String> list=new ArrayList<String>();
-		//list.add("a = 5");
-		//list.add("PRINT a");
-		//list.add("b = a * 10 + 20");
-		//list.add("PRINT b");
-		
-		//Driver dr=new Driver(list,"tests/SampleSpec");	
+//		ArrayList<String> list=new ArrayList<String>();
+//		list.add("a = 5");
+//		list.add("PRINT a");
+//		list.add("b = a * 10 + 20");
+//		list.add("PRINT b");
+//		
+//		Driver dr=new Driver(list,"tests/SampleSpec");	
 	}
 }

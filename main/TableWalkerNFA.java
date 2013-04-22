@@ -33,12 +33,11 @@ public class TableWalkerNFA
     	List<State> newStates = new ArrayList<State>();
     	List<State> currStates = new ArrayList<State>();
     	
-    	
     	ALL:
     	while(index < input.size()){
     		NFAS:
     		for(NFA nfa : nfas){
-    			System.out.println(nfa.getName());
+//    			System.out.println(nfa.getName());
     			currStates.add(nfa.getStart());
     			MAIN:
     			while(true){
@@ -52,7 +51,7 @@ public class TableWalkerNFA
     	            		newStates.add(currState);
     	            	}
     				}
-    				if(curr.equals("")){
+    				if(curr.equals("") || curr.equals(" ")){
 						index++;
     					for(State s : newStates){
         					if(s.isAccept()){
@@ -66,7 +65,14 @@ public class TableWalkerNFA
                                 break NFAS;
         					}
         				}
-    					break NFAS;
+    					if(currToken.length() <= 0){
+    						oldIndex = index;
+    						break NFAS;
+    					}
+    					currStates = new ArrayList<State>();
+        				index = oldIndex;
+        				currToken = "";
+    					continue NFAS;
     				}    				
     				for(State s : newStates){
     					for(String reg : s.getTransitionTable().keySet()){
@@ -102,7 +108,7 @@ public class TableWalkerNFA
     				}
     				currStates = new ArrayList<State>();
     				index = oldIndex;
-    				curr = "";
+    				currToken = "";
     				continue NFAS;
     			}
     		}
