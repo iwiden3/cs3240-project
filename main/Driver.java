@@ -8,10 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Driver
 {
@@ -73,55 +71,55 @@ public class Driver
 		return name.getName();
 	}*/
 	
-	private void readInput() throws IOException
-	{
-		List<String> text = readTextFile(input);
-		ArrayList<String> out=new ArrayList<String>();
-		for(String s: text)
-		{
-			String[] splitString = (s.split(" "));
-			for(int i=0;i<splitString.length;i++)
-			{
-				//String type=whatType(splitString[i]);
-			//	String fin=type + " "+ splitString[i];
-		//		out.add(fin);
-			}
-		}
-	
-		FileWriter writer = new FileWriter("output.txt"); 
-		for(String str: out) 
-		{
-		  writer.write(str);
-		}
-		writer.close();
-	}
+//	private void readInput() throws IOException
+//	{
+//		List<String> text = readTextFile(input);
+//		ArrayList<String> out=new ArrayList<String>();
+//		for(String s: text)
+//		{
+//			String[] splitString = (s.split(" "));
+//			for(int i=0;i<splitString.length;i++)
+//			{
+//				//String type=whatType(splitString[i]);
+//			//	String fin=type + " "+ splitString[i];
+//		//		out.add(fin);
+//			}
+//		}
+//	
+//		FileWriter writer = new FileWriter("output.txt"); 
+//		for(String str: out) 
+//		{
+//		  writer.write(str);
+//		}
+//		writer.close();
+//	}
 	
     private List<String> readTextFile(String aFileName) throws IOException{
         Path path = Paths.get(aFileName);
         return Files.readAllLines(path, ENCODING);
     }
 	
-	private void testReadInput() throws IOException
-	{
-		ArrayList<String> out=new ArrayList<String>();
-		for(String s: text)
-		{
-			String[] splitString = (s.split(" "));
-			for(int i=0;i<splitString.length;i++)
-			{
-				//String type = whatType(splitString[i]);
-				//String fin = type + " "+ splitString[i] + "\n";
-				//out.add(fin);
-			}
-		}
-	
-		FileWriter writer = new FileWriter("output.txt"); 
-		for(String str: out) 
-		{
-		  writer.write(str);
-		}
-		writer.close();
-	}
+//	private void testReadInput() throws IOException
+//	{
+//		ArrayList<String> out=new ArrayList<String>();
+//		for(String s: text)
+//		{
+//			String[] splitString = (s.split(" "));
+//			for(int i=0;i<splitString.length;i++)
+//			{
+//				//String type = whatType(splitString[i]);
+//				//String fin = type + " "+ splitString[i] + "\n";
+//				//out.add(fin);
+//			}
+//		}
+//	
+//		FileWriter writer = new FileWriter("output.txt"); 
+//		for(String str: out) 
+//		{
+//		  writer.write(str);
+//		}
+//		writer.close();
+//	}
 	
 	//NEW ONE
 	/*

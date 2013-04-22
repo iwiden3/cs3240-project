@@ -24,17 +24,31 @@ public class TableWalkerNFA
     {
     	System.out.println("Entered Parse");
         String curr;
-        String identifier;
-        int index = 0, oldIndex = 0;
+        String identifier, tempIdentifier;
+        int index = 0, oldIndex = 0, tempIndex = 0;
         List<Token> output = new LinkedList<Token>();
+        
         identifier = "";
+        tempIdentifier = "";
         index = 0;
-        String currToken = "";
+        String currToken = "", tempCurrToken = "";
     	List<State> newStates = new ArrayList<State>();
     	List<State> currStates = new ArrayList<State>();
     	
     	ALL:
     	while(index < input.size()){
+    		if(tempCurrToken.length() > 0){
+    			System.out.println("Accepts: " + tempIdentifier);
+	            Token acc = new Token(tempIdentifier, tempCurrToken);
+	            output.add(acc);
+	            currToken = "";
+	            tempCurrToken = "";
+	            tempIdentifier = "";
+	            currStates = new ArrayList<State>();
+	            oldIndex = tempIndex;
+	            index = tempIndex;
+    		}
+            
     		NFAS:
     		for(NFA nfa : nfas){
 //    			System.out.println(nfa.getName());
@@ -55,13 +69,12 @@ public class TableWalkerNFA
 						index++;
     					for(State s : newStates){
         					if(s.isAccept()){
-        						System.out.println("Accepts: " + s.getName());
                                 identifier = s.getName();
-                                Token acc = new Token(identifier, currToken);
-                                output.add(acc);
-                                currToken = "";
-                                currStates = new ArrayList<State>();
-                                oldIndex = index;
+                                if(currToken.length() > tempCurrToken.length()){
+                                	tempCurrToken = currToken;
+                                	tempIdentifier = identifier;
+                                	tempIndex = index;
+                                }                                
                                 break NFAS;
         					}
         				}
@@ -96,14 +109,16 @@ public class TableWalkerNFA
     				}
     				for(State s : newStates){
     					if(s.isAccept()){
-    						System.out.println("Accepts: " + s.getName());
                             identifier = s.getName();
-                            Token acc = new Token(identifier, currToken);
-                            output.add(acc);
+                            if(currToken.length() > tempCurrToken.length()){
+                            	tempCurrToken = currToken;
+                            	tempIdentifier = identifier;
+                            	tempIndex = index;
+                            }  
                             currToken = "";
                             currStates = new ArrayList<State>();
-                            oldIndex = index;
-                            break NFAS;
+                            index = oldIndex;
+                            continue NFAS;
     					}
     				}
     				currStates = new ArrayList<State>();
@@ -125,96 +140,18 @@ public class TableWalkerNFA
     	
     	for(State s : newStates){
 			if(s.isAccept()){
-				System.out.println("Accepts: " + s.getName());
                 identifier = s.getName();
-                Token acc = new Token(identifier, currToken);
+                if(currToken.length() > tempCurrToken.length()){
+                	tempCurrToken = currToken;
+                	tempIdentifier = identifier;
+                	tempIndex = index;
+                }  
+				System.out.println("Accepts: " + tempIdentifier);
+                Token acc = new Token(tempIdentifier, tempCurrToken);
                 output.add(acc);
-                currToken = "";
+                break;
 			}
 		}
-        		
-//        	THISWHILE:
-//        	while(true){
-//	            NFAMAIN:
-//	            for(NFA n : nfas){
-//	            	tempStates2.add(n.getStart());
-//	            	UMM:
-//	            	while(index < str.length() && !failure){
-//	                    curr = str.charAt(index);
-//	                    if(curr == ' '){
-//	                    	for(State s : tempStates2){
-//	                    		if(s.getTransitionTable().keySet().contains("")){
-//	    	                		List<State> tempStates3 = noMoreEpsilons(s.getTransitionTable().get(""));
-//	    	                		for(State s1 : tempStates3){
-//	    	                			if(s1.isAccept()){
-//	    		                			System.out.println("Accepts: " + s1.getName());
-//	    		                            identifier = s1.getName();
-//	    		                            Token acc = new Token(identifier, currToken);
-//	    		                            output.add(acc);
-//	    		                            currToken = "";
-//	    		                            index++;
-//	    		                            break NFAMAIN;
-//	    		                		}
-//	    	                		}
-//	    	                	}
-//	                    		else if(s.isAccept()){
-//		                			System.out.println("Accepts: " + s.getName());
-//		                            identifier = s.getName();
-//		                            Token acc = new Token(identifier, currToken);
-//		                            output.add(acc);
-//		                            currToken = "";
-//		                            index++;
-//									tempStates2.clear();
-//									break NFAMAIN;
-//		                		}
-//	                    	}
-//	                    	continue UMM;
-//	                    }
-//	                    currToken += Character.toString(curr);
-//	            		currStates = tempStates2;
-//	            		RESET:
-//	                	for(State currState : currStates){
-//		                	if(currState.getTransitionTable().keySet().contains("")){
-//		                		tempStates = noMoreEpsilons(currState.getTransitionTable().get(""));
-//		                	}
-//		                	else{
-//		                		tempStates = new ArrayList<State>();
-//		                		tempStates.add(currState);
-//		                	}
-//		                	
-//		                	for(State s : tempStates){
-//		                		STUFF:
-//		                		if(s.isAccept()){
-//		                			for(State sta : tempStates){
-//			                			for(String reg : sta.getTransitionTable().keySet()){
-//			                				if(Pattern.matches(reg, Character.toString(curr))){
-//			                					break STUFF;
-//			                				}
-//		                				}
-//		                			}
-//		            				System.out.println("Accepts: " + s.getName());
-//		                            identifier = s.getName();
-//		                            Token acc = new Token(identifier, currToken);
-//		                            output.add(acc);
-//		                            currToken = "";
-//		                            break NFAMAIN;
-//		                        }
-//		                		System.out.println(s.getTransitionTable().size());
-//								for(String reg : s.getTransitionTable().keySet()){
-//									if(Pattern.matches(reg, Character.toString(curr))){
-//										tempStates2 = s.getTransitionTable().get(reg);
-//										index++;
-//										break RESET;
-//									}
-//								}
-//								currToken = "";
-//								tempStates2.clear();
-//								break UMM;
-//		                	}
-//	                	}
-//	                }
-//	            }
-//          }
         return output;
     }
     

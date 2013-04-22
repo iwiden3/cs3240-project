@@ -486,7 +486,7 @@ public class NFACreator {
         for(int j=1; j<splitString.length; j++){
         	if(splitString[j].equalsIgnoreCase("in")){
         		String tempVal = regexTable.get(splitString[j+1]); //Retrieves the regex for "in $DIGIT/$CHAR"
-        		System.out.println(tempVal);
+//        		System.out.println(tempVal);
         		String[] otherVal;
         		if(value.length() >= 5){
         			otherVal = tempVal.split(value.substring(2,5));

@@ -19,7 +19,7 @@ public class NFAFactoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		fs = new FileScanner("tests/SampleSpec");
+		fs = new FileScanner("tests/spec1");
 		factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
 		nfas = factory.factorize();
 	}

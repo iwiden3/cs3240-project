@@ -15,7 +15,7 @@ public class TestReadTextFile {
 	
 	@Before
 	public void setup() throws IOException{
-		fs = new FileScanner("tests/SampleSpec");
+		fs = new FileScanner("tests/spec1");
 	}
 	
 	@Test
@@ -25,7 +25,7 @@ public class TestReadTextFile {
 
 	@Test
 	public void testNonZero(){		
-		assertEquals("[0-9^0]", fs.getRegexTable().get("$NON-ZERO"));
+		assertEquals("[^0] IN $DIGIT", fs.getRegexTable().get("$NON-ZERO"));
 	}
 	
 	@Test
@@ -35,27 +35,27 @@ public class TestReadTextFile {
 	
 	@Test
 	public void testUpper(){
-		assertEquals("[a-zA-Z^a-z]", fs.getRegexTable().get("$UPPER"));
+		assertEquals("[^a-z] IN $CHAR", fs.getRegexTable().get("$UPPER"));
 	}
 	
 	@Test
 	public void testLower(){
-		assertEquals("[a-zA-Z^A-Z]", fs.getRegexTable().get("$LOWER"));
+		assertEquals("[^A-Z] IN $CHAR", fs.getRegexTable().get("$LOWER"));
 	}
 	
 	@Test
 	public void testIdentifier(){
-		assertEquals("[a-zA-Z^A-Z] ([a-zA-Z^A-Z]|[0-9])*", fs.getTokenTable().get("$IDENTIFIER"));
+		assertEquals("$LOWER ($LOWER|$DIGIT)*", fs.getTokenTable().get("$IDENTIFIER"));
 	}
 	
 	@Test
 	public void testInt(){
-		assertEquals("([0-9])+", fs.getTokenTable().get("$INT"));
+		assertEquals("($DIGIT)+", fs.getTokenTable().get("$INT"));
 	}
 	
 	@Test
 	public void testFloat(){
-		assertEquals("([0-9])+ \\. ([0-9])+", fs.getTokenTable().get("$FLOAT"));
+		assertEquals("($DIGIT)+ \\. ($DIGIT)+", fs.getTokenTable().get("$FLOAT"));
 	}
 	
 	@Test

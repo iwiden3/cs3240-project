@@ -59,7 +59,7 @@ public class DriverNFA {
         for(String str : temp){
         	toRet.addAll(new ArrayList<String>(Arrays.asList(str.split(""))));
         }
-        System.out.println(toRet.toString());
+//        System.out.println(toRet.toString());
         return toRet;
     }
 }

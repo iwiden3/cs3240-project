@@ -16,7 +16,8 @@ public class TableWalker
         this.input = input;
     }
 
-    public List<Token> parse()
+    @SuppressWarnings("unused") // Remove this if work is attempted again
+	public List<Token> parse()
     {
     	System.out.println("Entered Parse");
         char curr;
