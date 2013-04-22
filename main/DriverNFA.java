@@ -15,7 +15,6 @@ import java.util.List;
 public class DriverNFA {
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
     
-	DFA dfa;
 	String input, rules;
 	List<String> text;
     TableWalkerNFA tw;
