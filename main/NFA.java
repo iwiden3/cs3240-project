@@ -19,7 +19,6 @@ public class NFA
         this.name = name;
 
         // Make accept state
-        // TODO: this is for simple char classes only
         State accept = new State(true, new HashMap<String, List<State>>());
         accept.setName(name);
         
@@ -76,7 +75,7 @@ public class NFA
     	s1.addTransition(trans, s2);
     }
     
-    // Meh I think this broke but whatever
+    // Kinda broken. At least, doesn't work entirely as expected.
     public List<String> toListStrings()
     {
     	ArrayList<String> fin=new ArrayList<String>();
@@ -141,7 +140,6 @@ public class NFA
     			}	
     	    }
     	}
-    	
     	return fin;
     }
 }

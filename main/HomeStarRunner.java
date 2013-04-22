@@ -4,34 +4,9 @@ import java.io.IOException;
 
 public class HomeStarRunner {
 
-	@SuppressWarnings("unused")
 	public static void main(String[]args) throws IOException
-	{
-//		FileScanner fs;
-//		NFAFactory factory;
-//		HashSet<NFA> nfas;
-//		
-//		fs = new FileScanner("tests/SampleSpec");
-//		factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
-//		nfas = factory.factorize();
-//		
-//		for(NFA n: nfas)
-//		{
-//			System.out.println(n.getName());
-//			System.out.println(n.toListStrings());
-//		}
-//		
-//		HashSet<Integer> test=new HashSet<Integer>();
-//		Driver dr2 = new Driver("tests/testInput2", "tests/SampleSpec");
-		
-		DriverNFA dr2 = new DriverNFA("tests/input1", "tests/spec1");
-		
-//		ArrayList<String> list=new ArrayList<String>();
-//		list.add("a = 5");
-//		list.add("PRINT a");
-//		list.add("b = a * 10 + 20");
-//		list.add("PRINT b");
-//		
-//		Driver dr=new Driver(list,"tests/SampleSpec");	
+	{		
+		DriverNFA dr = new DriverNFA("tests/input1", "tests/spec1");
+		dr.start();
 	}
 }

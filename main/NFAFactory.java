@@ -31,10 +31,8 @@ public class NFAFactory
 		{
 			String value = tokenTable.get(key);
 			NFACreator create = new NFACreator(key, value, regexTable, regexNFAs);
-//			NFACreator create = new NFACreator("$TEST", "PRINT", regexTable, regexNFAs);
 			nfaSet.add(create.getNFA());
 		}
 		return nfaSet;
 	}
-
 }

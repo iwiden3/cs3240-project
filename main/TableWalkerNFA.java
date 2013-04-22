@@ -51,7 +51,6 @@ public class TableWalkerNFA
             
     		NFAS:
     		for(NFA nfa : nfas){
-//    			System.out.println(nfa.getName());
     			currStates.add(nfa.getStart());
     			MAIN:
     			while(true){

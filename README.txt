@@ -1,0 +1,1 @@
+The file to be run is HomeStarRunner.java in the main folder. Please edit the parameters for DriverNFA in this file in order to read in different inputs and specifications. The output will be placed at in the tests folder with a filename of "output" by default. This can be changed in DriverNFA.java.

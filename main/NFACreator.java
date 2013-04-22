@@ -486,7 +486,6 @@ public class NFACreator {
         for(int j=1; j<splitString.length; j++){
         	if(splitString[j].equalsIgnoreCase("in")){
         		String tempVal = regexTable.get(splitString[j+1]); //Retrieves the regex for "in $DIGIT/$CHAR"
-//        		System.out.println(tempVal);
         		String[] otherVal;
         		if(value.length() >= 5){
         			otherVal = tempVal.split(value.substring(2,5));
@@ -500,7 +499,6 @@ public class NFACreator {
         				otherVal[0] += String.valueOf(Character.toChars(value.charAt(2)-1));
         			}
         		}
-//            	value = value.substring(0,1) + "(" + value.substring(1,value.length()-1) + ")" + tempVal.substring(1); //Appends the previous regex with the new one
         		value = otherVal[0] + otherVal[1];
             	break;
             }
@@ -565,7 +563,6 @@ public class NFACreator {
 		{
 			wat.add(escapedChars[i]);
 		}
-		//System.out.println(wat.toString());
 		return wat;
 	}
 	
@@ -583,7 +580,6 @@ public class NFACreator {
 		{
 			wat.add(escapedChars[i]);
 		}
-		//System.out.println(wat.toString());
 		return wat;
 	}
 	
@@ -686,7 +682,6 @@ public class NFACreator {
 			}
 			splitDef.add(curr);
 		}
-		//System.out.println(splitDef.toString());
 	}
 	
 	public void nextCurr()

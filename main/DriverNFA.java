@@ -13,24 +13,28 @@ import java.util.HashSet;
 import java.util.List;
 
 public class DriverNFA {
-	DFA dfa;
-	String input;
-	List<String> text;
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
+    
+	DFA dfa;
+	String input, rules;
+	List<String> text;
     TableWalkerNFA tw;
 	
-	public DriverNFA(String input, String rules) throws IOException
+	public DriverNFA(String input, String rules)
 	{
 		this.input = input;
-		FileScanner fs=new FileScanner(rules);
+		this.rules = rules;
+	 }
+	
+	public void start() throws IOException{
+		FileScanner fs = new FileScanner(rules);
 		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
 		HashSet<NFA> nfas = factory.factorize();
-//		BigNFA theNFA=new BigNFA(nfas);
 		text = readTextFile(input);
 	    tw = new TableWalkerNFA(nfas,text);
+
+		List<Token> list = tw.parse();
 	    ArrayList<String> out = new ArrayList<String>();
-		
-	    List<Token> list=tw.parse();
 	    
 	    for(Token t : list)
 	    {
@@ -44,13 +48,14 @@ public class DriverNFA {
 	    	out.add(str);
 	    }
 	    
+	    // Edit this to change where the output is saved.
 		FileWriter writer = new FileWriter("tests/output"); 
 		for(String str: out) 
 		{
 		  writer.write(str);
 		}
 		writer.close();
-	 }
+	}
 	
     private List<String> readTextFile(String aFileName) throws IOException{
         Path path = Paths.get(aFileName);
@@ -59,7 +64,6 @@ public class DriverNFA {
         for(String str : temp){
         	toRet.addAll(new ArrayList<String>(Arrays.asList(str.split(""))));
         }
-//        System.out.println(toRet.toString());
         return toRet;
     }
 }
