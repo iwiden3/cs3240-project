@@ -64,13 +64,29 @@ public class LL1parser
     	firstSets=map;
     }
     
+    public String replaceSpace(String str)
+    {
+    	String ret="";
+    	
+    	for(int i=0;i<str.length();i++)
+    	{
+    		if(str.charAt(i)!=' ')
+    		{
+    			ret+=str.charAt(i);
+    		}
+    		
+    	}
+    	return ret;
+    }
+    
     public HashMap<String, Set<String>> createFirstSets(List<String> origFile)
     {
     	HashMap<String, Set<String>> map=new HashMap<String,Set<String>>();
     	HashSet<String> keys=new HashSet<String>();
     	for(String str : origFile)
     	{	
-        	String[] splitString = (str.split("="));
+    		str=replaceSpace(str);
+    		String[] splitString = (str.split("="));
         	//REMOVE SPACES
         	splitString[0]= splitString[0].substring(0, splitString[0].length() - 1);
         	

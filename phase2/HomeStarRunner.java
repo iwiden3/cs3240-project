@@ -30,9 +30,9 @@ public class HomeStarRunner {
 		//HashSet<String> str= parse.getstuff(map,"<cool>");
 
 		ArrayList<String> list=new ArrayList<String>();
-		list.add("<cool>:=<hello>|<epsilon>");
-		list.add("<hello>:=begin|<pawl>");
-		list.add("<pawl>:=nice|koitus");
+		list.add("<cool>:=<hello>| <epsilon>");
+		list.add("<hello> :=begin|<pawl>");
+		list.add("<pawl>:=nice |koitus");
 		
 		HashMap<String, Set<String>> map=parse.createFirstSets(list);
 		Set<String> keys=map.keySet();
