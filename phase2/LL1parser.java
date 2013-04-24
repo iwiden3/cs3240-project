@@ -24,6 +24,11 @@ public class LL1parser
 		firstSets=null;
 		followSets=null;
 	}
+	
+	public HashMap<String,Set<String>> getFirstSets()
+	{
+		return firstSets;
+	}
     
     public void inputFile(String file) throws IOException
     {
@@ -56,7 +61,39 @@ public class LL1parser
     		map.put(key, value);
     		
     	}
+    	firstSets=map;
     }
+    
+    public HashMap<String, Set<String>> createFirstSets(List<String> origFile)
+    {
+    	HashMap<String, Set<String>> map=new HashMap<String,Set<String>>();
+    	HashSet<String> keys=new HashSet<String>();
+    	for(String str : origFile)
+    	{	
+        	String[] splitString = (str.split("="));
+        	//REMOVE SPACES
+        	splitString[0]= splitString[0].substring(0, splitString[0].length() - 1);
+        	
+        	HashSet<String> set=getTerm(splitString[1]);
+        	//terminating conditions are now in
+        	map.put(splitString[0], set);
+        	keys.add(splitString[0]);
+        }
+    
+    	//HashSet<String> keys= (HashSet<String>) map.keySet();
+    
+    	for(String key : keys)
+    	{
+    		HashSet<String> value=getstuff(map,key);
+    		map.put(key, value);
+    		
+    	}
+    	return map;
+    }
+    
+    
+    
+    
     
     public HashSet<String> getstuff(HashMap<String,Set<String>> map, String key)
     {
@@ -65,7 +102,12 @@ public class LL1parser
 
     	for(String str : set)
     	{
-    		if(str.charAt(0)!='<')
+    		
+    		if(str.substring(1,str.length()-1).equals("epsilon"))
+    		{
+    			set2.add(str);
+    		}
+    		else if(str.charAt(0)!='<')
     		{
     			set2.add(str);
     		}
@@ -92,7 +134,7 @@ public class LL1parser
 	public HashSet<String> getTerm(String str)
 	{
 		HashSet<String> set=new HashSet<String>();
-		String[] split=str.split("|");
+		String[] split=str.split("\\|");
 		for(String temp : split)
 		{
 			if(!temp.isEmpty())
@@ -105,6 +147,8 @@ public class LL1parser
 				else
 				{
 					String[] split2=temp.split(">");
+					split2[0]+=">";
+					set.add(split2[0]);
 				}
 			
 			}
@@ -128,10 +172,4 @@ public class LL1parser
 		Path path = Paths.get(aFileName);
 		return Files.readAllLines(path, ENCODING);
 	}
-
-
-
-
-
-
 }

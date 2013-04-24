@@ -1,6 +1,7 @@
 package phase2;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +12,8 @@ public class HomeStarRunner {
 	{		
 		LL1parser parse=new LL1parser();
 		//HashSet<String> str=parse.getTerm("diff|union|inters");
-		HashSet<String> set1=new HashSet<String>();
+		
+		/*HashSet<String> set1=new HashSet<String>();
 		HashSet<String> set2=new HashSet<String>();
 		HashSet<String> set3=new HashSet<String>();
 
@@ -23,18 +25,42 @@ public class HomeStarRunner {
 		set3.add("koitus");
 		map.put("<cool>",set1);
 		map.put("<hello>",set2);
-		map.put("<pawl>",set3);
+		map.put("<pawl>",set3);*/
 		
+		//HashSet<String> str= parse.getstuff(map,"<cool>");
+
+		ArrayList<String> list=new ArrayList<String>();
+		list.add("<cool>:=<hello>|<epsilon>");
+		list.add("<hello>:=begin|<pawl>");
+		list.add("<pawl>:=nice|koitus");
 		
+		HashMap<String, Set<String>> map=parse.createFirstSets(list);
+		Set<String> keys=map.keySet();
 		
-		HashSet<String> str= parse.getstuff(map,"<cool>");
-		
-		
-		for(String temp : str)
+		for(String key : keys)
 		{
-			System.out.println(temp);
+			System.out.println(key + " : " + setToString(map.get(key)));
 		}
 
 		
+		
+		
+		
 	}
+	
+	public static String setToString(Set<String> set)
+	{
+		String ret="";
+		
+		for(String s : set)
+		{
+			ret+=s;
+			ret+=" ";
+		}
+		
+		
+		return ret;
+	}
+	
+	
 }
