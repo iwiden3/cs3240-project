@@ -43,17 +43,21 @@ public class LL1parser
     public void createFirstSets()
     {
     	HashMap<String, Set<String>> map=new HashMap<String,Set<String>>();
-    	
+    	HashSet<String> keys=new HashSet<String>();
     	for(String str : origFile)
     	{	
-        	String[] splitString = (str.split("::="));
+    		str=replaceSpace(str);
+    		String[] splitString = (str.split("="));
         	//REMOVE SPACES
+        	splitString[0]= splitString[0].substring(0, splitString[0].length() - 1);
+        	
         	HashSet<String> set=getTerm(splitString[1]);
         	//terminating conditions are now in
         	map.put(splitString[0], set);
+        	keys.add(splitString[0]);
         }
     
-    	HashSet<String> keys= (HashSet<String>) map.keySet();
+    	//HashSet<String> keys= (HashSet<String>) map.keySet();
     
     	for(String key : keys)
     	{
@@ -63,6 +67,7 @@ public class LL1parser
     	}
     	firstSets=map;
     }
+    
     
     public String replaceSpace(String str)
     {

@@ -29,13 +29,19 @@ public class HomeStarRunner {
 		
 		//HashSet<String> str= parse.getstuff(map,"<cool>");
 
-		ArrayList<String> list=new ArrayList<String>();
+		/*ArrayList<String> list=new ArrayList<String>();
 		list.add("<cool>:=<hello>| <epsilon>");
 		list.add("<hello> :=begin|<pawl>");
-		list.add("<pawl>:=nice |koitus");
+		list.add("<pawl>:=nice |koitus");*/
 		
-		HashMap<String, Set<String>> map=parse.createFirstSets(list);
+		parse.inputFile("miniReg.txt");
+		parse.createFirstSets();
+		
+	    HashMap<String, Set<String>> map=parse.getFirstSets();
 		Set<String> keys=map.keySet();
+		
+		
+		
 		
 		for(String key : keys)
 		{
