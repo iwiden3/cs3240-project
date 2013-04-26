@@ -34,7 +34,7 @@ public class HomeStarRunner {
 		list.add("<hello> :=begin|<pawl>");
 		list.add("<pawl>:=nice |koitus");*/
 		
-		parse.inputFile("miniReg.txt");
+		parse.inputFile("phase2/book.txt");
 		parse.createFirstSets();
 		
 	    HashMap<String, Set<String>> map=parse.getFirstSets();

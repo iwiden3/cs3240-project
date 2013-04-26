@@ -47,11 +47,12 @@ public class LL1parser
     	for(String str : origFile)
     	{	
     		str=replaceSpace(str);
-    		String[] splitString = (str.split("="));
+    		String[] splitString = (str.split("::="));
         	//REMOVE SPACES
-        	splitString[0]= splitString[0].substring(0, splitString[0].length() - 1);
+        	//splitString[0]= splitString[0].substring(0, splitString[0].length() - 3);
         	
-        	HashSet<String> set=getTerm(splitString[1]);
+        	
+        	HashSet<String> set=getTerm(splitString[0],splitString[1]);
         	//terminating conditions are now in
         	map.put(splitString[0], set);
         	keys.add(splitString[0]);
@@ -95,7 +96,7 @@ public class LL1parser
         	//REMOVE SPACES
         	splitString[0]= splitString[0].substring(0, splitString[0].length() - 1);
         	
-        	HashSet<String> set=getTerm(splitString[1]);
+        	HashSet<String> set=getTerm(splitString[0],splitString[1]);
         	//terminating conditions are now in
         	map.put(splitString[0], set);
         	keys.add(splitString[0]);
@@ -121,25 +122,32 @@ public class LL1parser
     	HashSet<String> set=(HashSet<String>) map.get(key);
     	HashSet<String> set2=new HashSet<String>();
 
-    	for(String str : set)
-    	{
-    		
-    		if(str.substring(1,str.length()-1).equals("epsilon"))
+    	if(set!=null)
+    	{	
+    		for(String str : set)
     		{
-    			set2.add(str);
-    		}
-    		else if(str.charAt(0)!='<')
-    		{
-    			set2.add(str);
-    		}
-    		else
-    		{
-    			HashSet<String> set3=getstuff(map,str);
-    			for(String t : set3)
+    			
+    			if(str.length()==1)
     			{
-    				set2.add(t);
+    				set2.add(str);
     			}
-    		}
+    			else if(str.substring(1,str.length()-1).equals("epsilon"))
+    			{
+    				set2.add(str);
+    			}
+    			else if(str.charAt(0)!='<')
+    			{
+    				set2.add(str);
+    			}
+    			else
+    			{
+    				HashSet<String> set3=getstuff(map,str);
+    				for(String t : set3)
+    				{
+    					set2.add(t);
+    				}
+    			}
+    		}	
     	}
     	return set2;
     }
@@ -152,7 +160,7 @@ public class LL1parser
     
     
     
-	public HashSet<String> getTerm(String str)
+	public HashSet<String> getTerm(String key,String str)
 	{
 		HashSet<String> set=new HashSet<String>();
 		String[] split=str.split("\\|");
@@ -169,7 +177,18 @@ public class LL1parser
 				{
 					String[] split2=temp.split(">");
 					split2[0]+=">";
-					set.add(split2[0]);
+					if(!split2[0].equals(key))
+					{	
+						set.add(split2[0]);
+					}
+					/*
+					else
+					{
+						
+						split2[1]+=">";
+						set.add(split2[1]);
+
+					}*/
 				}
 			
 			}
