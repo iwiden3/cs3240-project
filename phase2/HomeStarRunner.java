@@ -37,15 +37,15 @@ public class HomeStarRunner {
 		parse.inputFile("phase2/book.txt");
 		parse.createFirstSets();
 		
-	    HashMap<String, Set<String>> map=parse.getFirstSets();
-		Set<String> keys=map.keySet();
+	    HashMap<Token, Set<Token>> map=parse.getFirstSets();
+		Set<Token> keys=map.keySet();
 		
 		
 		
 		
-		for(String key : keys)
+		for(Token key : keys)
 		{
-			System.out.println(key + " : " + setToString(map.get(key)));
+			System.out.println(key.getValue() + " : " + setToString(map.get(key)));
 		}
 
 		
@@ -54,13 +54,14 @@ public class HomeStarRunner {
 		
 	}
 	
-	public static String setToString(Set<String> set)
+	public static String setToString(Set<Token> set)
 	{
 		String ret="";
 		
-		for(String s : set)
+		for(Token s : set)
 		{
-			ret+=s;
+			String s2=s.getValue();
+			ret+=s2;
 			ret+=" ";
 		}
 		

@@ -13,8 +13,8 @@ import java.util.*;
 public class LL1parser
 {
     private List<String> origFile;
-    private HashMap<String,Set<String>> firstSets;
-    private HashMap<String,Set<String>> followSets;
+    private HashMap<Token,Set<Token>> firstSets;
+    private HashMap<Token,Set<Token>> followSets;
 
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
@@ -25,7 +25,7 @@ public class LL1parser
 		followSets=null;
 	}
 	
-	public HashMap<String,Set<String>> getFirstSets()
+	public HashMap<Token,Set<Token>> getFirstSets()
 	{
 		return firstSets;
 	}
@@ -42,8 +42,10 @@ public class LL1parser
     
     public void createFirstSets()
     {
-    	HashMap<String, Set<String>> map=new HashMap<String,Set<String>>();
-    	HashSet<String> keys=new HashSet<String>();
+    	int i=0;
+    	HashMap<Token, Set<Token>> map=new HashMap<Token,Set<Token>>();
+    	HashSet<Token> keys=new HashSet<Token>();
+    	Token t;
     	for(String str : origFile)
     	{	
     		str=replaceSpace(str);
@@ -52,17 +54,20 @@ public class LL1parser
         	//splitString[0]= splitString[0].substring(0, splitString[0].length() - 3);
         	
         	
-        	HashSet<String> set=getTerm(splitString[0],splitString[1]);
+        	HashSet<Token> set=getTerm(splitString[0],splitString[1]);
         	//terminating conditions are now in
-        	map.put(splitString[0], set);
-        	keys.add(splitString[0]);
+        	
+        	t=new Token(splitString[0],false,i==0);
+        	map.put(t,set);
+        	keys.add(t);
+        	i++;
         }
     
     	//HashSet<String> keys= (HashSet<String>) map.keySet();
     
-    	for(String key : keys)
+    	for(Token key : keys)
     	{
-    		HashSet<String> value=getstuff(map,key);
+    		HashSet<Token> value=getstuff(map,key);
     		map.put(key, value);
     		
     	}
@@ -85,6 +90,7 @@ public class LL1parser
     	return ret;
     }
     
+    /*
     public HashMap<String, Set<String>> createFirstSets(List<String> origFile)
     {
     	HashMap<String, Set<String>> map=new HashMap<String,Set<String>>();
@@ -112,37 +118,40 @@ public class LL1parser
     	}
     	return map;
     }
+    */
     
     
     
     
     
-    public HashSet<String> getstuff(HashMap<String,Set<String>> map, String key)
+    public HashSet<Token> getstuff(HashMap<Token,Set<Token>> map, Token key)
     {
-    	HashSet<String> set=(HashSet<String>) map.get(key);
-    	HashSet<String> set2=new HashSet<String>();
+    	HashSet<Token> set=(HashSet<Token>) map.get(key);
+    	HashSet<Token> set2=new HashSet<Token>();
+    	
 
     	if(set!=null)
     	{	
-    		for(String str : set)
+    		for(Token str : set)
     		{
     			
-    			if(str.length()==1)
+    			if(str.getValue().length()==1)
     			{
     				set2.add(str);
     			}
-    			else if(str.substring(1,str.length()-1).equals("epsilon"))
+    			else if(str.getValue().substring(1,str.getValue().length()-1).equals("epsilon"))
     			{
+    				str.toggle();
     				set2.add(str);
     			}
-    			else if(str.charAt(0)!='<')
+    			else if(str.getValue().charAt(0)!='<')
     			{
     				set2.add(str);
     			}
     			else
     			{
-    				HashSet<String> set3=getstuff(map,str);
-    				for(String t : set3)
+    				HashSet<Token> set3=getstuff(map,str);
+    				for(Token t : set3)
     				{
     					set2.add(t);
     				}
@@ -160,18 +169,21 @@ public class LL1parser
     
     
     
-	public HashSet<String> getTerm(String key,String str)
+	public HashSet<Token> getTerm(String key,String str)
 	{
-		HashSet<String> set=new HashSet<String>();
+		
+		HashSet<Token> set=new HashSet<Token>();
 		String[] split=str.split("\\|");
 		for(String temp : split)
 		{
+			Token t;
 			if(!temp.isEmpty())
 			{
 				if(temp.charAt(0)!='<')
 				{
 					String[] split2=temp.split("<");
-					set.add(split2[0]);
+					t=new Token(split2[0],true,false);
+					set.add(t);
 				}
 				else
 				{
@@ -179,7 +191,8 @@ public class LL1parser
 					split2[0]+=">";
 					if(!split2[0].equals(key))
 					{	
-						set.add(split2[0]);
+						t=new Token(split2[0],false,false);
+						set.add(t);
 					}
 					/*
 					else
