@@ -32,7 +32,7 @@ public class LL1parser
     
     public void inputFile(String file) throws IOException
     {
-    	origFile=readTextFile(file);
+    	origFile = readTextFile(file);
     }
     
     public List<String> getInputFile()
@@ -72,6 +72,22 @@ public class LL1parser
     		
     	}
     	firstSets=map;
+    }
+
+    public void createFollowSets()
+    {
+        String[] temp;
+        List<String> file = origFile;
+        HashSet<String> nonterminals = new HashSet<String>();
+
+        for (String s : file)
+        {
+            temp = s.split(" ");
+            nonterminals.add(temp[0]);
+        }
+
+        System.out.println(nonterminals);
+
     }
     
     
@@ -160,14 +176,6 @@ public class LL1parser
     	}
     	return set2;
     }
-    
-    public void createFollowSets()
-    {
-    	
-    }
-    
-    
-    
     
 	public HashSet<Token> getTerm(String key,String str)
 	{

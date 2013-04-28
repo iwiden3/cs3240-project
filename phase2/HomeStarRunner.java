@@ -34,11 +34,14 @@ public class HomeStarRunner {
 		list.add("<hello> :=begin|<pawl>");
 		list.add("<pawl>:=nice |koitus");*/
 		
-		parse.inputFile("phase2/book.txt");
+        System.out.println(args[0]);
+		parse.inputFile(args[0]);
 		parse.createFirstSets();
 		
 	    HashMap<Token, Set<Token>> map=parse.getFirstSets();
 		Set<Token> keys=map.keySet();
+
+        parse.createFollowSets();
 		
 		
 		
