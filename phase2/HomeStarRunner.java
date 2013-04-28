@@ -1,7 +1,6 @@
 package phase2;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,23 +37,15 @@ public class HomeStarRunner {
 		parse.inputFile(args[0]);
 		parse.createFirstSets();
 		
-	    HashMap<Token, Set<Token>> map=parse.getFirstSets();
-		Set<Token> keys=map.keySet();
+	    HashMap<Token, HashSet<Token>> map = parse.getFirstSets();
+		Set<Token> keys = map.keySet();
 
         parse.createFollowSets();
-		
-		
-		
 		
 		for(Token key : keys)
 		{
 			System.out.println(key.getValue() + " : " + setToString(map.get(key)));
-		}
-
-		
-		
-		
-		
+		}		
 	}
 	
 	public static String setToString(Set<Token> set)
@@ -66,11 +57,7 @@ public class HomeStarRunner {
 			String s2=s.getValue();
 			ret+=s2;
 			ret+=" ";
-		}
-		
-		
+		}	
 		return ret;
-	}
-	
-	
+	}	
 }

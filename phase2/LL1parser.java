@@ -1,31 +1,35 @@
 package phase2;
 
 import java.io.IOException;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class LL1parser
 {
     private List<String> origFile;
-    private HashMap<Token,Set<Token>> firstSets;
-    private HashMap<Token,Set<Token>> followSets;
+    private HashMap<Token, HashSet<Token>> firstSets;
+    private HashMap<Token, HashSet<Token>> followSets;
+    private HashMap<String, HashMap<String, String>> parseTable;
 
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
 	public LL1parser()
 	{
-		origFile=null;
-		firstSets=null;
-		followSets=null;
+		origFile = null;
+		firstSets = null;
+		followSets = null;
+		parseTable = new HashMap<String, HashMap<String, String>>();
 	}
 	
-	public HashMap<Token,Set<Token>> getFirstSets()
+	public HashMap<Token, HashSet<Token>> getFirstSets()
 	{
 		return firstSets;
 	}
@@ -42,24 +46,35 @@ public class LL1parser
     
     public void createFirstSets()
     {
-    	int i=0;
-    	HashMap<Token, Set<Token>> map=new HashMap<Token,Set<Token>>();
-    	HashSet<Token> keys=new HashSet<Token>();
+    	int i = 0;
+    	HashMap<Token, HashSet<Token>> map = new HashMap<Token, HashSet<Token>>();
+    	HashSet<Token> keys = new HashSet<Token>();
     	Token t;
     	for(String str : origFile)
     	{	
-    		str=replaceSpace(str);
+    		str = replaceSpace(str);
     		String[] splitString = (str.split("::="));
         	//REMOVE SPACES
         	//splitString[0]= splitString[0].substring(0, splitString[0].length() - 3);
-        	
-        	
-        	HashSet<Token> set=getTerm(splitString[0],splitString[1]);
+    		parseTable.put(splitString[0], new HashMap<String,String>());
+        	        	
+        	HashSet<Token> set = getTerm(splitString[0],splitString[1]);
         	//terminating conditions are now in
         	
-        	t=new Token(splitString[0],false,i==0);
+//        	for(Token t2 : set){
+//        		if(t2.getValue().charAt(0)!='<' || t2.getValue().length() == 1){
+//        			parseTable.get(splitString[0]).put(t2.getValue(), value);
+//        		}
+//        	}
+        	
+        	t = new Token(splitString[0],false,i==0);
+        	if(keys.contains(t)){
+        		set = combineSet(map.get(t), set);
+        	}
+        	else{
+        		keys.add(t);
+        	}
         	map.put(t,set);
-        	keys.add(t);
         	i++;
         }
     
@@ -67,11 +82,10 @@ public class LL1parser
     
     	for(Token key : keys)
     	{
-    		HashSet<Token> value=getstuff(map,key);
+    		HashSet<Token> value = getstuff(map,key);
     		map.put(key, value);
-    		
     	}
-    	firstSets=map;
+    	firstSets = map;
     }
 
     public void createFollowSets()
@@ -85,15 +99,13 @@ public class LL1parser
             temp = s.split(" ");
             nonterminals.add(temp[0]);
         }
-
         System.out.println(nonterminals);
-
     }
     
     
     public String replaceSpace(String str)
     {
-    	String ret="";
+    	String ret = "";
     	
     	for(int i=0;i<str.length();i++)
     	{
@@ -101,7 +113,6 @@ public class LL1parser
     		{
     			ret+=str.charAt(i);
     		}
-    		
     	}
     	return ret;
     }
@@ -136,21 +147,15 @@ public class LL1parser
     }
     */
     
-    
-    
-    
-    
-    public HashSet<Token> getstuff(HashMap<Token,Set<Token>> map, Token key)
+    public HashSet<Token> getstuff(HashMap<Token,HashSet<Token>> map, Token key)
     {
-    	HashSet<Token> set=(HashSet<Token>) map.get(key);
-    	HashSet<Token> set2=new HashSet<Token>();
-    	
+    	HashSet<Token> set = (HashSet<Token>) map.get(key);
+    	HashSet<Token> set2 = new HashSet<Token>();
 
     	if(set!=null)
     	{	
     		for(Token str : set)
-    		{
-    			
+    		{	
     			if(str.getValue().length()==1)
     			{
     				set2.add(str);
@@ -166,7 +171,7 @@ public class LL1parser
     			}
     			else
     			{
-    				HashSet<Token> set3=getstuff(map,str);
+    				HashSet<Token> set3 = getstuff(map,str);
     				for(Token t : set3)
     				{
     					set2.add(t);
@@ -179,9 +184,8 @@ public class LL1parser
     
 	public HashSet<Token> getTerm(String key,String str)
 	{
-		
-		HashSet<Token> set=new HashSet<Token>();
-		String[] split=str.split("\\|");
+		HashSet<Token> set = new HashSet<Token>();
+		String[] split = str.split("\\|");
 		for(String temp : split)
 		{
 			Token t;
@@ -189,44 +193,40 @@ public class LL1parser
 			{
 				if(temp.charAt(0)!='<')
 				{
-					String[] split2=temp.split("<");
-					t=new Token(split2[0],true,false);
+					String[] split2 = temp.split("<");
+					t = new Token(split2[0],true,false);
 					set.add(t);
 				}
 				else
 				{
-					String[] split2=temp.split(">");
+					String[] split2 = temp.split(">");
 					split2[0]+=">";
 					if(!split2[0].equals(key))
 					{	
-						t=new Token(split2[0],false,false);
+						t = new Token(split2[0],false,false);
 						set.add(t);
 					}
 					/*
 					else
 					{
-						
 						split2[1]+=">";
 						set.add(split2[1]);
 
 					}*/
 				}
-			
 			}
 		}
 	    return set;
 	}
     
-	private HashSet<String> combineSet(HashSet<String> set1, HashSet<String> set2)
+	private <T> HashSet<T> combineSet(HashSet<T> set1, HashSet<T> set2)
 	{
-		for(String str :set2)
+		for(T str :set2)
 		{
 			set1.add(str);
 		}
 		return set1;
 	}
-    
-	
     
     private List<String> readTextFile(String aFileName) throws IOException
 	{

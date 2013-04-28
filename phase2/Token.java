@@ -17,6 +17,7 @@ public class Token
 	{
 		return value.hashCode();
 	}
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -25,8 +26,6 @@ public class Token
 		}
 		return false;
 	}
-	
-	
 	
 	public boolean isBegin()
 	{
