@@ -333,9 +333,13 @@ public class LL1Parser
 	     						&& !x.equals("<epsilon>"))
 	     				{
 	     					tempTerm = result.get(x);
-	 						oldSize = tempTerm.size();
-	     					tempTerm = combineSet(tempTerm, currTerm);
-	     				}
+	 						if(tempTerm!=null)
+	 						{
+	 							oldSize = tempTerm.size();
+	 						}	
+	 						tempTerm = combineSet(tempTerm, currTerm);
+	     				
+	 					}
 	     				else if (x.charAt(0) == '<' && !x.equals("<epsilon>"))
 	     				{
 	     					// x is a non-terminal
@@ -436,9 +440,16 @@ public class LL1Parser
     
 	private <T> HashSet<T> combineSet(HashSet<T> set1, HashSet<T> set2)
 	{
-		for(T str :set2)
+		if(set2!=null && set1!=null)
 		{
-			set1.add(str);
+			for(T str :set2)
+			{
+				set1.add(str);
+			}
+		}
+		else if(set2!=null)
+		{
+			return set2;
 		}
 		return set1;
 	}

@@ -34,16 +34,30 @@ public class HomeStarRunner2 {
 		list.add("<pawl>:=nice |koitus");*/
 		
         /*(System.out.println(args[0]);*/
-		parse.inputFile("phase2/miniReg.txt");
+		parse.inputFile("phase2/other.txt");
 		parse.createFirstSets();
 		parse.createFollowSets();
 		
 	    HashMap<String, HashSet<String>> map = parse.getFollowSets();
 		Set<String> keys = map.keySet();
+		parse.createFollowSets();
+	    HashMap<Token, HashSet<Token>> map2 = parse.getFirstSets();
+		Set<Token> keys2 = map2.keySet();
 
-        parse.createFollowSets();
+		System.out.println("First Sets");
+
+	    
+	    for(Token key : keys2)
+		{
+			System.out.println(key.getValue() + " : " + setToString2(map2.get(key)));
+		}	
 		
-		for(String key : keys)
+        
+        
+        
+		System.out.println("Follow Sets");
+
+        for(String key : keys)
 		{
 			System.out.println(key + " : " + setToString(map.get(key)));
 		}		
@@ -64,6 +78,19 @@ public class HomeStarRunner2 {
 		for(String s : set)
 		{
 			String s2=s;
+			ret+=s2;
+			ret+=" ";
+		}	
+		return ret;
+	}	
+	
+	public static String setToString2(Set<Token> set)
+	{
+		String ret="";
+		
+		for(Token s : set)
+		{
+			String s2=s.getValue();
 			ret+=s2;
 			ret+=" ";
 		}	
