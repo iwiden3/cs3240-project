@@ -56,7 +56,6 @@ public class LL1parser
     		String[] splitString = (str.split("::="));
         	//REMOVE SPACES
         	//splitString[0]= splitString[0].substring(0, splitString[0].length() - 3);
-    		parseTable.put(splitString[0], new HashMap<String,String>());
         	        	
         	HashSet<Token> set = getTerm(splitString[0],splitString[1]);
         	//terminating conditions are now in
@@ -82,7 +81,7 @@ public class LL1parser
     
     	for(Token key : keys)
     	{
-    		HashSet<Token> value = getstuff(map,key);
+    		HashSet<Token> value = getStuff(map,key);
     		map.put(key, value);
     	}
     	firstSets = map;
@@ -147,7 +146,7 @@ public class LL1parser
     }
     */
     
-    public HashSet<Token> getstuff(HashMap<Token,HashSet<Token>> map, Token key)
+    public HashSet<Token> getStuff(HashMap<Token,HashSet<Token>> map, Token key)
     {
     	HashSet<Token> set = (HashSet<Token>) map.get(key);
     	HashSet<Token> set2 = new HashSet<Token>();
@@ -171,7 +170,10 @@ public class LL1parser
     			}
     			else
     			{
-    				HashSet<Token> set3 = getstuff(map,str);
+					String[] split2 = str.getValue().split(">");
+					split2[0]+=">";
+    				HashSet<Token> set3 = getStuff(map,new Token(split2[0], false, false));
+    				addToParseTable(set3, str, key.getValue());
     				for(Token t : set3)
     				{
     					set2.add(t);
@@ -195,6 +197,9 @@ public class LL1parser
 				{
 					String[] split2 = temp.split("<");
 					t = new Token(split2[0],true,false);
+					HashSet<Token> h = new HashSet<Token>();
+					h.add(t);
+					addToParseTable(h, new Token(temp,false,false), key);
 					set.add(t);
 				}
 				else
@@ -203,7 +208,7 @@ public class LL1parser
 					split2[0]+=">";
 					if(!split2[0].equals(key))
 					{	
-						t = new Token(split2[0],false,false);
+						t = new Token(temp,false,false);
 						set.add(t);
 					}
 					/*
@@ -226,6 +231,18 @@ public class LL1parser
 			set1.add(str);
 		}
 		return set1;
+	}
+	
+	private void addToParseTable(HashSet<Token> hs, Token str, String key){
+		Set<String> ks = parseTable.keySet();
+		if(!ks.contains(key)){
+    		parseTable.put(key, new HashMap<String,String>());
+		}
+    	for(Token t2 : hs){
+			if(t2.getValue().charAt(0)!='<' || t2.getValue().length() == 1){
+				parseTable.get(key).put(t2.getValue(), str.getValue());
+			}
+    	}	
 	}
     
     private List<String> readTextFile(String aFileName) throws IOException
