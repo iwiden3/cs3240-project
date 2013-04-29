@@ -1,6 +1,8 @@
 package main;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class NFAFactory
 {
@@ -14,7 +16,7 @@ public class NFAFactory
 		this.tokenTable = tokenTable;
 	}
 
-	public HashSet<NFA> factorize()
+	public LinkedHashSet<NFA> factorize()
 	{
 		LinkedHashSet<NFA> regexNFAs = new LinkedHashSet<NFA>();
 		Set<String> keys1 = regexTable.keySet();
@@ -25,7 +27,7 @@ public class NFAFactory
 			regexNFAs.add(create.getNFA());
 		}
 		
-		HashSet<NFA> nfaSet = new HashSet<NFA>();
+		LinkedHashSet<NFA> nfaSet = new LinkedHashSet<NFA>();
 		Set<String> keys2 = tokenTable.keySet();
 		for(String key : keys2)
 		{

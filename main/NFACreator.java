@@ -493,6 +493,7 @@ public class NFACreator {
         		String[] otherVal;
         		if(value.length() >= 5){
         			otherVal = tempVal.split(value.substring(2,5));
+        			value = otherVal[0] + otherVal[1];
         		}
         		else{
         			if(tempVal.contains(value.substring(2,3))){

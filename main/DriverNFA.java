@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class DriverNFA {
@@ -28,7 +28,7 @@ public class DriverNFA {
 	public void start() throws IOException{
 		FileScanner fs = new FileScanner(rules);
 		NFAFactory factory = new NFAFactory(fs.getRegexTable(), fs.getTokenTable());
-		HashSet<NFA> nfas = factory.factorize();
+		LinkedHashSet<NFA> nfas = factory.factorize();
 		text = readTextFile(input);
 	    tw = new TableWalkerNFA(nfas,text);
 
