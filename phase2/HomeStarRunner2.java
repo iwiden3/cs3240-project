@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HomeStarRunner {
+public class HomeStarRunner2 {
 
 	public static void main(String[]args) throws IOException
 	{		
@@ -46,6 +46,9 @@ public class HomeStarRunner {
 		{
 			System.out.println(key.getValue() + " : " + setToString(map.get(key)));
 		}		
+		
+		FinalDriver fd = new FinalDriver("phase2/grammar.txt","phase2/script.txt", "phase2/token_spec.txt");
+		fd.start();
 	}
 	
 	public static String setToString(Set<Token> set)

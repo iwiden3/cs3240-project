@@ -9,17 +9,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FileScanner{
-    private HashMap<String,String> regexTable = new HashMap<String,String>();
-    private HashMap<String,String> tokenTable = new HashMap<String,String>();
+    private LinkedHashMap<String,String> regexTable = new LinkedHashMap<String,String>();
+    private LinkedHashMap<String,String> tokenTable = new LinkedHashMap<String,String>();
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
     public FileScanner(String file) throws IOException{
         List<String> text = readTextFile(file);
-        HashMap<String,String> tempTable = regexTable;
+        LinkedHashMap<String,String> tempTable = regexTable;
         
         for(int i=0; i<text.size(); i++){
             String currLine = text.get(i);
@@ -42,11 +42,11 @@ public class FileScanner{
         return Files.readAllLines(path, ENCODING);
     }
     
-    public HashMap<String,String> getRegexTable(){
+    public LinkedHashMap<String,String> getRegexTable(){
         return regexTable;
     }
     
-    public HashMap<String,String> getTokenTable(){
+    public LinkedHashMap<String,String> getTokenTable(){
         return tokenTable;
     }
 }

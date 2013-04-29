@@ -48,7 +48,7 @@ public class DriverNFA {
 	    }
 	    
 	    // Edit this to change where the output is saved.
-		FileWriter writer = new FileWriter("tests/output"); 
+		FileWriter writer = new FileWriter("tests/output");
 		for(String str: out) 
 		{
 		  writer.write(str);

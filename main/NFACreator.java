@@ -23,6 +23,7 @@ public class NFACreator {
 	
 	public NFACreator(String name, String def, HashMap<String, String> regexTable, HashSet<NFA> regexNFAs)
 	{
+		System.out.println(name);
 		index = 0;
 		this.def = def;
 		this.defined_classes = regexNFAs;
@@ -113,6 +114,9 @@ public class NFACreator {
 	
 	public NFA rexp1()
 	{
+		if(splitDef.get(index).equals(")")){
+			return epsilonNFA2();
+		}
 		if(!rexp1First.contains((String) (splitDef.get(index).charAt(0) == '$' ? splitDef.get(index).substring(0,1) : splitDef.get(index))))
 		{
 			return epsilonNFA();
@@ -491,15 +495,23 @@ public class NFACreator {
         			otherVal = tempVal.split(value.substring(2,5));
         		}
         		else{
-        			otherVal = tempVal.split(value.substring(2,3));
-        			if(otherVal[1].startsWith("-")){
-        				otherVal[0] += String.valueOf(Character.toChars(value.charAt(2)+1));
+        			if(tempVal.contains(value.substring(2,3))){
+	        			otherVal = tempVal.split(value.substring(2,3));
+	        			if(otherVal[1].startsWith("-")){
+	        				otherVal[0] += String.valueOf(Character.toChars(value.charAt(2)+1));
+	        			}
+	        			else if(otherVal[0].endsWith("-")){
+	        				otherVal[0] += String.valueOf(Character.toChars(value.charAt(2)-1));
+	        			}
+	        			value = otherVal[0] + otherVal[1];
         			}
-        			else if(otherVal[0].endsWith("-")){
-        				otherVal[0] += String.valueOf(Character.toChars(value.charAt(2)-1));
+        			else{
+        				if(value.charAt(2) > tempVal.charAt(1) && value.charAt(2) < tempVal.charAt(3)){
+        					value = tempVal.substring(0,2) + "-" + String.valueOf(Character.toChars(value.charAt(2)-1)) +
+        							String.valueOf(Character.toChars(value.charAt(2)+1)) + "-" + tempVal.substring(3);
+        				}
         			}
         		}
-        		value = otherVal[0] + otherVal[1];
             	break;
             }
             else{
@@ -622,6 +634,17 @@ public class NFACreator {
 		return epsNFA;
 	}
 	
+	public NFA epsilonNFA2()
+	{
+		NFA epsNFA = new NFA("NOPE");
+		State startS = new State(false, new HashMap<String, List<State>>(), "NOPE");
+		State acceptS = new State(true, new HashMap<String, List<State>>(), "NOPE");
+		epsNFA.addTransition(startS, "", acceptS);
+		epsNFA.setStart(startS);
+		epsNFA.setAccept(acceptS);
+		return epsNFA;
+	}
+	
 	public String epsilon()
 	{
 		return "";
@@ -659,7 +682,7 @@ public class NFACreator {
 		for(int i=0; i<def.length(); i++)
 		{
 			curr = def.substring(i, i+1);
-			if(curr.equals(" "))
+			if(curr.equals(" ") && !def.substring(i-1, i).equals("["))
 			{
 				continue;
 			}

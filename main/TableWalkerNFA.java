@@ -64,6 +64,22 @@ public class TableWalkerNFA
     	            		newStates.add(currState);
     	            	}
     				}
+    				for(State s : newStates){
+    					for(String reg : s.getTransitionTable().keySet()){
+							if(Pattern.matches(reg, curr)){
+								currToken += curr;
+								index++;
+								currStates = s.getTransitionTable().get(reg);
+								if(index < input.size()){
+									continue MAIN;
+								}
+								else{
+			        				newStates = new ArrayList<State>();
+									break ALL;
+								}
+							}
+						}
+    				}
     				if(curr.equals("") || curr.equals(" ")){
 						index++;
     					for(State s : newStates){
@@ -85,22 +101,6 @@ public class TableWalkerNFA
         				index = oldIndex;
         				currToken = "";
     					continue NFAS;
-    				}    				
-    				for(State s : newStates){
-    					for(String reg : s.getTransitionTable().keySet()){
-							if(Pattern.matches(reg, curr)){
-								currToken += curr;
-								index++;
-								currStates = s.getTransitionTable().get(reg);
-								if(index < input.size()){
-									continue MAIN;
-								}
-								else{
-			        				newStates = new ArrayList<State>();
-									break ALL;
-								}
-							}
-						}
     				}
     				if(currToken.length() <= 0){
     					currStates = new ArrayList<State>();

@@ -8,33 +8,34 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import main.DriverNFA;
 
-public class finalDriver
+public class FinalDriver
 {
-    private HashMap<String, HashMap<String, String>> parseTable;
+    private LinkedHashMap<String, LinkedHashMap<String, String>> parseTable;
     private ArrayList<String> tokens;
     private List<String> input;
     private String begin;
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
-	
-	@SuppressWarnings("unchecked")
-	public finalDriver(String grammar,String input,String spec) throws IOException
+	public FinalDriver(String grammar,String input,String spec) throws IOException
 	{
-		DriverNFA dr=new DriverNFA(input,spec);
+		DriverNFA dr = new DriverNFA(input,spec);
 		dr.start();
-		tokens=(ArrayList<String>)readTextFile("tests/output.txt");
-		LL1parser parser=new LL1parser();
+		tokens=(ArrayList<String>)readTextFile("tests/output");
+		LL1parser parser = new LL1parser();
 		parser.inputFile(grammar);
 		parser.createFirstSets();
 		parser.createFollowSets();
-		parseTable=parser.getParseTable();
-		this.input=readTextFile("tests/input.txt");
-		begin=parser.getBegin();
+		parseTable = parser.getParseTable();
+		this.input = readTextFile("phase2/script.txt");
+		begin = parser.getBegin();
+	}
+	
+	public void start(){
 		
 	}
 
@@ -44,11 +45,8 @@ public class finalDriver
 		if(fin)
 		{
 			System.out.println("Pass");
-		}
-		
-		
+		}		
 	}
-	
 	
 	public boolean goDriverGo(String key,int i)
 	{
@@ -92,13 +90,8 @@ public class finalDriver
 			return goDriverGo(cool,i);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	public HashMap<String, HashMap<String, String>> getParseTable()
+
+	public LinkedHashMap<String, LinkedHashMap<String, String>> getParseTable()
 	{
 		return parseTable;
 	}
@@ -112,13 +105,10 @@ public class finalDriver
 	{
 		return input;
 	}
-	
 
-	private List<String> readTextFile(String aFileName) throws IOException
+	 private List<String> readTextFile(String aFileName) throws IOException
 	  {
 		  Path path = Paths.get(aFileName);
 		  return Files.readAllLines(path, ENCODING);
 	  }
-
-
 }

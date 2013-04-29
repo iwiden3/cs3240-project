@@ -6,8 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -15,9 +15,9 @@ import java.util.Set;
 public class LL1parser
 {
     private List<String> origFile;
-    private HashMap<Token, HashSet<Token>> firstSets;
-    private HashMap<Token, HashSet<Token>> followSets;
-    private HashMap<String, HashMap<String, String>> parseTable;
+    private LinkedHashMap<Token, HashSet<Token>> firstSets;
+    private LinkedHashMap<Token, HashSet<Token>> followSets;
+    private LinkedHashMap<String, LinkedHashMap<String, String>> parseTable;
     private String begin;
 
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
@@ -28,10 +28,10 @@ public class LL1parser
 		origFile = null;
 		firstSets = null;
 		followSets = null;
-		parseTable = new HashMap<String, HashMap<String, String>>();
+		parseTable = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 	}
 	
-	public HashMap<String, HashMap<String, String>> getParseTable()
+	public LinkedHashMap<String, LinkedHashMap<String, String>> getParseTable()
 	{
 		return parseTable;
 	}
@@ -40,10 +40,8 @@ public class LL1parser
 	{
 		return begin;
 	}
-	
-	
-	
-	public HashMap<Token, HashSet<Token>> getFirstSets()
+
+	public LinkedHashMap<Token, HashSet<Token>> getFirstSets()
 	{
 		return firstSets;
 	}
@@ -61,7 +59,7 @@ public class LL1parser
     public void createFirstSets()
     {
     	int i = 0;
-    	HashMap<Token, HashSet<Token>> map = new HashMap<Token, HashSet<Token>>();
+    	LinkedHashMap<Token, HashSet<Token>> map = new LinkedHashMap<Token, HashSet<Token>>();
     	HashSet<Token> keys = new HashSet<Token>();
     	Token t;
     	for(String str : origFile)
@@ -135,9 +133,9 @@ public class LL1parser
     }
     
     /*
-    public HashMap<String, Set<String>> createFirstSets(List<String> origFile)
+    public LinkedHashMap<String, Set<String>> createFirstSets(List<String> origFile)
     {
-    	HashMap<String, Set<String>> map=new HashMap<String,Set<String>>();
+    	LinkedHashMap<String, Set<String>> map=new LinkedHashMap<String,Set<String>>();
     	HashSet<String> keys=new HashSet<String>();
     	for(String str : origFile)
     	{	
@@ -164,7 +162,7 @@ public class LL1parser
     }
     */
     
-    public HashSet<Token> getStuff(HashMap<Token,HashSet<Token>> map, Token key)
+    public HashSet<Token> getStuff(LinkedHashMap<Token,HashSet<Token>> map, Token key)
     {
     	HashSet<Token> set = (HashSet<Token>) map.get(key);
     	HashSet<Token> set2 = new HashSet<Token>();
@@ -254,7 +252,7 @@ public class LL1parser
 	private void addToParseTable(HashSet<Token> hs, Token str, String key){
 		Set<String> ks = parseTable.keySet();
 		if(!ks.contains(key)){
-    		parseTable.put(key, new HashMap<String,String>());
+    		parseTable.put(key, new LinkedHashMap<String,String>());
 		}
     	for(Token t2 : hs){
 			if(t2.getValue().charAt(0)!='<' || t2.getValue().length() == 1){
