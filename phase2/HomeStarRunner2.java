@@ -34,7 +34,7 @@ public class HomeStarRunner2 {
 		list.add("<pawl>:=nice |koitus");*/
 		
         /*(System.out.println(args[0]);*/
-		parse.inputFile("phase2/other.txt");
+		parse.inputFile("phase2/book2.txt");
 		parse.createFirstSets();
 		parse.createFollowSets();
 		
@@ -62,8 +62,8 @@ public class HomeStarRunner2 {
 			System.out.println(key + " : " + setToString(map.get(key)));
 		}		
 		
-		//FinalDriver fd = new FinalDriver("phase2/grammar.txt", "phase2/script.txt", "phase2/token_spec.txt", "phase2/output");
-		//fd.start();
+		FinalDriver fd = new FinalDriver("phase2/grammar.txt", "phase2/script.txt", "phase2/token_spec.txt", "phase2/output");
+		fd.start();
 	}
 		
 		

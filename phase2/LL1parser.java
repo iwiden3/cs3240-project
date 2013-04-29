@@ -271,7 +271,7 @@ public class LL1Parser
 	     	HashSet<String> currTerm, tempTerm = new HashSet<String>(), lastTerm;
 	 		Set<Token> addTerm = new HashSet<Token>();
 	     	List<String> input = deconstructOr(origFile);
-	     	System.out.println(input);
+	     //	System.out.println(input);
 	     	
 	     	// Pull out non-terminals
 	     	for (String s : input)
@@ -295,16 +295,16 @@ public class LL1Parser
 	     	while (changes)
 	     	{
 	     		inputLine = 0;
-	     		System.out.println("====================================");
-	     		System.out.println("While loop: " + whileCount);
+	     		//System.out.println("====================================");
+	     	//	System.out.println("While loop: " + whileCount);
 	     		changes = false;
 	     		Token eps=new Token("<epsilon>",true,false);
 	     		lastTerm = new HashSet<String>();
 	     		// Iterate through production rules
 	     		for (String rule : input)
 	     		{
-	     			System.out.println("Input line: " + inputLine);
-	     			System.out.println("Input: " + rule);
+	     		//	System.out.println("Input line: " + inputLine);
+	     		//	System.out.println("Input: " + rule);
 	     			splitEquals = rule.split("::=");
 	     			nonTerm = splitEquals[0];
 	     			currTerm = result.get(nonTerm.trim());
@@ -387,11 +387,11 @@ public class LL1Parser
 	     				hasEpsilon = false;
 	     				j++;
 	     			}
-	     			System.out.println(result);
+	     		//	System.out.println(result);
 	     			inputLine++;
 	     		}
 	     		
-	 			System.out.println("======================================");
+	 			//System.out.println("======================================");
 
 	     		whileCount++;
 	     	}
@@ -418,26 +418,6 @@ public class LL1Parser
 	     	return result;
 	     }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    
 	private <T> HashSet<T> combineSet(HashSet<T> set1, HashSet<T> set2)
 	{
 		if(set2!=null && set1!=null)

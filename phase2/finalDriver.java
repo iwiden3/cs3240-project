@@ -55,7 +55,7 @@ public class FinalDriver
 	public boolean goDriverGo(String key,int i)
 	{
 
-		if(key.equals("$"))
+		if( key.isEmpty() ||key.equals("$"))
 		{
 			return true;
 		}
