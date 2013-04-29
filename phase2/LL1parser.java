@@ -298,6 +298,7 @@ public class LL1Parser
 	     		System.out.println("====================================");
 	     		System.out.println("While loop: " + whileCount);
 	     		changes = false;
+	     		Token eps=new Token("<epsilon>",true,false);
 	     		lastTerm = new HashSet<String>();
 	     		// Iterate through production rules
 	     		for (String rule : input)
@@ -354,10 +355,10 @@ public class LL1Parser
 	     						addTerm = firstSets.get(y);
 	     						if(addTerm!=null)
 	     						{	
-	     							if (addTerm.contains("<epsilon>"))
+	     							if (addTerm.contains(eps))
 	     							{	
 	     								hasEpsilon = true;
-	     								addTerm.remove("<epsilon>");
+	     								addTerm.remove(eps);
 	     								tempTerm = combineSet2(tempTerm, addTerm);
 	     							}	
 	     						}
