@@ -352,7 +352,8 @@ public class LL1Parser
 	     					// Check to see if y is terminal or not
 	     					if (y.charAt(0) == '<' && !y.equals("<epsilon>"))
 	     					{
-	     						addTerm = firstSets.get(y);
+	     						Token t=new Token(y,true,true);
+	     						addTerm = firstSets.get(t);
 	     						if(addTerm!=null)
 	     						{	
 	     							if (addTerm.contains(eps))
