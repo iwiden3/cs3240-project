@@ -18,11 +18,13 @@ public class LL1parser
     private HashMap<Token, HashSet<Token>> firstSets;
     private HashMap<Token, HashSet<Token>> followSets;
     private HashMap<String, HashMap<String, String>> parseTable;
+    private String begin;
 
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
 	public LL1parser()
 	{
+		begin=null;
 		origFile = null;
 		firstSets = null;
 		followSets = null;
@@ -34,6 +36,10 @@ public class LL1parser
 		return parseTable;
 	}
 
+	public String getBegin()
+	{
+		return begin;
+	}
 	
 	
 	
@@ -75,6 +81,10 @@ public class LL1parser
 //        	}
         	
         	t = new Token(splitString[0],false,i==0);
+        	if(i==0)
+        	{
+        		begin=splitString[0];
+        	}
         	if(keys.contains(t)){
         		set = combineSet(map.get(t), set);
         	}
