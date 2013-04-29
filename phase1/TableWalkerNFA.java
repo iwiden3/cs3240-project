@@ -1,4 +1,4 @@
-package main;
+package phase1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 
 public class TableWalkerNFA
 {

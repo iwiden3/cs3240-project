@@ -1,7 +1,7 @@
 // scanner generator
 // read lexical specifications
 // generate primitive NFAs
-package main;
+package phase1;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

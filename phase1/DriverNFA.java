@@ -1,4 +1,4 @@
-package main;
+package phase1;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,14 +15,15 @@ import java.util.List;
 public class DriverNFA {
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
     
-	String input, rules;
+	String input, rules, output;
 	List<String> text;
     TableWalkerNFA tw;
 	
-	public DriverNFA(String input, String rules)
+	public DriverNFA(String input, String rules, String output)
 	{
 		this.input = input;
 		this.rules = rules;
+		this.output = output;
 	 }
 	
 	public void start() throws IOException{
@@ -48,7 +49,7 @@ public class DriverNFA {
 	    }
 	    
 	    // Edit this to change where the output is saved.
-		FileWriter writer = new FileWriter("tests/output");
+		FileWriter writer = new FileWriter(output);
 		for(String str: out) 
 		{
 		  writer.write(str);

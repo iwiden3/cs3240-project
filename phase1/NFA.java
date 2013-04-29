@@ -1,7 +1,6 @@
-package main;
+package phase1;
 
 import java.util.*;
-
 
 public class NFA
 {

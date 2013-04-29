@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class LL1parser
+public class LL1Parser
 {
     private List<String> origFile;
     private LinkedHashMap<Token, HashSet<Token>> firstSets;
@@ -22,7 +22,7 @@ public class LL1parser
 
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
-	public LL1parser()
+	public LL1Parser()
 	{
 		begin=null;
 		origFile = null;

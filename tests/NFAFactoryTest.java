@@ -1,15 +1,15 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 
-import main.FileScanner;
-import main.NFA;
-import main.NFAFactory;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import phase1.FileScanner;
+import phase1.NFA;
+import phase1.NFAFactory;
 
 public class NFAFactoryTest {
 	

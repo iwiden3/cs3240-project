@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
-import main.FileScanner;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import phase1.FileScanner;
 
 public class TestReadTextFile {
 	

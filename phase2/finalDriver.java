@@ -11,32 +11,36 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import main.DriverNFA;
+import phase1.DriverNFA;
 
 public class FinalDriver
 {
     private LinkedHashMap<String, LinkedHashMap<String, String>> parseTable;
     private ArrayList<String> tokens;
-    private List<String> input;
-    private String begin;
+    private List<String> inputList;
+    private String grammar, begin, input, output;
+    private DriverNFA dr;
+    private LL1Parser parser;
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
-	public FinalDriver(String grammar,String input,String spec) throws IOException
+	public FinalDriver(String grammar, String input, String spec, String output)
 	{
-		DriverNFA dr = new DriverNFA(input,spec);
+		dr = new DriverNFA(input, spec, output);
+		parser = new LL1Parser();
+		this.grammar = grammar;
+		this.input = input;
+		this.output = output;
+	}
+	
+	public void start() throws IOException{
 		dr.start();
-		tokens=(ArrayList<String>)readTextFile("tests/output");
-		LL1parser parser = new LL1parser();
+		tokens = (ArrayList<String>)readTextFile(output);
 		parser.inputFile(grammar);
 		parser.createFirstSets();
 		parser.createFollowSets();
 		parseTable = parser.getParseTable();
-		this.input = readTextFile("phase2/script.txt");
+		inputList = readTextFile(input);
 		begin = parser.getBegin();
-	}
-	
-	public void start(){
-		
 	}
 
 	public void goDriverGo()
@@ -101,9 +105,9 @@ public class FinalDriver
 		return tokens;
 	}
 	
-	public List<String> getInput()
+	public List<String> getInputList()
 	{
-		return input;
+		return inputList;
 	}
 
 	 private List<String> readTextFile(String aFileName) throws IOException
