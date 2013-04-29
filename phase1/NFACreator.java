@@ -23,7 +23,6 @@ public class NFACreator {
 	
 	public NFACreator(String name, String def, HashMap<String, String> regexTable, HashSet<NFA> regexNFAs)
 	{
-		System.out.println(name);
 		index = 0;
 		this.def = def;
 		this.defined_classes = regexNFAs;
