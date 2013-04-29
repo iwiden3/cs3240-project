@@ -16,7 +16,6 @@ public class finalDriver
     private HashMap<String, HashMap<String, String>> parseTable;
     private List<String> tokens;
     private List<String> input;
-    private List<String> output;
     private final static Charset ENCODING = StandardCharsets.US_ASCII;
 
 	
@@ -24,7 +23,12 @@ public class finalDriver
 	{
 		DriverNFA dr=new DriverNFA(input,spec);
 		tokens=readTextFile("tests/output.txt");
-		
+		LL1parser parser=new LL1parser();
+		parser.inputFile(grammar);
+		parser.createFirstSets();
+		parser.createFollowSets();
+		parseTable=parser.getParseTable();
+		this.input=readTextFile("tests/input.txt");
 		
 	}
 

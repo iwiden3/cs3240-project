@@ -29,6 +29,14 @@ public class LL1parser
 		parseTable = new HashMap<String, HashMap<String, String>>();
 	}
 	
+	public HashMap<String, HashMap<String, String>> getParseTable()
+	{
+		return parseTable;
+	}
+
+	
+	
+	
 	public HashMap<Token, HashSet<Token>> getFirstSets()
 	{
 		return firstSets;
