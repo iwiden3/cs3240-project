@@ -6,8 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +18,7 @@ public class LL1Parser
 {
     private List<String> origFile;
     private LinkedHashMap<Token, HashSet<Token>> firstSets;
-    private LinkedHashMap<Token, HashSet<Token>> followSets;
+    private LinkedHashMap<String, HashSet<String>> followSets;
     private LinkedHashMap<String, LinkedHashMap<String, String>> parseTable;
     private String begin;
 
@@ -55,6 +57,17 @@ public class LL1Parser
     {
     	return origFile;
     }
+    
+	private  HashSet<String> combineSet2(HashSet<String> set1, Set<Token> addTerm)
+	{
+		for(Token str :addTerm)
+		{
+			set1.add(str.getValue());
+		}
+		return set1;
+		
+	}
+    
     
     public void createFirstSets()
     {
@@ -103,7 +116,7 @@ public class LL1Parser
     	firstSets = map;
     }
 
-    public void createFollowSets()
+   /* public void createFollowSets()
     {
         String[] temp;
         List<String> file = origFile;
@@ -115,7 +128,7 @@ public class LL1Parser
             nonterminals.add(temp[0]);
         }
         System.out.println(nonterminals);
-    }
+    }*/
     
     
     public String replaceSpace(String str)
@@ -239,6 +252,181 @@ public class LL1Parser
 		}
 	    return set;
 	}
+	
+	
+	 
+	 public HashMap<String, HashSet<String>> getFollowSets()
+	 	{
+	 		return followSets;
+	 	}
+
+	 // Creates the follow sets for the input file grammar
+	     public void createFollowSets()
+	     {
+	     	LinkedHashMap<String, HashSet<String>> result = new LinkedHashMap<String, HashSet<String>>();
+	     	String[] splitSpace, splitEquals;
+	     	int oldSize = 0, index = 0;
+	     	String nonTerm = "";
+	     	boolean isFirst = true, changes = true, hasEpsilon = false;
+	     	HashSet<String> currTerm, tempTerm = new HashSet<String>(), lastTerm;
+	 		Set<Token> addTerm = new HashSet<Token>();
+	     	List<String> input = deconstructOr(origFile);
+	     	System.out.println(input);
+	     	
+	     	// Pull out non-terminals
+	     	for (String s : input)
+	     	{
+	     		splitSpace = s.split(" ");
+	     		nonTerm = splitSpace[0].trim();
+	     		if (result.containsKey(nonTerm))
+	     			continue;
+	     			
+	     		result.put(nonTerm, new HashSet<String>());
+	     		
+	     		if (isFirst)
+	     		{
+	     			result.get(nonTerm).add("$");
+	     			isFirst = false;
+	     		}
+	     	}
+	     	
+	     	// Compute the follow sets
+	     	int whileCount = 0, inputLine = 0;
+	     	while (changes)
+	     	{
+	     		inputLine = 0;
+	     		System.out.println("====================================");
+	     		System.out.println("While loop: " + whileCount);
+	     		changes = false;
+	     		lastTerm = new HashSet<String>();
+	     		// Iterate through production rules
+	     		for (String rule : input)
+	     		{
+	     			System.out.println("Input line: " + inputLine);
+	     			System.out.println("Input: " + rule);
+	     			splitEquals = rule.split("::=");
+	     			nonTerm = splitEquals[0];
+	     			currTerm = result.get(nonTerm.trim());
+	     			splitSpace = splitEquals[1].trim().split("( |>)");
+	     			
+	     			// Add in '>' brackets where needed
+	     			for (int i = 0; i < splitSpace.length; i++)
+	     			{
+	     				if (splitSpace[i].length() > 0 && splitSpace[i].charAt(0) == '<')
+	     				{
+	     					splitSpace[i] = splitSpace[i].trim() + ">";
+	     				}
+	 					splitSpace[i] = splitSpace[i].trim();
+	     			}
+	     			
+	     			// For each non-terminal
+	     			int j = 0;
+	     			while (j < splitSpace.length)
+	     			{
+	     				String x = splitSpace[j];
+	     				String y = "";
+	     				if (x.length() <= 0)
+	     				{
+	     				}
+	     				else if (x.charAt(0) == '<' && j == splitSpace.length-1
+	     						&& !x.equals("<epsilon>"))
+	     				{
+	     					tempTerm = result.get(x);
+	 						oldSize = tempTerm.size();
+	     					tempTerm = combineSet(tempTerm, currTerm);
+	     				}
+	     				else if (x.charAt(0) == '<' && !x.equals("<epsilon>"))
+	     				{
+	     					// x is a non-terminal
+	     					tempTerm = result.get(x);
+	 						oldSize = tempTerm.size();
+	     					
+	     					// Search for next character
+	     					index = j+1;
+	     					while (index < splitSpace.length-1 && splitSpace[index].length() <= 0)
+	     						index++;
+	     					
+	     					y = splitSpace[index];
+	     					
+	     					// Check to see if y is terminal or not
+	     					if (y.charAt(0) == '<' && !y.equals("<epsilon>"))
+	     					{
+	     						addTerm = firstSets.get(y);
+	     						if (addTerm.contains("<epsilon>")) hasEpsilon = true;
+	     						addTerm.remove("<epsilon>");
+	     						
+	     						tempTerm = combineSet2(tempTerm, addTerm);
+	     						
+	     						if (hasEpsilon)
+	     						{
+	         						addTerm.add(new Token("<epsilon>",true,false));
+	     							tempTerm = combineSet(tempTerm, currTerm);
+	     						}
+	     					}
+	     					else if (!y.equals("<epsilon>"))
+	     					{
+	     						tempTerm.add(y);
+	     					}
+	     					
+	     					if (oldSize < tempTerm.size())
+	     					{
+	     						changes = true;
+	     					}
+	     				}
+	     				
+	     				hasEpsilon = false;
+	     				j++;
+	     			}
+	     			System.out.println(result);
+	     			inputLine++;
+	     		}
+	     		
+	 			System.out.println("======================================");
+
+	     		whileCount++;
+	     	}
+	     	followSets = result;
+	     	System.out.println("\n\n\nFollow Sets = " + followSets);
+	     }
+
+	 // Gets rid of any | branching in the grammar by creating new production rules
+	     private List<String> deconstructOr(List<String> file)
+	     {
+	     	List<String> result = new LinkedList<String>();
+	     	String term = "", temp = "";
+	     	
+	     	for (String s : file)
+	     	{
+	     		String[] splitEquals = s.split("::=");
+	     		term = splitEquals[0];
+	     		String[] splitOr = splitEquals[1].split("\\|");
+	     		temp = term + " ::= ";
+	     		for (int i = 0; i < splitOr.length; i++)
+	     			result.add(temp + splitOr[i]);
+	     	}
+	     	
+	     	return result;
+	     }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
     
 	private <T> HashSet<T> combineSet(HashSet<T> set1, HashSet<T> set2)
 	{
