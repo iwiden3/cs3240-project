@@ -33,31 +33,37 @@ public class HomeStarRunner2 {
 		list.add("<hello> :=begin|<pawl>");
 		list.add("<pawl>:=nice |koitus");*/
 		
-        System.out.println(args[0]);
-		parse.inputFile(args[0]);
+        /*(System.out.println(args[0]);*/
+		parse.inputFile("phase2/miniReg.txt");
 		parse.createFirstSets();
+		parse.createFollowSets();
 		
-	    HashMap<Token, HashSet<Token>> map = parse.getFirstSets();
-		Set<Token> keys = map.keySet();
+	    HashMap<String, HashSet<String>> map = parse.getFollowSets();
+		Set<String> keys = map.keySet();
 
         parse.createFollowSets();
 		
-		for(Token key : keys)
+		for(String key : keys)
 		{
-			System.out.println(key.getValue() + " : " + setToString(map.get(key)));
+			System.out.println(key + " : " + setToString(map.get(key)));
 		}		
 		
-		FinalDriver fd = new FinalDriver("phase2/grammar.txt", "phase2/script.txt", "phase2/token_spec.txt", "phase2/output");
-		fd.start();
+		//FinalDriver fd = new FinalDriver("phase2/grammar.txt", "phase2/script.txt", "phase2/token_spec.txt", "phase2/output");
+		//fd.start();
 	}
+		
+		
+		
+		
+		
 	
-	public static String setToString(Set<Token> set)
+	public static String setToString(Set<String> set)
 	{
 		String ret="";
 		
-		for(Token s : set)
+		for(String s : set)
 		{
-			String s2=s.getValue();
+			String s2=s;
 			ret+=s2;
 			ret+=" ";
 		}	

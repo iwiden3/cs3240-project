@@ -352,11 +352,15 @@ public class LL1Parser
 	     					if (y.charAt(0) == '<' && !y.equals("<epsilon>"))
 	     					{
 	     						addTerm = firstSets.get(y);
-	     						if (addTerm.contains("<epsilon>")) hasEpsilon = true;
-	     						addTerm.remove("<epsilon>");
-	     						
-	     						tempTerm = combineSet2(tempTerm, addTerm);
-	     						
+	     						if(addTerm!=null)
+	     						{	
+	     							if (addTerm.contains("<epsilon>"))
+	     							{	
+	     								hasEpsilon = true;
+	     								addTerm.remove("<epsilon>");
+	     								tempTerm = combineSet2(tempTerm, addTerm);
+	     							}	
+	     						}
 	     						if (hasEpsilon)
 	     						{
 	         						addTerm.add(new Token("<epsilon>",true,false));
@@ -386,7 +390,7 @@ public class LL1Parser
 	     		whileCount++;
 	     	}
 	     	followSets = result;
-	     	System.out.println("\n\n\nFollow Sets = " + followSets);
+	     	//System.out.println("\n\n\nFollow Sets = " + followSets);
 	     }
 
 	 // Gets rid of any | branching in the grammar by creating new production rules
