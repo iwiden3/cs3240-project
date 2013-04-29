@@ -34,9 +34,10 @@ public class HomeStarRunner2 {
 		list.add("<pawl>:=nice |koitus");*/
 		
         /*(System.out.println(args[0]);*/
-		parse.inputFile("phase2/other.txt");
+		parse.inputFile("phase2/grammar.txt");
 		parse.createFirstSets();
 		parse.createFollowSets();
+		parse.finishParseTable();
 		
 	    HashMap<String, HashSet<String>> map = parse.getFollowSets();
 		Set<String> keys = map.keySet();
@@ -55,7 +56,7 @@ public class HomeStarRunner2 {
         
         
         
-		System.out.println("Follow Sets");
+		System.out.println("\nFollow Sets");
 
         for(String key : keys)
 		{
